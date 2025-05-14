@@ -54,6 +54,7 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
       "relations" :{
         "mama" : "Mr Bhura ji (S-o)  Mr Dhukha ji",
         "fufa" : "Mr Kalu ji (S-o)  Mr Moti Ji",
+        "mama" : "Mr Kalu ji (S-o)  Mr Moti Ji",
         "mosa" : "Mr Himta ji (S-o)  Mr Pratap ji",
         "chacha" : "Mr Dhanraj ji (S-o)  Mr Sonaji",
         "sasur ji" : "Mr Hemant Kumar (S-o)  Mr Kantilal ji"
@@ -569,7 +570,8 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
         "fufa" : "Mr Jitendra Kumar (S-o)  Shri Roopchand ji",
         "mosa" : "Mr Kalpesh Kumar (S-o)  Mr Masra ji",
         "chacha" : "Mr Kalu ji (S-o)  Mr Moti Ji",
-        "sasur ji" : "Mr Ambalal ji (S-o)  Shri Babuji"
+        "sasur ji" : "Mr Ambalal ji (S-o)  Shri Babuji",
+
       }
     },
     "Mr Himta ji (S-o)  Mr Pratap ji": {
@@ -716,7 +718,8 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
       "pin code": "",
       "work": "",
       "relations" :{
-        "sasur ji" : "Mr Chandu ji (S-o)  Mr Gheva ji"
+        "sasur ji" : "Mr Chandu ji (S-o)  Mr Gheva ji",
+        "chacha" : "Mr Chandu ji (S-o)  Mr Gheva ji"
       }
     },
     "Mr Kalu ji (S-o)  Mr Poonma ji": {
@@ -2323,6 +2326,7 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
     // indexWiseTextLength.clear();
 
     for(int index = 0; index < result.length ; index++){
+
       if((!result[index].contains("हे"))
           &&(!result[index].contains("के"))
           &&(index < result.length-2)
@@ -2330,6 +2334,12 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
           ||(index==result.length-2)
       ){
         graph.add(result[index]);
+      }else {
+        if(result[index].contains("No relation found")){
+          graph.add(selectedItem2!);
+          graph.add("❌");
+          graph.add(selectedItem1!);
+        }
       }
     }
 
@@ -3031,7 +3041,7 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
             double positionIng = 0;
             double start = 0;
             Map<String, Map<String, double>> codinates= {};
-
+            Map<String, Map<String, Map<String, double>>> codinatesOfArrows= {};
             return SizedBox(
               height: 500, // fixed height required!
               child: InteractiveViewer(
@@ -3100,6 +3110,102 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
 
                             // Check if both previous and next entries exist in codinates
                             if (codinates.containsKey(prevKey) && codinates.containsKey(nextKey)) {
+
+
+                              double fromLeft =50+ codinates[prevKey]!['fromLeft']!;
+                              double fromTop = codinates[prevKey]!['fromTop']!;
+                              double toLeft = 50+codinates[nextKey]!['fromLeft']!; // not 'toLeft'
+                              double toTop = codinates[nextKey]!['fromTop']!;
+                              bool curveAxis = false;
+
+                              final relationKey = graph[drawIndex];
+
+                              if(codinatesOfArrows.containsKey("$prevKey $nextKey")){
+                                final Map<String, Map<String, double>> relationMap = codinatesOfArrows["$prevKey $nextKey"]!;
+                                if(relationMap.containsKey(relationKey)){
+
+                                  return Container();
+                                }else {
+                                  relationMap.addAll({
+                                    relationKey : {
+                                      'fromTop' : fromTop,
+                                      'fromLeft' : fromLeft,
+                                      'toTop' : toTop,
+                                      'toLeft' : toLeft,
+                                    }
+                                  });
+                                  codinatesOfArrows.addAll({
+                                    "$prevKey $nextKey" : relationMap
+                                  });
+
+                                  if(fromTop == toTop && fromLeft < toLeft){
+                                    toLeft = toLeft - 50;
+                                    fromTop = fromTop + 20;
+                                    toTop = toTop + 20;
+                                    curveAxis=false;
+                                  }
+                                  if(fromTop < toTop && fromLeft < toLeft){
+                                    toLeft = toLeft - 50;
+                                    fromTop = fromTop + 17;
+                                    curveAxis=false;
+                                  }
+                                  if(fromTop > toTop && fromLeft > toLeft){
+                                    toTop = toTop + 17;
+                                    curveAxis=true;
+                                  }
+                                  if(fromTop > toTop && fromLeft == toLeft){
+                                    toTop = toTop + 19;
+
+                                    curveAxis=true;
+                                  }
+                                  if(codinatesOfArrows.containsKey(nextKey)){
+                                    if(fromTop == toTop && fromLeft < toLeft){
+                                      fromTop += 15;
+                                      toTop += 15;
+                                      curveAxis=false;
+                                    }
+                                  }
+                                }
+
+
+                              }else {
+                                codinatesOfArrows.addAll({
+                                  "$prevKey $nextKey" : {
+                                    graph[drawIndex] : {
+                                      'fromTop' : fromTop,
+                                      'fromLeft' : fromLeft,
+                                      'toTop' : toTop,
+                                      'toLeft' : toLeft,
+                                    }
+                                  }
+                                });
+                                if(fromTop == toTop && fromLeft < toLeft){
+                                  toLeft = toLeft - 50;
+                                  curveAxis=true;
+                                }
+                                if(fromTop < toTop && fromLeft < toLeft){
+                                  toLeft = toLeft - 50;
+                                  fromTop = fromTop + 17;
+                                  curveAxis=false;
+                                }
+                                if(fromTop > toTop && fromLeft > toLeft){
+                                  toTop = toTop + 17;
+                                  curveAxis=true;
+                                }
+                                if(fromTop > toTop && fromLeft == toLeft){
+                                  toTop = toTop + 19;
+
+                                  curveAxis=true;
+                                }
+                                if(codinatesOfArrows.containsKey(nextKey)){
+                                  if(fromTop == toTop && fromLeft < toLeft){
+                                    fromTop += 15;
+                                    toTop += 15;
+                                    curveAxis=false;
+                                  }
+                                }
+                              }
+
                               Color textColorType = Color(0xFF666AC6);
                               Color textBackColor = Color(0xFF666AC6);
                               Color arrowColor = Color(0xFF666AC6);
@@ -3125,33 +3231,6 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
                                 arrowColor = Color(0xFF3955EF);
                               }
 
-
-                              double fromLeft =50+ codinates[prevKey]!['fromLeft']!;
-                              double fromTop = codinates[prevKey]!['fromTop']!;
-                              double toLeft = 50+codinates[nextKey]!['fromLeft']!; // not 'toLeft'
-                              double toTop = codinates[nextKey]!['fromTop']!;
-                              bool curveAxis = false;
-
-                              if(fromTop == toTop && fromLeft < toLeft){
-                                toLeft = toLeft - 50;
-
-                                curveAxis=true;
-                              }
-                              if(fromTop < toTop && fromLeft < toLeft){
-                                toLeft = toLeft - 50;
-                                fromTop = fromTop + 17;
-                                curveAxis=false;
-                              }
-                              if(fromTop > toTop && fromLeft > toLeft){
-                                toTop = toTop + 17;
-                                curveAxis=true;
-                              }
-                              if(fromTop > toTop && fromLeft == toLeft){
-                                toTop = toTop + 19;
-
-                                curveAxis=true;
-                              }
-                              print("$fromLeft   $fromTop   $toLeft   $toTop   ${prevKey}   ${entry.value}   ${nextKey}");
                               return CustomPaint(
                                 painter: ArrowPainter(
                                   from: Offset(toLeft, toTop),
@@ -3175,7 +3254,7 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
                               );
                             } else {
                               // Debugging
-                              print("Missing coordinates for $prevKey or $nextKey");
+
                               return Container();
                             }
                           }
@@ -3183,7 +3262,9 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
                           positionIng += 1;
                           start = 0;
                         }
+                        if(graph.length - 1 == drawIndex){
 
+                        }
                         return Container();
                       }),
 
@@ -3292,7 +3373,6 @@ class ArrowPainter extends CustomPainter {
     // Derivative of quadratic Bézier at t=1 to get tangent vector
     final tangent = (end - control) * 2;
     final angle = atan2(tangent.dy, tangent.dx);
-
     final path = Path()
       ..moveTo(end.dx, end.dy)
       ..lineTo(
