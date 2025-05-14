@@ -137,7 +137,7 @@ class _profileManageState extends State<profileManage>{
                           ),
                           profileTile(/*GlobalVariables().name*/"Dilip kumar", "username", Icons.person),
                           Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
-                          profileTile(/*GlobalVariables().name*/"Reva Ram", "Father Name", Icons.person),
+                          profileTile(/*GlobalVariables().name*/"Manoj Kumar", "Father Name", Icons.person),
                           Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
                           profileTile(/*GlobalVariables().email*/"hardikkumar2664@gmail.com", "E-mail", Icons.email_rounded),
                           Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
