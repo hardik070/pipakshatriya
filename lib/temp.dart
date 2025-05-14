@@ -2670,7 +2670,7 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
           );
         }else{
           List<String> splitedRelation = splitAndKeep(reltions[index],
-              [selectedItem1!, selectedItem2!, 'fufa', 'हे', 'के', 'chacha','mama', 'mosa', 'sasur ji']);
+              [selectedItem1!, selectedItem2!, 'fufa', 'हे', 'के', 'chacha','mama', 'mosa', 'sasur ji', 'damad ji', 'beta']);
 
           if(outputType == 0){
             return Column(
@@ -3362,11 +3362,3 @@ class RelationCard extends StatelessWidget {
   }
 }
 
-
-class hello extends StatelessWidget{
-
-  @override
-  Widget build(BuildContext context){
-    return Container();
-  }
-}
