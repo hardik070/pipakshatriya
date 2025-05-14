@@ -135,7 +135,7 @@ class _profileManageState extends State<profileManage>{
                               ),
                             ),
                           ),
-                          profileTile(/*GlobalVariables().name*/"Hardik kumar", "username", Icons.person),
+                          profileTile(/*GlobalVariables().name*/"Dilip kumar", "username", Icons.person),
                           Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
                           profileTile(/*GlobalVariables().name*/"Reva Ram", "Father Name", Icons.person),
                           Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
