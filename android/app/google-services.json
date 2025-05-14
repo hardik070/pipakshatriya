@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "519824754025",
+    "firebase_url": "https://pipa-kshatriya-darji-samaj-default-rtdb.firebaseio.com",
+    "project_id": "pipa-kshatriya-darji-samaj",
+    "storage_bucket": "pipa-kshatriya-darji-samaj.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:519824754025:android:65474b9f5d02eff85629f8",
+        "android_client_info": {
+          "package_name": "com.darji.pipa.kshatriya.pipakshatriya"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWmob5njrT-TrLGhLsFEMB3m4AL9P5dLs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:519824754025:android:0fe368bb6f334e4d5629f8",
+        "android_client_info": {
+          "package_name": "pipa.kshatriya.darji.com"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWmob5njrT-TrLGhLsFEMB3m4AL9P5dLs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
