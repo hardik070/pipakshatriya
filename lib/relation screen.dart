@@ -2064,7 +2064,7 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
       "pin code": "",
       "work": "",
       "relations" :{
-        "mama" : "Sri Bhala Ji (S-o)  Mr Uka Ji",
+        "mama" : "Sri Babu Ji (S-o)  Mr Uka Ji",
         "fufa" : "Sri Mohan Ji (S-o)  Mr Sagna Ji",
         "mosa" : "Sri Karsan Ji (S-o)  Mr Lehra Ji",
       }
@@ -2082,6 +2082,7 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
       "work": "",
       "relations" :{
         "sadu ji" : "Sri Babu Ji (S-o)  Mr Uka Ji",
+        "sale ji" : "Sri Reva Ji (S-o)  Mr Bhoma Ji"
       }
     },
     "Sri Reva Ji (S-o)  Mr Bhoma Ji": {
@@ -2877,8 +2878,8 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
                                     textBackColor = Color(0xFFE8F5E9);
 
                                   }else if(splitedRelation[index].contains("mama")){
-                                    textColorType = Color(0xFFFFEB3B);
-                                    textBackColor = Color(0xFF0D1B2A);
+                                    textColorType = Color(0xFF304D6C);
+                                    textBackColor = Color(0x34304D6C);
 
                                   }else if(splitedRelation[index].contains("chacha")){
                                     textColorType = Color(0xFF2196F3);
@@ -3057,8 +3058,8 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
                         textBackColor = Color(0xFFE8F5E9);
                         textType = 1;
                       }else if(splitedRelation[index].contains("mama")){
-                        textColorType = Color(0xFFFFEB3B);
-                        textBackColor = Color(0xFF0D1B2A);
+                        textColorType = Color(0xFF304D6C);
+                        textBackColor = Color(0x34304D6C);
                         textType = 2;
                       }else if(splitedRelation[index].contains("chacha")){
                         textColorType = Color(0xFF2196F3);
@@ -3331,9 +3332,9 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
                                 textBackColor = Color(0xFFC2FBC7);
                                 arrowColor = Color(0xFF4CAF50);
                               }else if(graph[drawIndex].contains("mama")){
-                                textColorType = Color(0xFFFFEB3B);
-                                textBackColor = Color(0xFF0D1B2A);
-                                arrowColor = Color(0xFFFFEB3B);
+                                textColorType = Color(0xFF304D6C);
+                                textBackColor = Color(0x34304D6C);
+                                arrowColor = Color(0x34304D6C);
                               }else if(graph[drawIndex].contains("chacha")){
                                 textColorType = Color(0xFF2196F3);
                                 textBackColor = Color(0xFFB4DFFF);
