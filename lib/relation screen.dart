@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'helper widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -54,7 +53,6 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
       "relations" :{
         "mama" : "Mr Bhura ji (S-o)  Mr Dhukha ji",
         "fufa" : "Mr Kalu ji (S-o)  Mr Moti Ji",
-        "mama" : "Mr Kalu ji (S-o)  Mr Moti Ji",
         "mosa" : "Mr Himta ji (S-o)  Mr Pratap ji",
         "chacha" : "Mr Dhanraj ji (S-o)  Mr Sonaji",
         "sasur ji" : "Mr Hemant Kumar (S-o)  Mr Kantilal ji"
@@ -1981,7 +1979,126 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
       "number 3": "",
       "pin code": "",
       "work": ""
-    }
+    },
+    "Sri Dinesh Ji (S-o)  Mr Uka Ji": {
+      "address": "Bhinmal",
+      "current living address": "",
+      "father name": "Mr Kala Ji",
+      "gotra": "Dabhi",
+      "name": "Sri Arvind Ji",
+      "number": "7690802737",
+      "number 2": "",
+      "number 3": "",
+      "pin code": "",
+      "work": ""
+    },
+    "Sri Babu Ji (S-o)  Mr Uka Ji": {
+      "address": "Bhinmal",
+      "current living address": "",
+      "father name": "Mr Kala Ji",
+      "gotra": "Dabhi",
+      "name": "Sri Arvind Ji",
+      "number": "7690802737",
+      "number 2": "",
+      "number 3": "",
+      "pin code": "",
+      "work": ""
+    },
+    "Sri Ashok Ji (S-o)  Mr Uka Ji": {
+      "address": "Bhinmal",
+      "current living address": "",
+      "father name": "Mr Kala Ji",
+      "gotra": "Dabhi",
+      "name": "Sri Arvind Ji",
+      "number": "7690802737",
+      "number 2": "",
+      "number 3": "",
+      "pin code": "",
+      "work": ""
+    },
+    "Sri Sankar Ji (S-o)  Mr Uka Ji": {
+      "address": "Bhinmal",
+      "current living address": "",
+      "father name": "Mr Kala Ji",
+      "gotra": "Dabhi",
+      "name": "Sri Arvind Ji",
+      "number": "7690802737",
+      "number 2": "",
+      "number 3": "",
+      "pin code": "",
+      "work": ""
+    },
+    "Sri Bhala Ji (S-o)  Mr Uka Ji": {
+      "address": "Bhinmal",
+      "current living address": "",
+      "father name": "Mr Kala Ji",
+      "gotra": "Dabhi",
+      "name": "Sri Arvind Ji",
+      "number": "7690802737",
+      "number 2": "",
+      "number 3": "",
+      "pin code": "",
+      "work": ""
+    },
+    "Sri Karsan Ji (S-o)  Mr Lehra Ji": {
+      "address": "Bhinmal",
+      "current living address": "",
+      "father name": "Mr Kala Ji",
+      "gotra": "Dabhi",
+      "name": "Sri Arvind Ji",
+      "number": "7690802737",
+      "number 2": "",
+      "number 3": "",
+      "pin code": "",
+      "work": ""
+    },
+    "Sri Hardik Ji (S-o)  Mr Reva Ji": {
+      "address": "Bhinmal",
+      "current living address": "",
+      "father name": "Mr Kala Ji",
+      "gotra": "Dabhi",
+      "name": "Sri Arvind Ji",
+      "number": "7690802737",
+      "number 2": "",
+      "number 3": "",
+      "pin code": "",
+      "work": "",
+      "relations" :{
+        "mama" : "Sri Bhala Ji (S-o)  Mr Uka Ji",
+        "fufa" : "Sri Mohan Ji (S-o)  Mr Sagna Ji",
+        "mosa" : "Sri Karsan Ji (S-o)  Mr Lehra Ji",
+      }
+    },
+    "Sri Mohan Ji (S-o)  Mr Sagna Ji": {
+      "address": "Bhinmal",
+      "current living address": "",
+      "father name": "Mr Kala Ji",
+      "gotra": "Dabhi",
+      "name": "Sri Arvind Ji",
+      "number": "7690802737",
+      "number 2": "",
+      "number 3": "",
+      "pin code": "",
+      "work": "",
+      "relations" :{
+        "sadu ji" : "Sri Babu Ji (S-o)  Mr Uka Ji",
+      }
+    },
+    "Sri Reva Ji (S-o)  Mr Bhoma Ji": {
+      "address": "Bhinmal",
+      "current living address": "",
+      "father name": "Mr Kala Ji",
+      "gotra": "Dabhi",
+      "name": "Sri Arvind Ji",
+      "number": "7690802737",
+      "number 2": "",
+      "number 3": "",
+      "pin code": "",
+      "work": "",
+      "relations" :{
+        "sale ji" : "Sri Babu Ji (S-o)  Mr Uka Ji",
+      }
+    },
   };
   int outputType = 0;
 
@@ -2301,7 +2418,7 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
 
   void graphObjectsList(int triger) {
 
-    List<String> delimiters = [selectedItem1!, selectedItem2!, 'fufa', 'हे', 'के', 'chacha','mama', 'mosa', 'sasur ji'];
+    List<String> delimiters = [selectedItem1!, selectedItem2!, 'fufa', 'हे', 'के', 'chacha','mama', 'mosa', 'sasur ji', 'sale ji', 'sadu ji', ];
     String input = reltions[triger];
     final pattern = RegExp('(${delimiters.join('|')})');
     final matches = pattern.allMatches(input);
@@ -2680,7 +2797,7 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
           );
         }else{
           List<String> splitedRelation = splitAndKeep(reltions[index],
-              [selectedItem1!, selectedItem2!, 'fufa', 'हे', 'के', 'chacha','mama', 'mosa', 'sasur ji']);
+              [selectedItem1!, selectedItem2!, 'fufa', 'हे', 'के', 'chacha','mama', 'mosa', 'sasur ji', 'sale ji', 'sadu ji',]);
 
           if(outputType == 0){
             return Column(
@@ -3248,7 +3365,7 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
                                     fontSize: 8,
                                   ),
                                   arrowColor: arrowColor.withOpacity(0.5),
-                                  glassColor: textBackColor.withOpacity(0.4),
+                                  glassColor: textBackColor.withOpacity(0.5),
                                   lineColor: textBackColor.withOpacity(0.7),
                                 ),
                               );
@@ -3425,6 +3542,7 @@ class RelationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<String> spliteTitle = title.split("(S-o)");
     return Container(
         padding: EdgeInsets.all(2),
         width: 50,
@@ -3436,7 +3554,7 @@ class RelationCard extends StatelessWidget {
             BoxShadow(color: textBackColor, blurRadius: 8, offset: Offset(3, 3)),
           ],
         ),
-        child: Center(child: Text(title, style: TextStyle(fontSize: 5, color: textColorType, fontWeight: FontWeight.bold)))
+        child: Center(child: Text("${spliteTitle[0].trim()}\n${spliteTitle[1].trim()}", style: TextStyle(fontSize: 5, color: textColorType, fontWeight: FontWeight.bold)))
     );
   }
 }
