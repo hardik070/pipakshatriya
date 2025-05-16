@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dashboard.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'splashscreen.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +20,7 @@ class Pipa extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Color(0xff001e59)),
         useMaterial3: true,
       ),
-      home: Dashboard(),
+      home: SplashScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
