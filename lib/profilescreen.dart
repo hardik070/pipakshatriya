@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'datamodels/save_user.dart';
+import 'datamodels/user_model.dart';
+import 'package:hive/hive.dart';
+import 'datamodels/datamanager/data_manager.dart';
+
 // import 'editprofile.dart';
 // import 'globalvariables.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
@@ -28,6 +33,10 @@ class _profileManageState extends State<profileManage>{
   //   );
   // }
 
+  void initState(){
+    super.initState();
+
+  }
 
 
   @override
@@ -60,7 +69,7 @@ class _profileManageState extends State<profileManage>{
                   children: [
                     Text(
                       //GlobalVariables().name.isNotEmpty ? GlobalVariables().name : 'Name',
-                      "Hardik kumar",
+                      UserDataManager().currentUser!.name.split('@')[0],
                       style: GoogleFonts.openSans(
                         color: Color(0xFF666AC6),
                         fontWeight: FontWeight.w600,
@@ -70,7 +79,7 @@ class _profileManageState extends State<profileManage>{
                     ),
                     Text(
                       //GlobalVariables().course.isNotEmpty ? GlobalVariables().course : 'Course' ,
-                      "Parmar",
+                      UserDataManager().currentUser!.loginInfo.loginTime.toString(),
                       style: GoogleFonts.poppins(
                         color: Color(0xFF666AC6),
                         fontWeight: FontWeight.w400,
@@ -289,6 +298,7 @@ class _profileManageState extends State<profileManage>{
                           GestureDetector(
                             onTap: () async {
                               //handleSignOut(context);
+                              saveUser();
                             },
                             child: Text(
                               "Log out",

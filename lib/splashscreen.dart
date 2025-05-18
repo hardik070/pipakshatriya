@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:pipakshatriya/dashboard.dart';
 import'dart:async';
 import 'createaccount.dart';
+import 'package:flutter/services.dart';
+import 'createaccount.dart';
 
 class SplashScreen extends StatefulWidget{
 
@@ -15,26 +17,41 @@ class _SplashScreenState extends State<SplashScreen>{
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 6), (){
+
+    Timer(Duration(milliseconds: 100), (){
       Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (_) => Dashboard())
+        context, MaterialPageRoute(builder: (_) => CreateAccountWidget())
       );
     });
   }
 
   @override
   Widget build(BuildContext context){
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-
-          )
-        ],
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent, // Your splash color
+        statusBarIconBrightness: Brightness.light,
       ),
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Center(
+                child: Container(
+                    height: 150,
+                    width: 150,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Image.asset('assets/images/pipa_maharaj.png')
+                )),
+            CircularProgressIndicator()
+          ],
+        ),
+      )
     );
   }
 }
