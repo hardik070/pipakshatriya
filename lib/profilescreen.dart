@@ -1,15 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'datamodels/save_user.dart';
-import 'datamodels/user_model.dart';
-import 'package:hive/hive.dart';
 import 'datamodels/datamanager/data_manager.dart';
-
-// import 'editprofile.dart';
-// import 'globalvariables.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'createaccount.dart';
+import 'createaccount.dart';
+import 'editprofile.dart';
 
 class profileManage extends StatefulWidget{
 
@@ -69,7 +62,7 @@ class _profileManageState extends State<profileManage>{
                   children: [
                     Text(
                       //GlobalVariables().name.isNotEmpty ? GlobalVariables().name : 'Name',
-                      UserDataManager().currentUser!.name.split('@')[0],
+                      UserDataManager().currentUser!.name,
                       style: GoogleFonts.openSans(
                         color: Color(0xFF666AC6),
                         fontWeight: FontWeight.w600,
@@ -79,7 +72,7 @@ class _profileManageState extends State<profileManage>{
                     ),
                     Text(
                       //GlobalVariables().course.isNotEmpty ? GlobalVariables().course : 'Course' ,
-                      UserDataManager().currentUser!.loginInfo.loginTime.toString(),
+                      UserDataManager().currentUser!.userId,
                       style: GoogleFonts.poppins(
                         color: Color(0xFF666AC6),
                         fontWeight: FontWeight.w400,
@@ -89,17 +82,27 @@ class _profileManageState extends State<profileManage>{
                   ],
                 ),
                 const Spacer(),
-                Container(
-                  padding: EdgeInsets.all(5),
-                  margin: EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    color: Color(0xFF23255D),
-                    borderRadius: BorderRadius.circular(10)
-                  ),
-                  child: const Icon(
-                    Icons.edit_rounded,
-                    size: 20,
-                    color: Colors.white,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => EditProfile()
+                      )
+                    );
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(5),
+                    margin: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                        color: Color(0xFF23255D),
+                        borderRadius: BorderRadius.circular(10)
+                    ),
+                    child: const Icon(
+                      Icons.edit_rounded,
+                      size: 20,
+                      color: Colors.white,
+                    ),
                   ),
                 )
               ],
@@ -144,11 +147,11 @@ class _profileManageState extends State<profileManage>{
                               ),
                             ),
                           ),
-                          profileTile(/*GlobalVariables().name*/"Dilip kumar", "username", Icons.person),
+                          profileTile(/*GlobalVariables().name*/UserDataManager().currentUser!.name, "username", Icons.person),
                           Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
                           profileTile(/*GlobalVariables().name*/"Manoj Kumar", "Father Name", Icons.person),
                           Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
-                          profileTile(/*GlobalVariables().email*/"hardikkumar2664@gmail.com", "E-mail", Icons.email_rounded),
+                          profileTile(/*GlobalVariables().email*/UserDataManager().currentUser!.email, "E-mail", Icons.email_rounded),
                           Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
                           profileTile(/*GlobalVariables().number*/"9727264663", "Contact Number", Icons.call),
                           Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
@@ -209,81 +212,6 @@ class _profileManageState extends State<profileManage>{
                         ],
                       ),
                     ),
-                    // Container(
-                    //   padding: EdgeInsets.all(15),
-                    //   margin: EdgeInsets.only(top: 10,bottom: 10),
-                    //   decoration: BoxDecoration(
-                    //     borderRadius: BorderRadius.circular(15),
-                    //     color: Color(0xFF666AC6),
-                    //   ),
-                    //   child: Column(
-                    //     children: [
-                    //       SizedBox(
-                    //         width: double.infinity,
-                    //         height: 50,
-                    //         child: Text(
-                    //           "About Me",
-                    //           style: GoogleFonts.poppins(
-                    //             color: Colors.white,
-                    //             fontWeight: FontWeight.w600,
-                    //             fontSize: 18,
-                    //             height: 1,
-                    //           ),
-                    //         ),
-                    //       ),
-                    //       profileTile(/*GlobalVariables().name*/"Hardik kumar", "username", Icons.person),
-                    //       Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
-                    //       profileTile(/*GlobalVariables().name*/"Reva Ram", "Father Name", Icons.person),
-                    //       Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
-                    //       profileTile(/*GlobalVariables().email*/"hardikkumar2664@gmail.com", "E-mail", Icons.email_rounded),
-                    //       Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
-                    //       profileTile(/*GlobalVariables().number*/"9727264663", "Contact Number", Icons.call),
-                    //       Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
-                    //       profileTile(/*GlobalVariables().course*/"Parmar", "Gotra", Icons.book_rounded),
-                    //       Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
-                    //       profileTile(/*GlobalVariables().city*/"Daspa", "City", Icons.location_city_rounded),
-                    //
-                    //     ],
-                    //   ),
-                    // ),
-                    // Container(
-                    //   padding: EdgeInsets.all(15),
-                    //   margin: EdgeInsets.only(top: 10,bottom: 10),
-                    //   decoration: BoxDecoration(
-                    //     borderRadius: BorderRadius.circular(15),
-                    //     color: Color(0xFF666AC6),
-                    //   ),
-                    //   child: Column(
-                    //     children: [
-                    //       SizedBox(
-                    //         width: double.infinity,
-                    //         height: 50,
-                    //         child: Text(
-                    //           "My Relations",
-                    //           style: GoogleFonts.poppins(
-                    //             color: Colors.white,
-                    //             fontWeight: FontWeight.w600,
-                    //             fontSize: 18,
-                    //             height: 1,
-                    //           ),
-                    //         ),
-                    //       ),
-                    //       profileTile(/*GlobalVariables().name*/"Dinesh", "Mama", Icons.person),
-                    //       Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
-                    //       profileTile(/*GlobalVariables().name*/"Mohan Darji", "Fufa", Icons.person),
-                    //       Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
-                    //       profileTile(/*GlobalVariables().name*/"Ashok", "Mama", Icons.person),
-                    //       Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
-                    //       profileTile(/*GlobalVariables().name*/"Babu Ji", "Fufa", Icons.person),
-                    //       Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
-                    //       profileTile(/*GlobalVariables().name*/"Babu Ji", "Mama", Icons.person),
-                    //       Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
-                    //       profileTile(/*GlobalVariables().name*/"Sawla Ji", "Fufa", Icons.person),
-                    //       Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
-                    //
-                    //     ],
-                    //   ),
-                    // ),
 
                     SizedBox(
                       height: 150,
@@ -297,8 +225,13 @@ class _profileManageState extends State<profileManage>{
                           SizedBox(width: 10),
                           GestureDetector(
                             onTap: () async {
-                              //handleSignOut(context);
-                              saveUser();
+                              await UserDataManager().clearUserData();
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => CreateAccountWidget()
+                                )
+                              );
                             },
                             child: Text(
                               "Log out",

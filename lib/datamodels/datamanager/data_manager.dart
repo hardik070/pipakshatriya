@@ -21,4 +21,10 @@ class UserDataManager {
     await _userBox.put('currentUser', user); // ✅ No need to open again
     _currentUser = user;
   }
+
+
+  Future<void> clearUserData() async {
+    await _userBox.clear();       // Clears all keys from this box
+    _currentUser = null;          // Reset in-memory user
+  }
 }

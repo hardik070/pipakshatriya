@@ -18,10 +18,13 @@ class CreateAccountWidget extends StatefulWidget {
 class _CreateAccountWidgetState extends State<CreateAccountWidget> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController userNameController = TextEditingController();
   bool showPassword = true;
   bool isSignInMode = true;
   bool forgetPassword = false;
   bool isLoading = false;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _ref = FirebaseFirestore.instance;
 
   Future<void> sendPasswordResetEmail(BuildContext context, String email) async {
     try {
@@ -61,23 +64,96 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
     }
   }
 
-  Future<void> handleAuthAction() async {
-    final email = emailController.text;
-    final password = passwordController.text;
-    UserModel user = UserModel(
-      name: email,
-      profilePic: "path/to/pic.jpg",
-      fatherName: "Mr. Kantilal",
-      email: email,
-      phoneNumber: "9725908540",
-      gotra: "Makwana",
-      address: "Bhinmal",
-      relationships: [],  // Your list of Relationship
-      loginInfo: LoginInfo(token: email, loginTime: DateTime.now()), // Example
-      contacts: [], // Your list of Contact
+
+  Future<void> userAuthSignIn() async{
+    String email = emailController.text;
+    String password = passwordController.text;
+
+
+    try{
+      UserCredential user = await _auth.signInWithEmailAndPassword(
+          email: email,
+          password: password
+      );
+      String userId = email.replaceAll('@gmail.com', '').replaceAll('.', '');
+      await fatchDataFirestore(userId);
+
+      setState(() {
+        isLoading = false;
+      });
+    }catch (e){
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.deepPurpleAccent,
+            content: Text("$e",style: TextStyle(fontSize: 15),),
+            duration: Duration(milliseconds: 1000),
+          )
+      );
+      setState(() {
+        isLoading = false;
+      });
+      return ;
+    }
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Dashboard()
+      )
     );
-// Store this user in Hive
-    await UserDataManager().updateUser(user);
+  }
+
+  Future<void> fatchDataFirestore(String userId) async{
+    try{
+      final snapshot = await _ref.collection('users').doc(userId).get();
+      final data = snapshot.data();
+
+      print("\n${data!['name']} \n ${data['email']} \n ${data['createdAt']} \n ${data['userId']}");
+      final user = UserModel(
+          name: data['name'] ?? '',
+          profilePic: data['profilePic'] ?? '',
+          fatherName: data['fatherName'] ?? '',
+          email: data['email'] ?? '',
+          phoneNumber: data['phoneNumber'] ?? [],
+          gotra: data['gotra'] ?? '',
+          actualAddress: data['actualAddress'] ?? '',
+          relationships: data['relationships'] ?? [],
+          loginInfo: LoginInfo(token: data['userId'] ?? '', loginTime: DateTime.now()),
+          contacts: [],
+          currentAddress: data['currentAddress'] ?? '',
+          userId: data['userId'] ?? ''
+      );
+      await UserDataManager().updateUser(user);
+    }catch (e) {
+
+    }
+  }
+
+  Future<void> createUserSignUp() async{
+    String email = emailController.text;
+    String password = passwordController.text;
+    String name = userNameController.text.trim();
+
+    try{
+      await _auth.createUserWithEmailAndPassword(
+          email: email,
+          password: password,
+      );
+     await storeFirestoreAccountCreation(email, name);
+    }catch (e){
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.deepPurpleAccent,
+            content: Text("$e",style: TextStyle(fontSize: 15),),
+            duration: Duration(milliseconds: 1000),
+          )
+      );
+      setState(() {
+        isLoading = false;
+      });
+      return ;
+    }
+
     setState(() {
       isLoading = false;
     });
@@ -90,12 +166,66 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
     );
   }
 
+  Future<void> storeFirestoreAccountCreation(String email, String name) async{
+    final String userId = email.replaceAll('@gmail.com', '').replaceAll('.', '');
+
+    try{
+      await _ref.collection('users').doc(userId).set({
+        'name' : name,
+        'email' : email,
+        'userId' : userId,
+        'createdAt' : FieldValue.serverTimestamp()
+      });
+
+     await storeHiveAccountCreation(email, name, userId);
+    }catch (e){
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.deepPurpleAccent,
+            content: Text("$e",style: TextStyle(fontSize: 15),),
+            duration: Duration(milliseconds: 1000),
+          )
+      );
+    }
+  }
+
+  Future<void> storeHiveAccountCreation(String email, String name, String userId) async{
+
+    try{
+      final user = UserModel(
+          name: name,
+          profilePic: '',
+          fatherName: '',
+          email: email,
+          phoneNumber: [],
+          gotra: '',
+          actualAddress: '',
+          relationships: [],
+          loginInfo: LoginInfo(token: userId, loginTime: DateTime.now()),
+          contacts: [],
+          currentAddress: '',
+          userId: userId
+      );
+
+      await UserDataManager().updateUser(user);
+    }catch (e){
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.deepPurpleAccent,
+            content: Text("$e",style: TextStyle(fontSize: 15),),
+            duration: Duration(milliseconds: 1000),
+          )
+      );
+    }
+  }
+
 
   @override
   void dispose() {
     // Dispose the TextEditingController to free up resources
     emailController.dispose();
     passwordController.dispose();
+    userNameController.dispose();
     super.dispose();
   }
 
@@ -136,7 +266,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
                       ),
                       alignment: AlignmentDirectional(0, 0),
                       child: Text(
-                        'Gainers',
+                        'Pipa Kshartriya',
                         style: TextStyle(
                           fontFamily: 'Plus Jakarta Sans',
                           color: Colors.white,
@@ -201,7 +331,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 35),
               TextFormField(
                 controller: emailController,
                 decoration: InputDecoration(
@@ -231,7 +361,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
                 ),
                 keyboardType: TextInputType.emailAddress,
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
               TextFormField(
                 controller: passwordController,
                 obscureText: !showPassword,
@@ -265,10 +395,10 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
                   ),
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 35),
               isLoading ? CircularProgressIndicator() : ElevatedButton(
                 onPressed: () {
-                  handleAuthAction();
+                  userAuthSignIn();
                   setState(() {
                     isLoading = true;
                   });
@@ -309,41 +439,8 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
                   ),
                 ),
               ),
-              const SizedBox(height: 24),
-              // const Text(
-              //   'Or sign up with',
-              //   textAlign: TextAlign.center,
-              //   style: TextStyle(
-              //     fontFamily: 'Plus Jakarta Sans',
-              //     color: Color(0xFF57636C),
-              //     fontSize: 16,
-              //     fontWeight: FontWeight.w500,
-              //   ),
-              // ),
-              // const SizedBox(height: 16),
-              // OutlinedButton.icon(
-              //   onPressed: () {
-              //     // Google sign-in logic
-              //   },
-              //   icon: Icon(Icons.android_rounded, color: Colors.black),
-              //   label: const Text(
-              //     'Continue with Google',
-              //     style: TextStyle(
-              //       fontFamily: 'Plus Jakarta Sans',
-              //       color: Color(0xFF101213),
-              //       fontSize: 16,
-              //       fontWeight: FontWeight.w500,
-              //     ),
-              //   ),
-              //   style: OutlinedButton.styleFrom(
-              //     minimumSize: const Size(double.infinity, 44),
-              //     side: const BorderSide(color: Color(0xFFE0E3E7), width: 2),
-              //     shape: RoundedRectangleBorder(
-              //       borderRadius: BorderRadius.circular(12),
-              //     ),
-              //   ),
-              // ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 35),
+
               InkWell(
                 onTap: () {
                   setState(() {
@@ -575,7 +672,30 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              SizedBox(height: 24),
+              SizedBox(height: 35),
+              TextFormField(
+                controller: userNameController,
+                decoration: InputDecoration(
+                  labelText: 'Username',
+                  labelStyle: TextStyle(
+                    color: Color(0xFF57636C),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xFFF1F4F8), width: 2),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xFF4B39EF), width: 2),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  filled: true,
+                  fillColor: Color(0xFFF1F4F8),
+                ),
+                keyboardType: TextInputType.name,
+              ),
+              SizedBox(height: 20),
               TextFormField(
                 controller: emailController,
                 decoration: InputDecoration(
@@ -598,7 +718,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
                 ),
                 keyboardType: TextInputType.emailAddress,
               ),
-              SizedBox(height: 16),
+              SizedBox(height: 20),
               TextFormField(
                 controller: passwordController,
                 obscureText: !showPassword,
@@ -632,15 +752,26 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
                   ),
                 ),
               ),
-              SizedBox(height: 16),
+              SizedBox(height: 35),
               isLoading ? CircularProgressIndicator() : ElevatedButton(
                 onPressed: () {
                   if(emailController.text.contains("@gmail.com")) {
                     if(passwordController.text.length >= 8) {
-                      handleAuthAction();
-                      setState(() {
-                        isLoading = true;
-                      });
+                      if(!passwordController.text.contains(' ')){
+                        createUserSignUp();
+                        setState(() {
+                          isLoading = true;
+                        });
+                      }else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              backgroundColor: Colors.deepPurpleAccent,
+                              content: Text("Invalid password, remove blank spaces",style: TextStyle(fontSize: 15),),
+                              duration: Duration(milliseconds: 1000),
+                            )
+                        );
+                      }
+
                     }else
                       ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(

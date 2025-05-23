@@ -20,13 +20,13 @@ class UserModel extends HiveObject {
   String email;
 
   @HiveField(4)
-  String phoneNumber;
+  List<String> phoneNumber;
 
   @HiveField(5)
   String gotra;
 
   @HiveField(6)
-  String address;
+  String actualAddress;
 
   @HiveField(7)
   List<Relationship> relationships;
@@ -37,6 +37,12 @@ class UserModel extends HiveObject {
   @HiveField(9)
   List<Contact> contacts;
 
+  @HiveField(10)
+  String currentAddress;
+
+  @HiveField(11)
+  String userId;
+
   UserModel({
     required this.name,
     required this.profilePic,
@@ -44,9 +50,11 @@ class UserModel extends HiveObject {
     required this.email,
     required this.phoneNumber,
     required this.gotra,
-    required this.address,
+    required this.actualAddress,
     required this.relationships,
     required this.loginInfo,
     required this.contacts,
+    required this.currentAddress,
+    required this.userId
   });
 }
