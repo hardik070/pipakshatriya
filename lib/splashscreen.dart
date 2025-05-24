@@ -4,6 +4,8 @@ import'dart:async';
 import 'createaccount.dart';
 import 'package:flutter/services.dart';
 import 'createaccount.dart';
+import 'datamodels/datamanager/data_manager.dart';
+import 'dashboard.dart';
 
 class SplashScreen extends StatefulWidget{
 
@@ -18,10 +20,16 @@ class _SplashScreenState extends State<SplashScreen>{
   void initState() {
     super.initState();
 
-    Timer(Duration(milliseconds: 100), (){
-      Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (_) => CreateAccountWidget())
-      );
+    Timer(Duration(milliseconds: 2000), (){
+      if(UserDataManager().currentUser?.loginInfo.token != null){
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (_) => Dashboard())
+        );
+      }else {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (_) => CreateAccountWidget())
+        );
+      }
     });
   }
 

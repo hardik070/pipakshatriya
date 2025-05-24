@@ -27,4 +27,15 @@ class UserDataManager {
     await _userBox.clear();       // Clears all keys from this box
     _currentUser = null;          // Reset in-memory user
   }
+
+  Future<void> updateUserField(void Function(UserModel user) updateCallback) async {
+    final user = _userBox.get('currentUser');
+    if (user != null) {
+      updateCallback(user); // modify the field(s)
+      await user.save();    // persist changes
+      _currentUser = user;  // update in-memory copy
+    } else {
+      print('No user found to update');
+    }
+  }
 }

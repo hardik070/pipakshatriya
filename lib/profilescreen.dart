@@ -3,6 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'datamodels/datamanager/data_manager.dart';
 import 'createaccount.dart';
 import 'editprofile.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
 
 class profileManage extends StatefulWidget{
 
@@ -26,9 +28,11 @@ class _profileManageState extends State<profileManage>{
   //   );
   // }
 
+  String profilePicUrl = '';
+
   void initState(){
     super.initState();
-
+    profilePicUrl = UserDataManager().currentUser!.profilePic;
   }
 
 
@@ -44,17 +48,23 @@ class _profileManageState extends State<profileManage>{
             SizedBox(height: 30),
             Row(
               children: [
-                SizedBox(
-                  width: 45,
-                  height: 45,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Image.network(
-                      "https://imgs.search.brave.com/ek_J28ierOL93E0C7btwCHh1V0nZyPAKISxj654meLg/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS1waG90/by9jYXJ0b29uLWdp/cmwtd2l0aC1sb25n/LWhhaXItYm9vdHMt/c3RhbmRpbmctZnJv/bnQtd2hpdGUtYmFj/a2dyb3VuZC1nZW5l/cmF0aXZlLWFpXzkw/MDgzMy0zODA0My5q/cGc_c2VtdD1haXNf/aHlicmlk",
-                      fit: BoxFit.cover,
-                    ),
+                profilePicUrl.isNotEmpty ?
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(100),
+                  child: CachedNetworkImage(
+                    imageUrl: UserDataManager().currentUser!.profilePic ?? '',
+                    cacheKey: "ProfilePicture",
+                    fit: BoxFit.cover,
+                    width: 50,
+                    height: 50,
                   ),
-                ),
+                )
+                    :
+                SizedBox(height: 50, width: 50, child: CircleAvatar(
+                    radius: 60,
+                    //backgroundImage: uploadedImageUrl != null ? FileImage(_profileImage!) : null,
+                    child: Icon(Icons.person, size: 30, color: Color(0xFF666AC6))
+                ),),
                 SizedBox(width: 10),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

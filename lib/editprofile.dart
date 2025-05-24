@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:hive/hive.dart';
 import 'datamodels/datamanager/data_manager.dart';
-import 'package:intl/intl.dart';
+
 
 class EditProfile extends StatefulWidget {
   @override
@@ -25,12 +32,61 @@ class _EditProfileState extends State<EditProfile> {
   List<String> numbers = ["9982875922", "8696282986"];
   List<String> reltionTypes = ["Mama", "Fufa", "Chacha", "Mosa", "Sala", "Sasur", "Sadu", ];
   List<Map<String, String>> relationships = [{"Mama" : "Hardikkumar"},{"Mama" : "Shayam kumar"}, {"Chacha" : "Mohan lal"}, {"Fufa" : "Ravi Kumar"}];
-
-
+  File? _profileImage;
+  String profilePicUrl = '';
   @override
   void initState() {
     super.initState();
+    profilePicUrl = UserDataManager().currentUser!.profilePic;
     createNumberController();
+  }
+
+  void _addProfilePicture() async{
+    final pickedFile = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 75, // optional to compress
+    );
+
+    if (pickedFile != null) {
+      setState(() {
+        _profileImage = File(pickedFile.path);
+      });
+    }
+  }
+
+  final ImagePicker _picker = ImagePicker();
+  String? uploadedImageUrl;
+
+  Future<void> pickAndUploadImage() async {
+    try {
+      // Step 1: Pick image from gallery
+      final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+
+      if (pickedFile == null) {
+        print('No image selected.');
+        return;
+      }
+
+      File imageFile = File(pickedFile.path);
+
+      // Step 2: Create unique file name
+      String fileName = basename(imageFile.path);
+      Reference storageRef = FirebaseStorage.instance.ref().child('uploads/$fileName');
+
+      // Step 3: Upload image
+      UploadTask uploadTask = storageRef.putFile(imageFile);
+      TaskSnapshot snapshot = await uploadTask;
+
+      // Step 4: Get download URL
+      uploadedImageUrl = await snapshot.ref.getDownloadURL();
+      await UserDataManager().updateUserField((user) {
+        user.profilePic = uploadedImageUrl!;
+      });
+
+      print('Image uploaded! URL: $uploadedImageUrl');
+    } catch (e) {
+      print('Error uploading image: $e');
+    }
   }
 
   void createNumberController() {
@@ -87,104 +143,104 @@ class _EditProfileState extends State<EditProfile> {
   Future<bool> _showItemDialog(int indexFromPara, String oldValue) async {
     List<String> fltdlist = reltionTypes;
     String searchQuery= '';
-    final result = await showDialog<String>(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return AlertDialog(
-              insetPadding: EdgeInsets.symmetric(horizontal: 20),
-              //title: Text('Select an item'),
-              content: SizedBox(
-                width: MediaQuery.of(context).size.width * 0.8,
-                height: MediaQuery.of(context).size.height * 0.5,
-                child: Column(
-                  children: [
-                    TextFormField(
-                      controller: _searchController,
-                      decoration: InputDecoration(
-                        hintText: 'City...',
-                        hintStyle: TextStyle(
-                          color: Color(0xFF23255D),
-                        ),
-                        prefixIcon: Icon(Icons.search, color: Color(0xFF23255D),),
-                        suffixIcon: _searchController.text.isEmpty
-                            ? IconButton(
-                          icon: Icon(Icons.info_outline),
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                //title: Text('Select City & Village'),
-                                content: Text(
-                                  'Frist select city in which person lives',
-                                  style: TextStyle(
-                                    color: Color(0xFF23255D),
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: Text('OK'),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        )
-
-                            : IconButton(
-                          icon: Icon(Icons.clear),
-                          onPressed: () {
-                            _searchController.clear();
-                            setState(() {
-                              searchQuery = '';
-                              fltdlist = reltionTypes;
-                            });
-                          },
-                        ),
-                      ),
-                      onChanged: (value) {
-                        setState(() {
-                          searchQuery = value.trim().toLowerCase();
-                          fltdlist = reltionTypes
-                              .where((item) =>
-                              item.toLowerCase().contains(searchQuery))
-                              .toList();
-                        });
-                      },
-                    ),
-                    Expanded(
-                      child: ListView.builder(
-                        cacheExtent: 1000,
-                        itemCount: fltdlist.length,
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            title: Text(
-                              fltdlist[index],
-                              style: TextStyle(
-                                color: Color(0xFF23255D),
-                                fontWeight: FontWeight.w500,
-
-                              ),
-                            ),
-                            onTap: () {
-                              relationships[indexFromPara] = {reltionTypes[index] : oldValue};
-                              Navigator.of(context).pop(fltdlist[index]);
-                            },
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
+    // final result = await showDialog<String>(
+    //   context: context,
+    //   builder: (BuildContext context) {
+    //     return StatefulBuilder(
+    //       builder: (context, setState) {
+    //         return AlertDialog(
+    //           insetPadding: EdgeInsets.symmetric(horizontal: 20),
+    //           //title: Text('Select an item'),
+    //           content: SizedBox(
+    //             width: MediaQuery.of(context).size.width * 0.8,
+    //             height: MediaQuery.of(context).size.height * 0.5,
+    //             child: Column(
+    //               children: [
+    //                 TextFormField(
+    //                   controller: _searchController,
+    //                   decoration: InputDecoration(
+    //                     hintText: 'City...',
+    //                     hintStyle: TextStyle(
+    //                       color: Color(0xFF23255D),
+    //                     ),
+    //                     prefixIcon: Icon(Icons.search, color: Color(0xFF23255D),),
+    //                     suffixIcon: _searchController.text.isEmpty
+    //                         ? IconButton(
+    //                       icon: Icon(Icons.info_outline),
+    //                       onPressed: () {
+    //                         showDialog(
+    //                           context: context,
+    //                           builder: (context) => AlertDialog(
+    //                             //title: Text('Select City & Village'),
+    //                             content: Text(
+    //                               'Frist select city in which person lives',
+    //                               style: TextStyle(
+    //                                 color: Color(0xFF23255D),
+    //                                 fontWeight: FontWeight.w500,
+    //                               ),
+    //                             ),
+    //                             actions: [
+    //                               TextButton(
+    //                                 onPressed: () => Navigator.pop(context),
+    //                                 child: Text('OK'),
+    //                               ),
+    //                             ],
+    //                           ),
+    //                         );
+    //                       },
+    //                     )
+    //
+    //                         : IconButton(
+    //                       icon: Icon(Icons.clear),
+    //                       onPressed: () {
+    //                         _searchController.clear();
+    //                         setState(() {
+    //                           searchQuery = '';
+    //                           fltdlist = reltionTypes;
+    //                         });
+    //                       },
+    //                     ),
+    //                   ),
+    //                   onChanged: (value) {
+    //                     setState(() {
+    //                       searchQuery = value.trim().toLowerCase();
+    //                       fltdlist = reltionTypes
+    //                           .where((item) =>
+    //                           item.toLowerCase().contains(searchQuery))
+    //                           .toList();
+    //                     });
+    //                   },
+    //                 ),
+    //                 Expanded(
+    //                   child: ListView.builder(
+    //                     cacheExtent: 1000,
+    //                     itemCount: fltdlist.length,
+    //                     itemBuilder: (context, index) {
+    //                       return ListTile(
+    //                         title: Text(
+    //                           fltdlist[index],
+    //                           style: TextStyle(
+    //                             color: Color(0xFF23255D),
+    //                             fontWeight: FontWeight.w500,
+    //
+    //                           ),
+    //                         ),
+    //                         onTap: () {
+    //                           relationships[indexFromPara] = {reltionTypes[index] : oldValue};
+    //                           Navigator.of(context).pop(fltdlist[index]);
+    //                         },
+    //                       );
+    //                     },
+    //                   ),
+    //                 ),
+    //               ],
+    //             ),
+    //           ),
+    //         );
+    //       },
+    //     );
+    //   },
+    // );
 
 
     _searchController.clear();
@@ -214,18 +270,34 @@ class _EditProfileState extends State<EditProfile> {
             children: [
               Center(
                 child: GestureDetector(
-                  onTap: () {
-
+                  onTap: () async{
+                    await pickAndUploadImage();
+                    setState(() {
+                      profilePicUrl = UserDataManager().currentUser!.profilePic;
+                    });
+                    print('Image URL: ${uploadedImageUrl}');
                   },
                   child: SizedBox(
                       height: 120,
                       width: 120,
                       child: Stack(
                         children: [
-                          Icon(
-                            Icons.account_circle_outlined,
-                            size: 120,
-                            color: Color(0xFF666AC6),
+                          profilePicUrl.isNotEmpty ?
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: CachedNetworkImage(
+                              imageUrl: UserDataManager().currentUser!.profilePic ?? '',
+                              cacheKey: "ProfilePicture",
+                              fit: BoxFit.cover,
+                              width: 120,
+                              height: 120,
+                            ),
+                          )
+                          :
+                          CircleAvatar(
+                            radius: 60,
+                            //backgroundImage: uploadedImageUrl != null ? FileImage(_profileImage!) : null,
+                            child: Icon(Icons.person, size: 60, color: Color(0xFF666AC6))
                           ),
                           Align(
                             alignment: Alignment(1, 1),
@@ -450,7 +522,9 @@ class _EditProfileState extends State<EditProfile> {
               ),
               SizedBox(height: 50),
               ElevatedButton(
-                  onPressed: (){},
+                  onPressed: (){
+                    print(UserDataManager().currentUser?.profilePic ?? "hello");
+                  },
                   style: ElevatedButton.styleFrom(
                     textStyle: TextStyle(fontSize: 20,),
                   ),
