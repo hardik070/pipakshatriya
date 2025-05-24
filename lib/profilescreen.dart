@@ -32,7 +32,7 @@ class _profileManageState extends State<profileManage>{
 
   void initState(){
     super.initState();
-    profilePicUrl = UserDataManager().currentUser!.profilePic;
+    profilePicUrl = UserDataManager().currentUser?.profilePic ?? '';
   }
 
 
@@ -52,8 +52,12 @@ class _profileManageState extends State<profileManage>{
                 ClipRRect(
                   borderRadius: BorderRadius.circular(100),
                   child: CachedNetworkImage(
-                    imageUrl: UserDataManager().currentUser!.profilePic ?? '',
-                    cacheKey: "ProfilePicture",
+                    imageUrl: profilePicUrl,
+                    placeholder: (context, url) => CircleAvatar(
+                        radius: 60,
+                        //backgroundImage: uploadedImageUrl != null ? FileImage(_profileImage!) : null,
+                        child: Icon(Icons.person, size: 30, color: Color(0xFF666AC6))
+                    ),
                     fit: BoxFit.cover,
                     width: 50,
                     height: 50,
@@ -62,8 +66,8 @@ class _profileManageState extends State<profileManage>{
                     :
                 SizedBox(height: 50, width: 50, child: CircleAvatar(
                     radius: 60,
-                    //backgroundImage: uploadedImageUrl != null ? FileImage(_profileImage!) : null,
-                    child: Icon(Icons.person, size: 30, color: Color(0xFF666AC6))
+                  //backgroundImage: _profileImage != null ? FileImage(_profileImage!) : null,
+                  child: Icon(Icons.person, size: 30, color: Color(0xFF666AC6)),
                 ),),
                 SizedBox(width: 10),
                 Column(
@@ -72,7 +76,7 @@ class _profileManageState extends State<profileManage>{
                   children: [
                     Text(
                       //GlobalVariables().name.isNotEmpty ? GlobalVariables().name : 'Name',
-                      UserDataManager().currentUser!.name,
+                      UserDataManager().currentUser?.name ?? "Name",
                       style: GoogleFonts.openSans(
                         color: Color(0xFF666AC6),
                         fontWeight: FontWeight.w600,
@@ -82,7 +86,7 @@ class _profileManageState extends State<profileManage>{
                     ),
                     Text(
                       //GlobalVariables().course.isNotEmpty ? GlobalVariables().course : 'Course' ,
-                      UserDataManager().currentUser!.userId,
+                      UserDataManager().currentUser?.userId ?? "User Id",
                       style: GoogleFonts.poppins(
                         color: Color(0xFF666AC6),
                         fontWeight: FontWeight.w400,
@@ -157,11 +161,11 @@ class _profileManageState extends State<profileManage>{
                               ),
                             ),
                           ),
-                          profileTile(/*GlobalVariables().name*/UserDataManager().currentUser!.name, "username", Icons.person),
+                          profileTile(/*GlobalVariables().name*/UserDataManager().currentUser?.name ?? "Username", "username", Icons.person),
                           Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
                           profileTile(/*GlobalVariables().name*/"Manoj Kumar", "Father Name", Icons.person),
                           Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
-                          profileTile(/*GlobalVariables().email*/UserDataManager().currentUser!.email, "E-mail", Icons.email_rounded),
+                          profileTile(/*GlobalVariables().email*/UserDataManager().currentUser?.email ?? "Email", "E-mail", Icons.email_rounded),
                           Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
                           profileTile(/*GlobalVariables().number*/"9727264663", "Contact Number", Icons.call),
                           Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),

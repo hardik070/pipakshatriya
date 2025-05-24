@@ -8,6 +8,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:hive/hive.dart';
 import 'datamodels/datamanager/data_manager.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+
 
 
 class EditProfile extends StatefulWidget {
@@ -16,10 +18,11 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
-  bool gender = false;
+
   final List<TextEditingController> _phoneNumbersController = [];
 
 
+  bool isSaving = false;
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
@@ -29,74 +32,126 @@ class _EditProfileState extends State<EditProfile> {
   final TextEditingController currentCityController = TextEditingController();
   final TextEditingController _searchController = TextEditingController();
 
-  List<String> numbers = ["9982875922", "8696282986"];
+  List<String>? numbers = ["9982875922", "8696282986"];
   List<String> reltionTypes = ["Mama", "Fufa", "Chacha", "Mosa", "Sala", "Sasur", "Sadu", ];
-  List<Map<String, String>> relationships = [{"Mama" : "Hardikkumar"},{"Mama" : "Shayam kumar"}, {"Chacha" : "Mohan lal"}, {"Fufa" : "Ravi Kumar"}];
-  File? _profileImage;
-  String profilePicUrl = '';
+  List<Map<String, String>> relationships = [
+    {"Mama" : "Hardikkumar"},
+    {"Mama" : "Shayam kumar"},
+    {"Chacha" : "Mohan lal"},
+    {"Sasur" : "Mohan lal"},
+    {"Sala" : "Mohan lal"},
+    {"Fufa" : "Ravi Kumar"}
+  ];
+  List<String> fltdCityList = [];
+  List<String> fltdCurrentCityList = [];
+  List<String> fltdListGotra = [];
+  List<String> gotraList = ["Parmar", "Bhati", "Solanki", "Panwar", "Padhyar", "Makwana", "Dabhi", "Dahiya",];
+  List<String> citysList = ["Jodhpur", "Navsari", "Bhinmal", "Daspa", "Surat", "Dhanera", "Pamana", "Virona", "Samrani"];
+  double _uploadProgress = 0.0;
   @override
   void initState() {
     super.initState();
-    profilePicUrl = UserDataManager().currentUser!.profilePic;
-    createNumberController();
-  }
-
-  void _addProfilePicture() async{
-    final pickedFile = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
-      imageQuality: 75, // optional to compress
-    );
-
-    if (pickedFile != null) {
-      setState(() {
-        _profileImage = File(pickedFile.path);
-      });
+    profilePicUrl = UserDataManager().currentUser?.profilePic ?? '';
+    if(numbers != null){
+      createNumberController();
+    }else {
+      _phoneNumbersController.add(TextEditingController());
+      _phoneNumbersController.add(TextEditingController());
     }
+
+    if(relationships.isEmpty){
+      _addRelationMakingTile("Fufa");
+      _addRelationMakingTile("Chacha");
+    }
+
   }
 
   final ImagePicker _picker = ImagePicker();
   String? uploadedImageUrl;
+  File? _profileImage;
+  String profilePicUrl = '';
+  XFile? pickedFile;
 
   Future<void> pickAndUploadImage() async {
-    try {
-      // Step 1: Pick image from gallery
-      final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
 
+    try {
+      profilePicUrl = '';
+      pickedFile = await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
       if (pickedFile == null) {
         print('No image selected.');
         return;
       }
-
-      File imageFile = File(pickedFile.path);
-
+      setState(() {
+        _profileImage = File(pickedFile!.path);
+      });
       // Step 2: Create unique file name
-      String fileName = basename(imageFile.path);
-      Reference storageRef = FirebaseStorage.instance.ref().child('uploads/$fileName');
+      String fileName = basename(_profileImage!.path);
+      Reference storageRef = FirebaseStorage.instance.ref().child('profilePic/$fileName');
 
       // Step 3: Upload image
-      UploadTask uploadTask = storageRef.putFile(imageFile);
+      UploadTask uploadTask = storageRef.putFile(_profileImage!);
+
+      uploadTask.snapshotEvents.listen((TaskSnapshot snapshot) {
+        final progress = snapshot.bytesTransferred / snapshot.totalBytes;
+        setState(() {
+          _uploadProgress = progress;
+        });
+      }).onError((error) {
+        print("Upload failed: $error");
+      });
+
       TaskSnapshot snapshot = await uploadTask;
 
       // Step 4: Get download URL
       uploadedImageUrl = await snapshot.ref.getDownloadURL();
+      print(uploadedImageUrl);
       await UserDataManager().updateUserField((user) {
         user.profilePic = uploadedImageUrl!;
       });
+      setState(() {
+        profilePicUrl = uploadedImageUrl!;
+      });
 
-      print('Image uploaded! URL: $uploadedImageUrl');
+
     } catch (e) {
       print('Error uploading image: $e');
     }
   }
 
+  Future<void> _uploadUserInfoToFirestore() async{
+
+    String name = nameController.text.trim();
+    String fatherName = fatherNameController.text.trim();
+    String gotra = gotraController.text.trim();
+    String city = cityController.text.trim();
+    String currentCity = currentCityController.text.trim();
+    List<String> numbers = _phoneNumbersController.map((eachNumber) => eachNumber.text).toList();
+    List<Map<String, String>> relations = relationships.map((eachRelation) => eachRelation).toList();
+    String userid = UserDataManager().currentUser!.userId;
+    print("$userid");
+    try{
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userid).update({
+        "name" : name,
+        "fatherName" : fatherName,
+        "gotra" : gotra,
+        "city" : city,
+        "currentCity" : currentCity,
+        "relations" : relations,
+        "numbers" : numbers,
+        "profilePic" : profilePicUrl
+      });
+    }catch (e){
+      print("\n\n\n\Error to store on firestore : $e");
+    }
+
+    print("\n$name\n$fatherName\n$gotra\n$city\n$currentCity\n$numbers\n$relations");
+  }
+
   void createNumberController() {
-    if(numbers.isNotEmpty){
-      for(var item in numbers){
-        _phoneNumbersController.add(TextEditingController(text: item));
-      }
-    }else {
-      _phoneNumbersController.add(TextEditingController());
-      _phoneNumbersController.add(TextEditingController());
+    for(var item in numbers!){
+      _phoneNumbersController.add(TextEditingController(text: item));
     }
   }
 
@@ -106,9 +161,9 @@ class _EditProfileState extends State<EditProfile> {
     });
   }
 
-  void _addRelationMakingTile() {
+  void _addRelationMakingTile(String? relationType) {
     setState(() {
-      relationships.add({"Select" : "Select person"});
+      relationships.add({ relationType ?? "Select" : "Select person"});
     });
   }
 
@@ -140,112 +195,103 @@ class _EditProfileState extends State<EditProfile> {
     super.dispose();
   }
 
-  Future<bool> _showItemDialog(int indexFromPara, String oldValue) async {
+  Future<bool> _showItemDialog(BuildContext context, int indexFromPara, String oldValue) async {
     List<String> fltdlist = reltionTypes;
-    String searchQuery= '';
-    // final result = await showDialog<String>(
-    //   context: context,
-    //   builder: (BuildContext context) {
-    //     return StatefulBuilder(
-    //       builder: (context, setState) {
-    //         return AlertDialog(
-    //           insetPadding: EdgeInsets.symmetric(horizontal: 20),
-    //           //title: Text('Select an item'),
-    //           content: SizedBox(
-    //             width: MediaQuery.of(context).size.width * 0.8,
-    //             height: MediaQuery.of(context).size.height * 0.5,
-    //             child: Column(
-    //               children: [
-    //                 TextFormField(
-    //                   controller: _searchController,
-    //                   decoration: InputDecoration(
-    //                     hintText: 'City...',
-    //                     hintStyle: TextStyle(
-    //                       color: Color(0xFF23255D),
-    //                     ),
-    //                     prefixIcon: Icon(Icons.search, color: Color(0xFF23255D),),
-    //                     suffixIcon: _searchController.text.isEmpty
-    //                         ? IconButton(
-    //                       icon: Icon(Icons.info_outline),
-    //                       onPressed: () {
-    //                         showDialog(
-    //                           context: context,
-    //                           builder: (context) => AlertDialog(
-    //                             //title: Text('Select City & Village'),
-    //                             content: Text(
-    //                               'Frist select city in which person lives',
-    //                               style: TextStyle(
-    //                                 color: Color(0xFF23255D),
-    //                                 fontWeight: FontWeight.w500,
-    //                               ),
-    //                             ),
-    //                             actions: [
-    //                               TextButton(
-    //                                 onPressed: () => Navigator.pop(context),
-    //                                 child: Text('OK'),
-    //                               ),
-    //                             ],
-    //                           ),
-    //                         );
-    //                       },
-    //                     )
-    //
-    //                         : IconButton(
-    //                       icon: Icon(Icons.clear),
-    //                       onPressed: () {
-    //                         _searchController.clear();
-    //                         setState(() {
-    //                           searchQuery = '';
-    //                           fltdlist = reltionTypes;
-    //                         });
-    //                       },
-    //                     ),
-    //                   ),
-    //                   onChanged: (value) {
-    //                     setState(() {
-    //                       searchQuery = value.trim().toLowerCase();
-    //                       fltdlist = reltionTypes
-    //                           .where((item) =>
-    //                           item.toLowerCase().contains(searchQuery))
-    //                           .toList();
-    //                     });
-    //                   },
-    //                 ),
-    //                 Expanded(
-    //                   child: ListView.builder(
-    //                     cacheExtent: 1000,
-    //                     itemCount: fltdlist.length,
-    //                     itemBuilder: (context, index) {
-    //                       return ListTile(
-    //                         title: Text(
-    //                           fltdlist[index],
-    //                           style: TextStyle(
-    //                             color: Color(0xFF23255D),
-    //                             fontWeight: FontWeight.w500,
-    //
-    //                           ),
-    //                         ),
-    //                         onTap: () {
-    //                           relationships[indexFromPara] = {reltionTypes[index] : oldValue};
-    //                           Navigator.of(context).pop(fltdlist[index]);
-    //                         },
-    //                       );
-    //                     },
-    //                   ),
-    //                 ),
-    //               ],
-    //             ),
-    //           ),
-    //         );
-    //       },
-    //     );
-    //   },
-    // );
-
+    String searchQuery = '';
+    final result = await showDialog<String>(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              insetPadding: EdgeInsets.symmetric(horizontal: 20),
+              content: SizedBox(
+                width: MediaQuery.of(context).size.width * 0.8,
+                height: MediaQuery.of(context).size.height * 0.5,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        hintText: 'City...',
+                        prefixIcon: Icon(Icons.search, color: Color(0xFF23255D)),
+                        suffixIcon: _searchController.text.isEmpty
+                            ? IconButton(
+                          icon: Icon(Icons.info_outline),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                content: Text(
+                                  'First select city in which person lives',
+                                  style: TextStyle(
+                                    color: Color(0xFF23255D),
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: Text('OK'),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        )
+                            : IconButton(
+                          icon: Icon(Icons.clear),
+                          onPressed: () {
+                            _searchController.clear();
+                            setState(() {
+                              searchQuery = '';
+                              fltdlist = reltionTypes;
+                            });
+                          },
+                        ),
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          searchQuery = value.trim().toLowerCase();
+                          fltdlist = reltionTypes
+                              .where((item) => item.toLowerCase().contains(searchQuery))
+                              .toList();
+                        });
+                      },
+                    ),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: fltdlist.length,
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            title: Text(
+                              fltdlist[index],
+                              style: TextStyle(
+                                color: Color(0xFF23255D),
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            onTap: () {
+                              relationships[indexFromPara] = {reltionTypes[index]: oldValue};
+                              Navigator.of(context).pop(fltdlist[index]);
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
 
     _searchController.clear();
     return true;
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -272,10 +318,6 @@ class _EditProfileState extends State<EditProfile> {
                 child: GestureDetector(
                   onTap: () async{
                     await pickAndUploadImage();
-                    setState(() {
-                      profilePicUrl = UserDataManager().currentUser!.profilePic;
-                    });
-                    print('Image URL: ${uploadedImageUrl}');
                   },
                   child: SizedBox(
                       height: 120,
@@ -283,22 +325,27 @@ class _EditProfileState extends State<EditProfile> {
                       child: Stack(
                         children: [
                           profilePicUrl.isNotEmpty ?
-                          ClipRRect(
+                            ClipRRect(
                             borderRadius: BorderRadius.circular(100),
                             child: CachedNetworkImage(
-                              imageUrl: UserDataManager().currentUser!.profilePic ?? '',
-                              cacheKey: "ProfilePicture",
+                              imageUrl: profilePicUrl,
+                              placeholder: (context, url) => CircleAvatar(
+                                  radius: 60,
+                                  backgroundImage: _profileImage != null ? FileImage(_profileImage!) : null,
+                                  child: _profileImage != null ? null : Icon(Icons.person, size: 60, color: Color(0xFF666AC6)),
+                              ),
                               fit: BoxFit.cover,
                               width: 120,
                               height: 120,
                             ),
                           )
                           :
-                          CircleAvatar(
-                            radius: 60,
-                            //backgroundImage: uploadedImageUrl != null ? FileImage(_profileImage!) : null,
-                            child: Icon(Icons.person, size: 60, color: Color(0xFF666AC6))
+                            CircleAvatar(
+                              radius: 60,
+                              backgroundImage: _profileImage != null ? FileImage(_profileImage!) : null,
+                              child: _profileImage != null ? null : Icon(Icons.person, size: 60, color: Color(0xFF666AC6)),
                           ),
+
                           Align(
                             alignment: Alignment(1, 1),
                             child: Icon(Icons.add_a_photo_rounded, color: Color(0xFF666AC6)),
@@ -308,6 +355,15 @@ class _EditProfileState extends State<EditProfile> {
                   ),
                 )
               ),
+              SizedBox(height: 15,),
+              pickedFile != null ?
+              LinearProgressIndicator(
+                value: _uploadProgress, // between 0 and 1
+                minHeight: 6,
+                backgroundColor: Color(0xFFB3B5EF),
+                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF666AC6),),
+              ) :
+              Container(),
               SizedBox(height: 20,),
               //Divider(color: Color(0x54002785), thickness: 1, height: 20),
               textBox("Name", Icons.person_rounded, TextInputType.name, nameController, 20),
@@ -316,15 +372,144 @@ class _EditProfileState extends State<EditProfile> {
               textBox("E-mail", Icons.email_rounded, TextInputType.emailAddress, emailController, 30),
               SizedBox(height: 15,),
               //Divider(color: Color(0x54002785), thickness: 1, height: 20),
-              textBox("Father name", Icons.account_circle_rounded, TextInputType.phone, fatherNameController, 10),
+              textBox("Father name", Icons.account_circle_rounded, TextInputType.text, fatherNameController, 10),
               SizedBox(height: 15,),
               //Divider(color: Color(0x54002785), thickness: 1, height: 20),
               textBox("Gotra", Icons.temple_hindu_rounded, TextInputType.text, gotraController, 20),
+              fltdListGotra.isNotEmpty ?
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                    maxHeight: 170,
+                    minWidth: double.infinity
+                ),
+                child: Card(
+                    color: Colors.white,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ...fltdListGotra.asMap().entries.map((element) {
+                            int index = element.key;
+
+                            return GestureDetector(
+                              onTap: () {
+                                gotraController.text = fltdListGotra[index];
+                                setState(() {
+                                  fltdListGotra = [];
+                                });
+                              },
+                              child: Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 20),
+                                  child: SizedBox(width: double.infinity, child: Text(
+                                    fltdListGotra[index],
+                                    style: TextStyle(
+                                        color: Colors.deepPurpleAccent,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500
+                                    ),
+                                  ),)
+                              ),
+                            );
+                          }),
+                        ],
+                      ),
+                    )
+                ),
+              )
+                  :
+              Container(),
               SizedBox(height: 15,),
               //Divider(color: Color(0x54002785), thickness: 1, height: 20),
               textBox("Address", Icons.location_city_rounded, TextInputType.text, cityController, 20),
+              fltdCityList.isNotEmpty ?
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: 170,
+                  minWidth: double.infinity
+                ),
+                child: Card(
+                    color: Colors.white,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ...fltdCityList.asMap().entries.map((element) {
+                            int index = element.key;
+
+                            return GestureDetector(
+                              onTap: () {
+                                cityController.text = fltdCityList[index];
+                                setState(() {
+                                  fltdCityList = [];
+                                });
+                              },
+                              child: Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 20),
+                                  child: SizedBox(width: double.infinity, child: Text(
+                                    fltdCityList[index],
+                                    style: TextStyle(
+                                        color: Colors.deepPurpleAccent,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500
+                                    ),
+                                  ),)
+                              ),
+                            );
+                          }),
+                        ],
+                      ),
+                    )
+                ),
+              )
+              :
+              Container(),
               SizedBox(height: 15,),
               textBox("Current living address", Icons.location_history, TextInputType.text, currentCityController, 20),
+              fltdCurrentCityList.isNotEmpty ?
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                    maxHeight: 170,
+                    minWidth: double.infinity
+                ),
+                child: Card(
+                    color: Colors.white,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ...fltdCurrentCityList.asMap().entries.map((element) {
+                            int index = element.key;
+
+                            return GestureDetector(
+                              onTap: () {
+                                currentCityController.text = fltdCurrentCityList[index];
+                                setState(() {
+                                  fltdCurrentCityList = [];
+                                });
+                              },
+                              child: Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 20),
+                                  child: SizedBox(width: double.infinity, child: Text(
+                                    fltdCurrentCityList[index],
+                                    style: TextStyle(
+                                        color: Colors.deepPurpleAccent,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500
+                                    ),
+                                  ),)
+                              ),
+                            );
+                          }),
+                        ],
+                      ),
+                    )
+                ),
+              )
+                  :
+              Container(),
               SizedBox(height: 25),
               Card(
                 color: Colors.white,
@@ -402,7 +587,7 @@ class _EditProfileState extends State<EditProfile> {
                             Spacer(),
                             IconButton(
                               onPressed: (){
-                                _addRelationMakingTile();
+                                _addRelationMakingTile(null);
                               },
                               icon: Icon(
                                 Icons.add_rounded,
@@ -452,7 +637,7 @@ class _EditProfileState extends State<EditProfile> {
                               children: [
                                 GestureDetector(
                                   onTap: () async{
-                                    await _showItemDialog(index, indexMapValues.values.first);
+                                    await _showItemDialog(context ,index, indexMapValues.values.first);
                                     setState(() {});
                                   },
                                   child: Container(
@@ -509,7 +694,7 @@ class _EditProfileState extends State<EditProfile> {
                                     onTap: (){
                                       _deleteRelation(index);
                                     },
-                                    child: Icon(Icons.delete),
+                                    child: Icon(Icons.delete, color: Color(0xFF666AC6),),
                                   ),
                                 )
                               ],
@@ -521,8 +706,43 @@ class _EditProfileState extends State<EditProfile> {
                   )
               ),
               SizedBox(height: 50),
+              isSaving ? CircularProgressIndicator() :
               ElevatedButton(
-                  onPressed: (){
+                  onPressed: ()async{
+                    if(nameController.text.trim().isNotEmpty){
+                      if(fatherNameController.text.trim().isNotEmpty){
+                        if(gotraController.text.trim().isNotEmpty){
+                          if(cityController.text.trim().isNotEmpty){
+                            if(currentCityController.text.trim().isNotEmpty){
+                              bool isNumberFieldEmpty = false;
+                              for(var element in _phoneNumbersController){
+                                if(element.text.trim().isEmpty){
+                                  isNumberFieldEmpty = true;
+                                }
+                              }
+                              if(!isNumberFieldEmpty){
+                                bool isRelationFieldEmpty = false;
+                                for(var element in relationships){
+                                  if(element.keys.first == "Select" || element.values.first == "Select person"){
+                                    isRelationFieldEmpty = true;
+                                  }
+                                }
+                                if(!isRelationFieldEmpty){
+                                  setState(() {
+                                    isSaving = true;
+                                  });
+                                  await _uploadUserInfoToFirestore();
+                                  setState(() {
+                                    isSaving = false;
+                                  });
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+
                     print(UserDataManager().currentUser?.profilePic ?? "hello");
                   },
                   style: ElevatedButton.styleFrom(
@@ -542,7 +762,7 @@ class _EditProfileState extends State<EditProfile> {
       ),
     );
   }
-
+  String citySearchQuery = "";
   Widget textBox(String hint, final prefixIcon, final inputType, TextEditingController controller, int maxLength) {
     return TextFormField(
       controller: controller,
@@ -569,10 +789,51 @@ class _EditProfileState extends State<EditProfile> {
           borderRadius: BorderRadius.circular(12),
         ),
         prefixIcon: Icon(prefixIcon, color: Color(0xff130097), size: 20),
+        suffixIcon: controller == cityController ||
+            controller == currentCityController ||
+            controller == gotraController ?
+          GestureDetector(onTap: (){
+            setState(() {
+              if(controller == cityController){
+                cityController.clear();
+                fltdCityList = [];
+              }else if(controller == currentCityController){
+                fltdCurrentCityList = [];
+                currentCityController.clear();
+              }else if(controller == gotraController){
+                fltdListGotra = [];
+                gotraController.clear();
+              }
+            });
+          }, child: Icon(Icons.close_rounded, color: Colors.deepPurpleAccent,),)
+            :
+          null,
         filled: true,
         fillColor: const Color(0xFFF1F4F8),
         counterText: '',
       ),
+      onChanged: (value) {
+        setState(() {
+          if(controller == cityController){
+            citySearchQuery = value.trim().toLowerCase();
+            fltdCityList = citysList
+                .where((item) => item.toLowerCase().contains(citySearchQuery))
+                .toList();
+          }else if(controller == currentCityController){
+            citySearchQuery = value.trim().toLowerCase();
+            fltdCurrentCityList = citysList
+                .where((item) => item.toLowerCase().contains(citySearchQuery))
+                .toList();
+          }else if(controller == gotraController){
+            citySearchQuery = value.trim().toLowerCase();
+            fltdListGotra = gotraList
+                .where((item) => item.toLowerCase().contains(citySearchQuery))
+                .toList();
+          }
+
+        });
+
+      },
       maxLength: maxLength,
       readOnly: controller == emailController ? true : false,
       keyboardType: inputType,
