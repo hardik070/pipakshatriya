@@ -30,7 +30,7 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       loginInfo: fields[8] as LoginInfo,
       contacts: (fields[9] as List).cast<Contact>(),
       currentAddress: fields[10] as String,
-      userId: fields[11] as String,
+      userId: fields[12] as String,
     );
   }
 
@@ -60,7 +60,7 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       ..write(obj.contacts)
       ..writeByte(10)
       ..write(obj.currentAddress)
-      ..writeByte(11)
+      ..writeByte(12)
       ..write(obj.userId);
   }
 

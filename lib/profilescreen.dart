@@ -94,7 +94,7 @@ class _profileManageState extends State<profileManage>{
                     ),
                     Text(
                       //GlobalVariables().course.isNotEmpty ? GlobalVariables().course : 'Course' ,
-                      UserDataManager().currentUser?.userId ?? "User Id",
+                      UserDataManager().currentUser?.actualAddress ?? "Address",
                       style: GoogleFonts.poppins(
                         color: Color(0xFF666AC6),
                         fontWeight: FontWeight.w400,
@@ -180,8 +180,6 @@ class _profileManageState extends State<profileManage>{
                           Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
                           profileTile(UserDataManager().currentUser?.email ?? "Email", "E-mail", Icons.email_rounded),
                           Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
-                          profileTile(UserDataManager().currentUser?.phoneNumber.toString() ?? "Contact", "Contact Number", Icons.call),
-                          Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
                           profileTile(UserDataManager().currentUser?.gotra ?? "Gotra", "Gotra", Icons.book_rounded),
                           Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
                           profileTile(UserDataManager().currentUser?.actualAddress ?? "City", "Address", Icons.location_city_rounded),
@@ -190,6 +188,58 @@ class _profileManageState extends State<profileManage>{
                         ],
                       ),
                     ),
+
+                    Container(
+                      padding: EdgeInsets.all(15),
+                      margin: EdgeInsets.only(top: 10,bottom: 10),
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFF4A3274),
+                            Color(0xFF4D5CBF),
+                            Color(0xFF5C4D91)],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color(0x57ff3456),
+                            blurRadius: 5,
+                            offset: Offset(0, 2),
+                          )
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            width: double.infinity,
+                            height: 50,
+                            child: Text(
+                              "Contact",
+                              style: GoogleFonts.poppins(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 18,
+                                height: 1,
+                              ),
+                            ),
+                          ),
+                          ...UserDataManager().currentUser!.phoneNumber.asMap().entries.map((item) {
+                            int index = item.key;
+
+                            return Column(
+                              children: [
+                                index == 0 ? Container() : Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
+                                profileTile(item.value, "Contact Number", Icons.call),
+                              ],
+                            );
+                          }
+                          ),
+
+                       ],
+                      ),
+                    ),
+
                     Container(
                       padding: EdgeInsets.all(15),
                       margin: EdgeInsets.only(top: 10,bottom: 10),
@@ -225,18 +275,17 @@ class _profileManageState extends State<profileManage>{
                               ),
                             ),
                           ),
-                          profileTile(/*GlobalVariables().name*/"Dinesh", "Mama", Icons.person),
-                          Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
-                          profileTile(/*GlobalVariables().name*/"Mohan Darji", "Fufa", Icons.person),
-                          Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
-                          profileTile(/*GlobalVariables().name*/"Ashok", "Mama", Icons.person),
-                          Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
-                          profileTile(/*GlobalVariables().name*/"Babu Ji", "Fufa", Icons.person),
-                          Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
-                          profileTile(/*GlobalVariables().name*/"Babu Ji", "Mama", Icons.person),
-                          Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
-                          profileTile(/*GlobalVariables().name*/"Sawla Ji", "Fufa", Icons.person),
-
+                          ...UserDataManager().currentUser!.relationships.asMap().entries.map((item) {
+                            int index = item.key;
+                            String relationType = item.value.keys.first;
+                            String relative = item.value.values.first;
+                            return Column(
+                              children: [
+                                index == 0 ? Container() : Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
+                                profileTile(relative, relationType, Icons.person),
+                              ],
+                            );
+                          }),
                         ],
                       ),
                     ),

@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:hive/hive.dart';
+import 'package:pipakshatriya/datamodels/user_model.dart';
 import 'datamodels/datamanager/data_manager.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
@@ -33,11 +34,6 @@ class _EditProfileState extends State<EditProfile> {
   final TextEditingController _searchController = TextEditingController();
 
   String userId = '';
-  String name = '';
-  String fatherName = '';
-  String gotra = '';
-  String city = '';
-  String currentCity = '';
   String profilePicUrl = '';
 
   bool statusId= false;
@@ -157,7 +153,7 @@ class _EditProfileState extends State<EditProfile> {
     List<String> numbers = _phoneNumbersController.map((eachNumber) => eachNumber.text).toList();
     List<Map<String, String>> relations = relationships.map((eachRelation) => eachRelation).toList();
     String userid = UserDataManager().currentUser!.userId;
-    print("$userid");
+
     try{
       await FirebaseFirestore.instance
           .collection('users')
@@ -174,13 +170,32 @@ class _EditProfileState extends State<EditProfile> {
       print("\n\n\n\Error to store on firestore : $e");
     }
 
-    statusId = true;
+    try{
+      final user = UserModel(
+        name: name,
+        fatherName: fatherName,
+        email: emailController.text.trim(),
+        gotra: gotra,
+        actualAddress: city,
+        currentAddress: currentCity,
+        phoneNumber: numbers,
+        relationships: UserDataManager().currentUser!.relationships,
+        loginInfo: UserDataManager().currentUser!.loginInfo,
+        profilePic: UserDataManager().currentUser!.profilePic,
+        contacts: UserDataManager().currentUser!.contacts,
+        userId: UserDataManager().currentUser!.userId
+      );
 
-    print("\n$name\n$fatherName\n$gotra\n$city\n$currentCity\n$numbers\n$relations");
+      await UserDataManager().updateUser(user);
+    }catch (e){
+      print(e);
+    }
+
+    statusId = true;
   }
 
   void createNumberController() {
-    for(var item in numbers!){
+    for(var item in numbers){
       _phoneNumbersController.add(TextEditingController(text: item));
     }
   }
@@ -197,12 +212,6 @@ class _EditProfileState extends State<EditProfile> {
     });
   }
 
-  void _relationSetLoder() {
-    for(var item in relationships!){
-      //_phoneNumbersController.add(TextEditingController(text: item));
-    }
-  }
-
   void _deleteRelation(int index) {
     setState(() {
       relationships.removeAt(index);
@@ -210,9 +219,10 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   /// Delete an option at a given index
-  void _deleteOption(int index) {
+  void _deleteOption(int index, final TextEditingController t) {
     setState(() {
       _phoneNumbersController.removeAt(index);
+      t.dispose();
     });
   }
 
@@ -412,16 +422,16 @@ class _EditProfileState extends State<EditProfile> {
                 Container(),
                 SizedBox(height: 20,),
                 //Divider(color: Color(0x54002785), thickness: 1, height: 20),
-                textBox("Name", Icons.person_rounded, TextInputType.name, nameController, 30),
+                textBox("Name", Icons.person_rounded, TextInputType.name, nameController, 20),
                 SizedBox(height: 15,),
                 //Divider(color: Color(0x54002785), thickness: 1, height: 20),
                 textBox("E-mail", Icons.email_rounded, TextInputType.emailAddress, emailController, 30),
                 SizedBox(height: 15,),
                 //Divider(color: Color(0x54002785), thickness: 1, height: 20),
-                textBox("Father name", Icons.account_circle_rounded, TextInputType.text, fatherNameController, 30),
+                textBox("Father name", Icons.account_circle_rounded, TextInputType.text, fatherNameController, 20),
                 SizedBox(height: 15,),
                 //Divider(color: Color(0x54002785), thickness: 1, height: 20),
-                textBox("Gotra", Icons.temple_hindu_rounded, TextInputType.text, gotraController, 30),
+                textBox("Gotra", Icons.temple_hindu_rounded, TextInputType.text, gotraController, 20),
                 fltdListGotra.isNotEmpty ?
                 ConstrainedBox(
                   constraints: BoxConstraints(
@@ -467,7 +477,7 @@ class _EditProfileState extends State<EditProfile> {
                 Container(),
                 SizedBox(height: 15,),
                 //Divider(color: Color(0x54002785), thickness: 1, height: 20),
-                textBox("Address", Icons.location_city_rounded, TextInputType.text, cityController, 30),
+                textBox("Address", Icons.location_city_rounded, TextInputType.text, cityController, 20),
                 fltdCityList.isNotEmpty ?
                 ConstrainedBox(
                   constraints: BoxConstraints(
@@ -512,7 +522,7 @@ class _EditProfileState extends State<EditProfile> {
                     :
                 Container(),
                 SizedBox(height: 15,),
-                textBox("Current living address", Icons.location_history, TextInputType.text, currentCityController, 30),
+                textBox("Current living address", Icons.location_history, TextInputType.text, currentCityController, 20),
                 fltdCurrentCityList.isNotEmpty ?
                 ConstrainedBox(
                   constraints: BoxConstraints(
@@ -604,7 +614,7 @@ class _EditProfileState extends State<EditProfile> {
                                   /// Delete Button
                                   IconButton(
                                     icon: const Icon(Icons.close_rounded, color: Colors.black54, size: 30),
-                                    onPressed: () => _deleteOption(index),
+                                    onPressed: () => _deleteOption(index, controller),
                                   ),
                                 ],
                               ),
@@ -794,6 +804,7 @@ class _EditProfileState extends State<EditProfile> {
                                       isSaving = true;
                                     });
                                     await _uploadUserInfoToFirestore();
+                                    Navigator.pop(context, statusId);
                                     setState(() {
                                       isSaving = false;
                                     });
