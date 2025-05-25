@@ -75,7 +75,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
           email: email,
           password: password
       );
-      String userId = email.replaceAll('@gmail.com', '').replaceAll('.', '');
+      String userId = email.replaceAll('@gmail.com', '').replaceAll('.', '_');
       await fatchDataFirestore(userId);
 
       setState(() {
@@ -107,25 +107,28 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
     try{
       final snapshot = await _ref.collection('users').doc(userId).get();
       final data = snapshot.data();
-
+      print("i am with data\n $data");
       print("\n${data!['name']} \n ${data['email']} \n ${data['createdAt']} \n ${data['userId']}");
       final user = UserModel(
           name: data['name'] ?? '',
           profilePic: data['profilePic'] ?? '',
           fatherName: data['fatherName'] ?? '',
           email: data['email'] ?? '',
-          phoneNumber: data['phoneNumber'] ?? [],
+          phoneNumber: List<String>.from(data['numbers'] ?? []),
           gotra: data['gotra'] ?? '',
           actualAddress: data['actualAddress'] ?? '',
-          relationships: data['relationships'] ?? [],
+          relationships: List<Map<String, String>>.from(
+            (data['relations'] ?? []).map((e) => Map<String, String>.from(e)),
+          ),
           loginInfo: LoginInfo(token: data['userId'] ?? '', loginTime: DateTime.now()),
           contacts: [],
           currentAddress: data['currentAddress'] ?? '',
           userId: data['userId'] ?? ''
       );
+      print("i am with data\n $data");
       await UserDataManager().updateUser(user);
     }catch (e) {
-
+      print("i am with eerror \n \n\n\n $e");
     }
   }
 
@@ -167,7 +170,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
   }
 
   Future<void> storeFirestoreAccountCreation(String email, String name) async{
-    final String userId = email.replaceAll('@gmail.com', '').replaceAll('.', '');
+    final String userId = email.replaceAll('@gmail.com', '').replaceAll('.', '_');
 
     try{
       await _ref.collection('users').doc(userId).set({

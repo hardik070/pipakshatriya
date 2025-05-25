@@ -24,7 +24,9 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       phoneNumber: (fields[4] as List).cast<String>(),
       gotra: fields[5] as String,
       actualAddress: fields[6] as String,
-      relationships: (fields[7] as List).cast<Relationship>(),
+      relationships: (fields[7] as List)
+          .map((dynamic e) => (e as Map).cast<String, String>())
+          .toList(),
       loginInfo: fields[8] as LoginInfo,
       contacts: (fields[9] as List).cast<Contact>(),
       currentAddress: fields[10] as String,

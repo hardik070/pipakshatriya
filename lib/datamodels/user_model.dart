@@ -29,7 +29,7 @@ class UserModel extends HiveObject {
   String actualAddress;
 
   @HiveField(7)
-  List<Relationship> relationships;
+  List<Map<String, String>> relationships;
 
   @HiveField(8)
   LoginInfo loginInfo;
@@ -40,7 +40,7 @@ class UserModel extends HiveObject {
   @HiveField(10)
   String currentAddress;
 
-  @HiveField(11)
+  @HiveField(12)
   String userId;
 
   UserModel({

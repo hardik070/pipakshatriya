@@ -32,7 +32,17 @@ class _EditProfileState extends State<EditProfile> {
   final TextEditingController currentCityController = TextEditingController();
   final TextEditingController _searchController = TextEditingController();
 
-  List<String>? numbers = ["9982875922", "8696282986"];
+  String userId = '';
+  String name = '';
+  String fatherName = '';
+  String gotra = '';
+  String city = '';
+  String currentCity = '';
+  String profilePicUrl = '';
+
+  bool statusId= false;
+
+  List<String> numbers = ["9982875922", "8696282986"];
   List<String> reltionTypes = ["Mama", "Fufa", "Chacha", "Mosa", "Sala", "Sasur", "Sadu", ];
   List<Map<String, String>> relationships = [
     {"Mama" : "Hardikkumar"},
@@ -51,8 +61,18 @@ class _EditProfileState extends State<EditProfile> {
   @override
   void initState() {
     super.initState();
+    emailController.text = UserDataManager().currentUser!.email;
+    nameController.text = UserDataManager().currentUser!.name;
+    fatherNameController.text = UserDataManager().currentUser!.fatherName;
+    gotraController.text = UserDataManager().currentUser!.gotra;
+    cityController.text = UserDataManager().currentUser!.actualAddress;
+    currentCityController.text = UserDataManager().currentUser!.currentAddress;
+    userId = UserDataManager().currentUser!.userId;
     profilePicUrl = UserDataManager().currentUser?.profilePic ?? '';
-    if(numbers != null){
+    numbers = UserDataManager().currentUser!.phoneNumber;
+    relationships = UserDataManager().currentUser!.relationships;
+
+    if(numbers.isNotEmpty){
       createNumberController();
     }else {
       _phoneNumbersController.add(TextEditingController());
@@ -69,13 +89,12 @@ class _EditProfileState extends State<EditProfile> {
   final ImagePicker _picker = ImagePicker();
   String? uploadedImageUrl;
   File? _profileImage;
-  String profilePicUrl = '';
   XFile? pickedFile;
 
   Future<void> pickAndUploadImage() async {
 
     try {
-      profilePicUrl = '';
+
       pickedFile = await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
       if (pickedFile == null) {
         print('No image selected.');
@@ -85,7 +104,7 @@ class _EditProfileState extends State<EditProfile> {
         _profileImage = File(pickedFile!.path);
       });
       // Step 2: Create unique file name
-      String fileName = basename(_profileImage!.path);
+      String fileName = basename("${userId}_profilePic");
       Reference storageRef = FirebaseStorage.instance.ref().child('profilePic/$fileName');
 
       // Step 3: Upload image
@@ -108,6 +127,15 @@ class _EditProfileState extends State<EditProfile> {
       await UserDataManager().updateUserField((user) {
         user.profilePic = uploadedImageUrl!;
       });
+      try{
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userId).update({
+          "profilePic" : uploadedImageUrl
+        });
+      }catch (e){
+        print("\n\n\n\Error to store on firestore : $e");
+      }
       setState(() {
         profilePicUrl = uploadedImageUrl!;
       });
@@ -116,6 +144,7 @@ class _EditProfileState extends State<EditProfile> {
     } catch (e) {
       print('Error uploading image: $e');
     }
+    statusId = true;
   }
 
   Future<void> _uploadUserInfoToFirestore() async{
@@ -136,15 +165,16 @@ class _EditProfileState extends State<EditProfile> {
         "name" : name,
         "fatherName" : fatherName,
         "gotra" : gotra,
-        "city" : city,
-        "currentCity" : currentCity,
+        "actualAddress" : city,
+        "currentAddress" : currentCity,
         "relations" : relations,
         "numbers" : numbers,
-        "profilePic" : profilePicUrl
       });
     }catch (e){
       print("\n\n\n\Error to store on firestore : $e");
     }
+
+    statusId = true;
 
     print("\n$name\n$fatherName\n$gotra\n$city\n$currentCity\n$numbers\n$relations");
   }
@@ -165,6 +195,12 @@ class _EditProfileState extends State<EditProfile> {
     setState(() {
       relationships.add({ relationType ?? "Select" : "Select person"});
     });
+  }
+
+  void _relationSetLoder() {
+    for(var item in relationships!){
+      //_phoneNumbersController.add(TextEditingController(text: item));
+    }
   }
 
   void _deleteRelation(int index) {
@@ -295,468 +331,535 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      //resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        backgroundColor: Color(0xFF23255D),
-        leading: InkWell(
-          onTap: () {
-            Navigator.pop(context, false); // Indicate no changes
-          },
-          child: Icon(Icons.arrow_back_rounded, size: 30, color: Colors.white),
+    return PopScope<Object?>(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, Object? result) async {
+        Navigator.pop(context, true);
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        //resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          backgroundColor: Color(0xFF23255D),
+          leading: InkWell(
+            onTap: () {
+              Navigator.pop(context, statusId); // Indicate no changes
+            },
+            child: Icon(Icons.arrow_back_rounded, size: 30, color: Colors.white),
+          ),
+          title: Text("Edit Profile", style: TextStyle(color: Colors.white)),
+          centerTitle: true,
         ),
-        title: Text("Edit Profile", style: TextStyle(color: Colors.white)),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Center(
-                child: GestureDetector(
-                  onTap: () async{
-                    await pickAndUploadImage();
-                  },
-                  child: SizedBox(
-                      height: 120,
-                      width: 120,
-                      child: Stack(
-                        children: [
-                          profilePicUrl.isNotEmpty ?
-                            ClipRRect(
-                            borderRadius: BorderRadius.circular(100),
-                            child: CachedNetworkImage(
-                              imageUrl: profilePicUrl,
-                              placeholder: (context, url) => CircleAvatar(
-                                  radius: 60,
-                                  backgroundImage: _profileImage != null ? FileImage(_profileImage!) : null,
-                                  child: _profileImage != null ? null : Icon(Icons.person, size: 60, color: Color(0xFF666AC6)),
-                              ),
-                              fit: BoxFit.cover,
-                              width: 120,
-                              height: 120,
-                            ),
-                          )
-                          :
-                            CircleAvatar(
-                              radius: 60,
-                              backgroundImage: _profileImage != null ? FileImage(_profileImage!) : null,
-                              child: _profileImage != null ? null : Icon(Icons.person, size: 60, color: Color(0xFF666AC6)),
-                          ),
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Center(
+                    child: GestureDetector(
+                      onTap: () async{
+                        await pickAndUploadImage();
+                      },
+                      child: SizedBox(
+                          height: 120,
+                          width: 120,
+                          child: Stack(
+                            children: [
+                              _profileImage == null ?
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(100),
+                                child: CachedNetworkImage(
+                                  imageUrl: profilePicUrl,
+                                  placeholder: (context, url) => CircleAvatar(
+                                    radius: 60,
+                                    backgroundImage: _profileImage != null ? FileImage(_profileImage!) : null,
+                                    child: _profileImage != null ? null : Icon(Icons.person, size: 60, color: Color(0xFF666AC6)),
+                                  ),
 
-                          Align(
-                            alignment: Alignment(1, 1),
-                            child: Icon(Icons.add_a_photo_rounded, color: Color(0xFF666AC6)),
+                                  errorWidget: (context, url, error) => CircleAvatar(
+                                    radius: 60,
+                                    child: Icon(Icons.error, size: 60, color: Color(0xFF666AC6)),
+                                  ),
+                                  fit: BoxFit.cover,
+                                  width: 120,
+                                  height: 120,
+                                ),
+                              )
+                                  :
+                              CircleAvatar(
+                                radius: 60,
+                                backgroundImage: _profileImage != null ? FileImage(_profileImage!) : null,
+                                child: _profileImage != null ? null : Icon(Icons.person, size: 60, color: Color(0xFF666AC6)),
+                              ),
+
+                              Align(
+                                alignment: Alignment(1, 1),
+                                child: Icon(Icons.add_a_photo_rounded, color: Color(0xFF666AC6)),
+                              )
+                            ],
                           )
-                        ],
+                      ),
+                    )
+                ),
+                SizedBox(height: 15,),
+                pickedFile != null ?
+                LinearProgressIndicator(
+                  value: _uploadProgress, // between 0 and 1
+                  minHeight: 6,
+                  backgroundColor: Color(0xFFB3B5EF),
+                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF666AC6),),
+                ) :
+                Container(),
+                SizedBox(height: 20,),
+                //Divider(color: Color(0x54002785), thickness: 1, height: 20),
+                textBox("Name", Icons.person_rounded, TextInputType.name, nameController, 30),
+                SizedBox(height: 15,),
+                //Divider(color: Color(0x54002785), thickness: 1, height: 20),
+                textBox("E-mail", Icons.email_rounded, TextInputType.emailAddress, emailController, 30),
+                SizedBox(height: 15,),
+                //Divider(color: Color(0x54002785), thickness: 1, height: 20),
+                textBox("Father name", Icons.account_circle_rounded, TextInputType.text, fatherNameController, 30),
+                SizedBox(height: 15,),
+                //Divider(color: Color(0x54002785), thickness: 1, height: 20),
+                textBox("Gotra", Icons.temple_hindu_rounded, TextInputType.text, gotraController, 30),
+                fltdListGotra.isNotEmpty ?
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                      maxHeight: 170,
+                      minWidth: double.infinity
+                  ),
+                  child: Card(
+                      color: Colors.white,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ...fltdListGotra.asMap().entries.map((element) {
+                              int index = element.key;
+
+                              return GestureDetector(
+                                onTap: () {
+                                  gotraController.text = fltdListGotra[index];
+                                  setState(() {
+                                    fltdListGotra = [];
+                                  });
+                                },
+                                child: Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 20),
+                                    child: SizedBox(width: double.infinity, child: Text(
+                                      fltdListGotra[index],
+                                      style: TextStyle(
+                                          color: Colors.deepPurpleAccent,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500
+                                      ),
+                                    ),)
+                                ),
+                              );
+                            }),
+                          ],
+                        ),
                       )
                   ),
                 )
-              ),
-              SizedBox(height: 15,),
-              pickedFile != null ?
-              LinearProgressIndicator(
-                value: _uploadProgress, // between 0 and 1
-                minHeight: 6,
-                backgroundColor: Color(0xFFB3B5EF),
-                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF666AC6),),
-              ) :
-              Container(),
-              SizedBox(height: 20,),
-              //Divider(color: Color(0x54002785), thickness: 1, height: 20),
-              textBox("Name", Icons.person_rounded, TextInputType.name, nameController, 20),
-              SizedBox(height: 15,),
-              //Divider(color: Color(0x54002785), thickness: 1, height: 20),
-              textBox("E-mail", Icons.email_rounded, TextInputType.emailAddress, emailController, 30),
-              SizedBox(height: 15,),
-              //Divider(color: Color(0x54002785), thickness: 1, height: 20),
-              textBox("Father name", Icons.account_circle_rounded, TextInputType.text, fatherNameController, 10),
-              SizedBox(height: 15,),
-              //Divider(color: Color(0x54002785), thickness: 1, height: 20),
-              textBox("Gotra", Icons.temple_hindu_rounded, TextInputType.text, gotraController, 20),
-              fltdListGotra.isNotEmpty ?
-              ConstrainedBox(
-                constraints: BoxConstraints(
-                    maxHeight: 170,
-                    minWidth: double.infinity
-                ),
-                child: Card(
-                    color: Colors.white,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ...fltdListGotra.asMap().entries.map((element) {
-                            int index = element.key;
-
-                            return GestureDetector(
-                              onTap: () {
-                                gotraController.text = fltdListGotra[index];
-                                setState(() {
-                                  fltdListGotra = [];
-                                });
-                              },
-                              child: Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 20),
-                                  child: SizedBox(width: double.infinity, child: Text(
-                                    fltdListGotra[index],
-                                    style: TextStyle(
-                                        color: Colors.deepPurpleAccent,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500
-                                    ),
-                                  ),)
-                              ),
-                            );
-                          }),
-                        ],
-                      ),
-                    )
-                ),
-              )
-                  :
-              Container(),
-              SizedBox(height: 15,),
-              //Divider(color: Color(0x54002785), thickness: 1, height: 20),
-              textBox("Address", Icons.location_city_rounded, TextInputType.text, cityController, 20),
-              fltdCityList.isNotEmpty ?
-              ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxHeight: 170,
-                  minWidth: double.infinity
-                ),
-                child: Card(
-                    color: Colors.white,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ...fltdCityList.asMap().entries.map((element) {
-                            int index = element.key;
-
-                            return GestureDetector(
-                              onTap: () {
-                                cityController.text = fltdCityList[index];
-                                setState(() {
-                                  fltdCityList = [];
-                                });
-                              },
-                              child: Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 20),
-                                  child: SizedBox(width: double.infinity, child: Text(
-                                    fltdCityList[index],
-                                    style: TextStyle(
-                                        color: Colors.deepPurpleAccent,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500
-                                    ),
-                                  ),)
-                              ),
-                            );
-                          }),
-                        ],
-                      ),
-                    )
-                ),
-              )
-              :
-              Container(),
-              SizedBox(height: 15,),
-              textBox("Current living address", Icons.location_history, TextInputType.text, currentCityController, 20),
-              fltdCurrentCityList.isNotEmpty ?
-              ConstrainedBox(
-                constraints: BoxConstraints(
-                    maxHeight: 170,
-                    minWidth: double.infinity
-                ),
-                child: Card(
-                    color: Colors.white,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ...fltdCurrentCityList.asMap().entries.map((element) {
-                            int index = element.key;
-
-                            return GestureDetector(
-                              onTap: () {
-                                currentCityController.text = fltdCurrentCityList[index];
-                                setState(() {
-                                  fltdCurrentCityList = [];
-                                });
-                              },
-                              child: Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 20),
-                                  child: SizedBox(width: double.infinity, child: Text(
-                                    fltdCurrentCityList[index],
-                                    style: TextStyle(
-                                        color: Colors.deepPurpleAccent,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500
-                                    ),
-                                  ),)
-                              ),
-                            );
-                          }),
-                        ],
-                      ),
-                    )
-                ),
-              )
-                  :
-              Container(),
-              SizedBox(height: 25),
-              Card(
-                color: Colors.white,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Text("Phone Numbers",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                              color: Color(0xFF23255D),
-                            ),
-                          ),
-                          Spacer(),
-                          IconButton(
-                            onPressed: (){
-                              _addContactNumber();
-                            },
-                            icon: Icon(
-                              Icons.add_rounded,
-                              size: 40,
-                              color: Color(0xB623255D),
-                            ),
-                          )
-                        ],
-                      ),
-                      SizedBox(height: 20,),
-                      ..._phoneNumbersController.asMap().entries.map((element) {
-                        int index = element.key;
-                        TextEditingController controller = element.value;
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 15),
-                          child: Row(
-                            children: [
-
-                              Expanded(
-                                child: textBox("Number${index+1}", Icons.phone, TextInputType.phone, controller, 10),
-                              ),
-
-
-                              const SizedBox(width: 10),
-
-                              /// Delete Button
-                              IconButton(
-                                icon: const Icon(Icons.close_rounded, color: Colors.black54, size: 30),
-                                onPressed: () => _deleteOption(index),
-                              ),
-                            ],
-                          ),
-                        );
-                      }),
-                    ],
+                    :
+                Container(),
+                SizedBox(height: 15,),
+                //Divider(color: Color(0x54002785), thickness: 1, height: 20),
+                textBox("Address", Icons.location_city_rounded, TextInputType.text, cityController, 30),
+                fltdCityList.isNotEmpty ?
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                      maxHeight: 170,
+                      minWidth: double.infinity
                   ),
-                )
-              ),
-              SizedBox(height: 25),
-              Card(
-                  color: Colors.white,
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 10),
-                    child: Column(
-                      children: [
-                        Row(
+                  child: Card(
+                      color: Colors.white,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Relations",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                                color: Color(0xFF23255D),
-                              ),
-                            ),
-                            Spacer(),
-                            IconButton(
-                              onPressed: (){
-                                _addRelationMakingTile(null);
-                              },
-                              icon: Icon(
-                                Icons.add_rounded,
-                                size: 40,
-                                color: Color(0xB623255D),
-                              ),
-                            )
+                            ...fltdCityList.asMap().entries.map((element) {
+                              int index = element.key;
+
+                              return GestureDetector(
+                                onTap: () {
+                                  cityController.text = fltdCityList[index];
+                                  setState(() {
+                                    fltdCityList = [];
+                                  });
+                                },
+                                child: Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 20),
+                                    child: SizedBox(width: double.infinity, child: Text(
+                                      fltdCityList[index],
+                                      style: TextStyle(
+                                          color: Colors.deepPurpleAccent,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500
+                                      ),
+                                    ),)
+                                ),
+                              );
+                            }),
                           ],
                         ),
-                        SizedBox(height: 20,),
-                        ...relationships.asMap().entries.map((element) {
-                          int index = element.key;
-                          final indexMapValues= element.value;
+                      )
+                  ),
+                )
+                    :
+                Container(),
+                SizedBox(height: 15,),
+                textBox("Current living address", Icons.location_history, TextInputType.text, currentCityController, 30),
+                fltdCurrentCityList.isNotEmpty ?
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                      maxHeight: 170,
+                      minWidth: double.infinity
+                  ),
+                  child: Card(
+                      color: Colors.white,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ...fltdCurrentCityList.asMap().entries.map((element) {
+                              int index = element.key;
 
-                          Color textColorType = Colors.white;
-                          Color textBackColor = Colors.black;
-
-                          if(indexMapValues.keys.first == "Fufa"){
-                            textColorType = Color(0xFF4CAF50);
-                            textBackColor = Color(0xFFE8F5E9);
-
-                          }else if(indexMapValues.keys.first == "Mama"){
-                            textColorType = Color(0xFF304D6C);
-                            textBackColor = Color(0x34304D6C);
-
-                          }else if(indexMapValues.keys.first == "Chacha"){
-                            textColorType = Color(0xFF2196F3);
-                            textBackColor = Color(0xFFE3F2FD);
-
-                          }else if(indexMapValues.keys.first == "Mosa"){
-                            textColorType = Color(0xFFFF5722);
-                            textBackColor = Color(0xFFFFEBEE);
-                          }else if(indexMapValues.keys.first == "Sasur"){
-                            textColorType = Color(0xFF3955EF);
-                            textBackColor = Color(0x4F6073DC);
-                          }else if(indexMapValues.keys.first == "Sadu"){
-                            textColorType = Color(0xFFFFFFFF);
-                            textBackColor = Color(0xFF507CC1);
-                          }else if(indexMapValues.keys.first == "Sala"){
-                            textColorType = Color(0xFF6A1B9A);
-                            textBackColor = Color(0xFFE1BEE7);
-                          }
-
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 15),
-                            child: Row(
-                              children: [
-                                GestureDetector(
-                                  onTap: () async{
-                                    await _showItemDialog(context ,index, indexMapValues.values.first);
-                                    setState(() {});
-                                  },
-                                  child: Container(
-                                      width : 90,
-                                      height: 50,
-                                      decoration: BoxDecoration(
-                                        color: textBackColor,
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(10),
-                                            bottomLeft: Radius.circular(10)
-                                        ),
+                              return GestureDetector(
+                                onTap: () {
+                                  currentCityController.text = fltdCurrentCityList[index];
+                                  setState(() {
+                                    fltdCurrentCityList = [];
+                                  });
+                                },
+                                child: Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 20),
+                                    child: SizedBox(width: double.infinity, child: Text(
+                                      fltdCurrentCityList[index],
+                                      style: TextStyle(
+                                          color: Colors.deepPurpleAccent,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500
                                       ),
-                                      child: Center(
-                                        child: Text(
-                                          "${indexMapValues.keys.first}",
-                                          style: TextStyle(
-                                              color: textColorType,
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 16
-                                          ),
-                                        ),
-                                      )
-                                  ),
+                                    ),)
                                 ),
-                                Expanded(
-                                  child: GestureDetector(
-                                    onTap: () {},
+                              );
+                            }),
+                          ],
+                        ),
+                      )
+                  ),
+                )
+                    :
+                Container(),
+                SizedBox(height: 25),
+                Card(
+                    color: Colors.white,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Text("Phone Numbers",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: Color(0xFF23255D),
+                                ),
+                              ),
+                              Spacer(),
+                              IconButton(
+                                onPressed: (){
+                                  _addContactNumber();
+                                },
+                                icon: Icon(
+                                  Icons.add_rounded,
+                                  size: 40,
+                                  color: Color(0xB623255D),
+                                ),
+                              )
+                            ],
+                          ),
+                          SizedBox(height: 20,),
+                          ..._phoneNumbersController.asMap().entries.map((element) {
+                            int index = element.key;
+                            TextEditingController controller = element.value;
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 15),
+                              child: Row(
+                                children: [
+
+                                  Expanded(
+                                    child: textBox("Number${index+1}", Icons.phone, TextInputType.phone, controller, 10),
+                                  ),
+
+
+                                  const SizedBox(width: 10),
+
+                                  /// Delete Button
+                                  IconButton(
+                                    icon: const Icon(Icons.close_rounded, color: Colors.black54, size: 30),
+                                    onPressed: () => _deleteOption(index),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }),
+                        ],
+                      ),
+                    )
+                ),
+                SizedBox(height: 25),
+                Card(
+                    color: Colors.white,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 10),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Text("Relations",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: Color(0xFF23255D),
+                                ),
+                              ),
+                              Spacer(),
+                              IconButton(
+                                onPressed: (){
+                                  _addRelationMakingTile(null);
+                                },
+                                icon: Icon(
+                                  Icons.add_rounded,
+                                  size: 40,
+                                  color: Color(0xB623255D),
+                                ),
+                              )
+                            ],
+                          ),
+                          SizedBox(height: 20,),
+                          ...relationships.asMap().entries.map((element) {
+                            int index = element.key;
+                            final indexMapValues= element.value;
+
+                            Color textColorType = Colors.white;
+                            Color textBackColor = Colors.black;
+
+                            if(indexMapValues.keys.first == "Fufa"){
+                              textColorType = Color(0xFF4CAF50);
+                              textBackColor = Color(0xFFE8F5E9);
+
+                            }else if(indexMapValues.keys.first == "Mama"){
+                              textColorType = Color(0xFF304D6C);
+                              textBackColor = Color(0x34304D6C);
+
+                            }else if(indexMapValues.keys.first == "Chacha"){
+                              textColorType = Color(0xFF2196F3);
+                              textBackColor = Color(0xFFE3F2FD);
+
+                            }else if(indexMapValues.keys.first == "Mosa"){
+                              textColorType = Color(0xFFFF5722);
+                              textBackColor = Color(0xFFFFEBEE);
+                            }else if(indexMapValues.keys.first == "Sasur"){
+                              textColorType = Color(0xFF3955EF);
+                              textBackColor = Color(0x4F6073DC);
+                            }else if(indexMapValues.keys.first == "Sadu"){
+                              textColorType = Color(0xFFFFFFFF);
+                              textBackColor = Color(0xFF507CC1);
+                            }else if(indexMapValues.keys.first == "Sala"){
+                              textColorType = Color(0xFF6A1B9A);
+                              textBackColor = Color(0xFFE1BEE7);
+                            }
+
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 15),
+                              child: Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () async{
+                                      await _showItemDialog(context ,index, indexMapValues.values.first);
+                                      setState(() {});
+                                    },
                                     child: Container(
+                                        width : 90,
                                         height: 50,
                                         decoration: BoxDecoration(
-                                          color: Color(0xA9666AC6),
+                                          color: textBackColor,
                                           borderRadius: BorderRadius.only(
-                                              topRight: Radius.circular(10),
-                                              bottomRight: Radius.circular(10)
+                                              topLeft: Radius.circular(10),
+                                              bottomLeft: Radius.circular(10)
                                           ),
                                         ),
                                         child: Center(
                                           child: Text(
-                                            "${indexMapValues.values.first}",
+                                            "${indexMapValues.keys.first}",
                                             style: TextStyle(
-                                                color: Colors.white,
+                                                color: textColorType,
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 16
                                             ),
                                           ),
                                         )
                                     ),
-                                  )
-                                ),
-                                SizedBox(
-                                  height: 50,
-                                  width: 40,
-                                  child: GestureDetector(
-                                    onTap: (){
-                                      _deleteRelation(index);
-                                    },
-                                    child: Icon(Icons.delete, color: Color(0xFF666AC6),),
                                   ),
-                                )
-                              ],
-                            ),
-                          );
-                        }),
-                      ],
-                    ),
-                  )
-              ),
-              SizedBox(height: 50),
-              isSaving ? CircularProgressIndicator() :
-              ElevatedButton(
-                  onPressed: ()async{
-                    if(nameController.text.trim().isNotEmpty){
-                      if(fatherNameController.text.trim().isNotEmpty){
-                        if(gotraController.text.trim().isNotEmpty){
-                          if(cityController.text.trim().isNotEmpty){
-                            if(currentCityController.text.trim().isNotEmpty){
-                              bool isNumberFieldEmpty = false;
-                              for(var element in _phoneNumbersController){
-                                if(element.text.trim().isEmpty){
-                                  isNumberFieldEmpty = true;
-                                }
-                              }
-                              if(!isNumberFieldEmpty){
-                                bool isRelationFieldEmpty = false;
-                                for(var element in relationships){
-                                  if(element.keys.first == "Select" || element.values.first == "Select person"){
-                                    isRelationFieldEmpty = true;
+                                  Expanded(
+                                      child: GestureDetector(
+                                        onTap: () {},
+                                        child: Container(
+                                            height: 50,
+                                            decoration: BoxDecoration(
+                                              color: Color(0xA9666AC6),
+                                              borderRadius: BorderRadius.only(
+                                                  topRight: Radius.circular(10),
+                                                  bottomRight: Radius.circular(10)
+                                              ),
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                "${indexMapValues.values.first}",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 16
+                                                ),
+                                              ),
+                                            )
+                                        ),
+                                      )
+                                  ),
+                                  SizedBox(
+                                    height: 50,
+                                    width: 40,
+                                    child: GestureDetector(
+                                      onTap: (){
+                                        _deleteRelation(index);
+                                      },
+                                      child: Icon(Icons.delete, color: Color(0xFF666AC6),),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            );
+                          }),
+                        ],
+                      ),
+                    )
+                ),
+                SizedBox(height: 50),
+                isSaving ? CircularProgressIndicator() :
+                ElevatedButton(
+                    onPressed: ()async{
+                      if(nameController.text.trim().isNotEmpty){
+                        if(fatherNameController.text.trim().isNotEmpty){
+                          if(gotraController.text.trim().isNotEmpty){
+                            if(cityController.text.trim().isNotEmpty){
+                              if(currentCityController.text.trim().isNotEmpty){
+                                bool isNumberFieldEmpty = false;
+                                for(var element in _phoneNumbersController){
+                                  if(element.text.trim().isEmpty){
+                                    isNumberFieldEmpty = true;
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: Text("Number field should not be empty"),
+                                          backgroundColor: Colors.deepPurpleAccent,
+                                          duration: Duration(milliseconds: 1500),
+                                        )
+                                    );
+                                    return ;
                                   }
                                 }
-                                if(!isRelationFieldEmpty){
-                                  setState(() {
-                                    isSaving = true;
-                                  });
-                                  await _uploadUserInfoToFirestore();
-                                  setState(() {
-                                    isSaving = false;
-                                  });
+                                if(!isNumberFieldEmpty){
+                                  bool isRelationFieldEmpty = false;
+                                  for(var element in relationships){
+                                    if(element.keys.first == "Select" || element.values.first == "Select person"){
+                                      isRelationFieldEmpty = true;
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                          SnackBar(
+                                            content: Text("Relation field should not be empty"),
+                                            backgroundColor: Colors.deepPurpleAccent,
+                                            duration: Duration(milliseconds: 1500),
+                                          )
+                                      );
+                                      return ;
+                                    }
+                                  }
+                                  if(!isRelationFieldEmpty){
+                                    setState(() {
+                                      isSaving = true;
+                                    });
+                                    await _uploadUserInfoToFirestore();
+                                    setState(() {
+                                      isSaving = false;
+                                    });
+                                  }
                                 }
+                              }else{
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text("Please enter your current living city"),
+                                      backgroundColor: Colors.deepPurpleAccent,
+                                      duration: Duration(milliseconds: 1500),
+                                    )
+                                );
                               }
+                            }else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    backgroundColor: Colors.deepPurpleAccent,
+                                    duration: Duration(milliseconds: 1500),
+                                    content: Text("Please enter your city"),
+                                  )
+                              );
                             }
+                          }else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  backgroundColor: Colors.deepPurpleAccent,
+                                  duration: Duration(milliseconds: 1500),
+                                  content: Text("Please enter your gotra"),
+                                )
+                            );
                           }
+                        }else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                backgroundColor: Colors.deepPurpleAccent,
+                                duration: Duration(milliseconds: 1500),
+                                content: Text("Please enter your father name"),
+                              )
+                          );
                         }
+                      }else{
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text("Please enter your name"),
+                              backgroundColor: Colors.deepPurpleAccent,
+                              duration: Duration(milliseconds: 1500),
+                            )
+                        );
                       }
-                    }
 
-                    print(UserDataManager().currentUser?.profilePic ?? "hello");
-                  },
-                  style: ElevatedButton.styleFrom(
-                    textStyle: TextStyle(fontSize: 20,),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                    child: Text(
-                      "Save",
+                      print(UserDataManager().currentUser?.profilePic ?? "hello");
+                    },
+                    style: ElevatedButton.styleFrom(
+                      textStyle: TextStyle(fontSize: 20,),
                     ),
-                  )
-              ),
-              SizedBox(height: 50,)
-            ],
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                      child: Text(
+                        "Save",
+                      ),
+                    )
+                ),
+                SizedBox(height: 50,)
+              ],
+            ),
           ),
         ),
       ),

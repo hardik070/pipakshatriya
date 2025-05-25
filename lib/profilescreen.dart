@@ -35,6 +35,10 @@ class _profileManageState extends State<profileManage>{
     profilePicUrl = UserDataManager().currentUser?.profilePic ?? '';
   }
 
+  Future<void> editProfileStatus() async{
+    profilePicUrl = UserDataManager().currentUser?.profilePic ?? '';
+  }
+
 
   @override
   Widget build(BuildContext context){
@@ -57,6 +61,10 @@ class _profileManageState extends State<profileManage>{
                         radius: 60,
                         //backgroundImage: uploadedImageUrl != null ? FileImage(_profileImage!) : null,
                         child: Icon(Icons.person, size: 30, color: Color(0xFF666AC6))
+                    ),
+                    errorWidget: (context, url, error) => CircleAvatar(
+                      radius: 60,
+                      child: Icon(Icons.error, size: 30, color: Color(0xFF666AC6)),
                     ),
                     fit: BoxFit.cover,
                     width: 50,
@@ -97,13 +105,18 @@ class _profileManageState extends State<profileManage>{
                 ),
                 const Spacer(),
                 GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => EditProfile()
-                      )
+                  onTap: () async{
+                    final bool status = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => EditProfile()
+                        )
                     );
+
+                    if(status){
+                     await editProfileStatus();
+                      setState(() {});
+                    }
                   },
                   child: Container(
                     padding: EdgeInsets.all(5),
@@ -161,18 +174,19 @@ class _profileManageState extends State<profileManage>{
                               ),
                             ),
                           ),
-                          profileTile(/*GlobalVariables().name*/UserDataManager().currentUser?.name ?? "Username", "username", Icons.person),
+                          profileTile(UserDataManager().currentUser?.name ?? "Username", "username", Icons.person),
                           Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
-                          profileTile(/*GlobalVariables().name*/"Manoj Kumar", "Father Name", Icons.person),
+                          profileTile(UserDataManager().currentUser?.fatherName ?? "Father name", "Father Name", Icons.person),
                           Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
-                          profileTile(/*GlobalVariables().email*/UserDataManager().currentUser?.email ?? "Email", "E-mail", Icons.email_rounded),
+                          profileTile(UserDataManager().currentUser?.email ?? "Email", "E-mail", Icons.email_rounded),
                           Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
-                          profileTile(/*GlobalVariables().number*/"9727264663", "Contact Number", Icons.call),
+                          profileTile(UserDataManager().currentUser?.phoneNumber.toString() ?? "Contact", "Contact Number", Icons.call),
                           Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
-                          profileTile(/*GlobalVariables().course*/"Parmar", "Gotra", Icons.book_rounded),
+                          profileTile(UserDataManager().currentUser?.gotra ?? "Gotra", "Gotra", Icons.book_rounded),
                           Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
-                          profileTile(/*GlobalVariables().city*/"Daspa", "City", Icons.location_city_rounded),
-
+                          profileTile(UserDataManager().currentUser?.actualAddress ?? "City", "Address", Icons.location_city_rounded),
+                          Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
+                          profileTile(UserDataManager().currentUser?.currentAddress ?? "Current City", "Current Living Address", Icons.location_city_rounded),
                         ],
                       ),
                     ),
