@@ -32,11 +32,6 @@ class _profileManageState extends State<profileManage>{
 
   void initState(){
     super.initState();
-    profilePicUrl = UserDataManager().currentUser?.profilePic ?? '';
-  }
-
-  Future<void> editProfileStatus() async{
-    profilePicUrl = UserDataManager().currentUser?.profilePic ?? '';
   }
 
 
@@ -52,11 +47,11 @@ class _profileManageState extends State<profileManage>{
             SizedBox(height: 30),
             Row(
               children: [
-                profilePicUrl.isNotEmpty ?
+                UserDataManager().currentUser!.profilePic.isNotEmpty ?
                 ClipRRect(
                   borderRadius: BorderRadius.circular(100),
                   child: CachedNetworkImage(
-                    imageUrl: profilePicUrl,
+                    imageUrl: UserDataManager().currentUser!.profilePic,
                     placeholder: (context, url) => CircleAvatar(
                         radius: 60,
                         //backgroundImage: uploadedImageUrl != null ? FileImage(_profileImage!) : null,
@@ -114,7 +109,6 @@ class _profileManageState extends State<profileManage>{
                     );
 
                     if(status){
-                     await editProfileStatus();
                       setState(() {});
                     }
                   },

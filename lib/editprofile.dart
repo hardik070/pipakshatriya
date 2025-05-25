@@ -187,6 +187,7 @@ class _EditProfileState extends State<EditProfile> {
       );
 
       await UserDataManager().updateUser(user);
+      await UserDataManager().init();
     }catch (e){
       print(e);
     }
@@ -344,7 +345,9 @@ class _EditProfileState extends State<EditProfile> {
     return PopScope<Object?>(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, Object? result) async {
-        Navigator.pop(context, true);
+        if (!didPop) {
+          Navigator.pop(context, true);
+        }
       },
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -388,7 +391,7 @@ class _EditProfileState extends State<EditProfile> {
 
                                   errorWidget: (context, url, error) => CircleAvatar(
                                     radius: 60,
-                                    child: Icon(Icons.error, size: 60, color: Color(0xFF666AC6)),
+                                    child: Icon(url == '' ? Icons.person: Icons.error, size: 60, color: Color(0xFF666AC6)),
                                   ),
                                   fit: BoxFit.cover,
                                   width: 120,
