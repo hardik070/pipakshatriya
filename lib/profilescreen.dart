@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pipakshatriya/datamodels/user_model.dart';
 import 'datamodels/datamanager/data_manager.dart';
 import 'createaccount.dart';
 import 'editprofile.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'dart:async';
 
 
 class profileManage extends StatefulWidget{
@@ -30,8 +32,27 @@ class _profileManageState extends State<profileManage>{
 
   String profilePicUrl = '';
 
+  StreamSubscription? _userSubscription;
+
+  void listenToUserDataChanges() {
+    _userSubscription = UserDataManager().userStreamController.stream.listen((userData) {
+      updateProfile();
+    });
+  }
+
+  @override
   void initState(){
     super.initState();
+  }
+
+  void updateProfile() {
+    setState(() {});
+    stopListeningToUserDataChanges();
+  }
+
+  void stopListeningToUserDataChanges() {
+    _userSubscription?.cancel();
+    _userSubscription = null;
   }
 
 
@@ -84,16 +105,16 @@ class _profileManageState extends State<profileManage>{
                         color: Color(0xFF666AC6),
                         fontWeight: FontWeight.w600,
                         fontSize: 20,
-
+                        height: 1.3
                       ),
                     ),
                     Text(
                       //GlobalVariables().course.isNotEmpty ? GlobalVariables().course : 'Course' ,
-                      UserDataManager().currentUser?.actualAddress ?? "Address",
+                      UserDataManager().currentUser?.fatherName ?? "Father",
                       style: GoogleFonts.poppins(
                         color: Color(0xFF666AC6),
                         fontWeight: FontWeight.w400,
-                        fontSize: 12,
+                        fontSize: 14,
                       ),
                     ),
                   ],
@@ -101,15 +122,15 @@ class _profileManageState extends State<profileManage>{
                 const Spacer(),
                 GestureDetector(
                   onTap: () async{
+                    listenToUserDataChanges();
                     final bool status = await Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (_) => EditProfile()
                         )
                     );
-
-                    if(status){
-                      setState(() {});
+                    if(!status){
+                      stopListeningToUserDataChanges();
                     }
                   },
                   child: Container(
@@ -349,7 +370,7 @@ class _profileManageState extends State<profileManage>{
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              title.isNotEmpty ? title : subtitle,
+              title.isNotEmpty ? title.split("(S-o)")[0].trim() : subtitle,
               style: GoogleFonts.poppins(
                 color: Colors.white,
                 fontWeight: FontWeight.w400,

@@ -1,5 +1,6 @@
 import 'package:hive/hive.dart';
 import 'package:pipakshatriya/datamodels/user_model.dart';
+import 'dart:async';
 
 class UserDataManager {
   static final UserDataManager _instance = UserDataManager._internal();
@@ -16,10 +17,13 @@ class UserDataManager {
   }
 
   UserModel? get currentUser => _currentUser;
+  final StreamController<UserModel> userStreamController = StreamController<UserModel>.broadcast();
+
 
   Future<void> updateUser(UserModel user) async {
     await _userBox.put('currentUser', user); // ✅ No need to open again
     _currentUser = user;
+    userStreamController.add(user); // Notify listeners
   }
 
 
@@ -37,5 +41,6 @@ class UserDataManager {
     } else {
       print('No user found to update');
     }
+    userStreamController.add(user!);
   }
 }

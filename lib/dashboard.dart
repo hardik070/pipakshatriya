@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pipakshatriya/datamodels/datamanager/data_manager.dart';
+import 'package:pipakshatriya/editprofile.dart';
 import 'community screen.dart';
 import 'contact screen.dart';
 import 'relation screen.dart';
@@ -17,6 +19,30 @@ class Dashboard extends StatefulWidget {
 class _Dashboard extends State<Dashboard> {
 
   int _selectedIndex = 3;
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    if(UserDataManager().currentUser!.relationships.isEmpty
+        || UserDataManager().currentUser!.name.isEmpty
+        || UserDataManager().currentUser!.fatherName.isEmpty
+        || UserDataManager().currentUser!.gotra.isEmpty
+        || UserDataManager().currentUser!.actualAddress.isEmpty
+        || UserDataManager().currentUser!.currentAddress.isEmpty
+        || UserDataManager().currentUser!.phoneNumber.isEmpty
+        || UserDataManager().currentUser!.profilePic.isEmpty){
+      _loadProfileFillComponent();
+    }
+  }
+
+  void _loadProfileFillComponent() async{
+    await Future.delayed(
+      Duration(milliseconds: 5000),(){
+        _showItemDialog();
+      }
+    );
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -24,11 +50,59 @@ class _Dashboard extends State<Dashboard> {
     });
   }
 
+  Future<bool> _showItemDialog() async {
+    String searchQuery = '';
+    await showDialog<String>(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              insetPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              content: Container(
+                height: 100,
+                width: 200,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Your profile is incomplete", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text("Skip"),
+                        ),
+                        ElevatedButton(onPressed: (){
+                          Navigator.of(context).pop();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => EditProfile()
+                            )
+                          );
+                        }, child: Text("Complete now"))
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+
+    _searchController.clear();
+    return true;
+  }
+
   final List<Widget> _screens = [
 
     Center(child: ContactScreen()),
     Center(child: CommunityMessage()),
-
     Center(child: ItemSelectionScreen()),
     Center(child: profileManage()),
   ];
@@ -39,11 +113,6 @@ class _Dashboard extends State<Dashboard> {
         resizeToAvoidBottomInset: false,
 
         appBar: _selectedIndex == 3 ? null : AppBar(
-          // leading: Card(
-          //
-          //   color: Colors.deepOrange,
-          //   child: Icon(Icons.search),
-          // ),
           title: Text(
             "👋 Hy hardik",
             style: GoogleFonts.montserrat(
@@ -55,7 +124,10 @@ class _Dashboard extends State<Dashboard> {
           ),
           //centerTitle: true,
           actions: [
-            const Icon(Icons.notifications_active, color: Color(0xFF666AC6),),
+            GestureDetector(
+              onTap: () {},
+              child: const Icon(Icons.notifications_active, color: Color(0xFF666AC6),),
+            ),
             const SizedBox(width: 20,),
             GestureDetector(
               onTap: () {

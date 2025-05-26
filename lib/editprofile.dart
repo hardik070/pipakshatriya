@@ -53,6 +53,2309 @@ class _EditProfileState extends State<EditProfile> {
   List<String> fltdListGotra = [];
   List<String> gotraList = ["Parmar", "Bhati", "Solanki", "Panwar", "Padhyar", "Makwana", "Dabhi", "Dahiya",];
   List<String> citysList = ["Jodhpur", "Navsari", "Bhinmal", "Daspa", "Surat", "Dhanera", "Pamana", "Virona", "Samrani"];
+  Map<String, Map<String, Map<String, dynamic>>> bhinmal = {
+    "Samrani" : {
+
+    },
+    "daspa" : {
+      "Mr Ajmal ji (S-o)  Shri Pratapji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Pratapji",
+        "gotra": "Parmar",
+        "name": "Mr Ajmal ji",
+        "number": "9413854869",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": "",
+        "relations": {
+          "mama": "Mr Arjun Kumar ji (S-o)  Shri Krishna ji",
+          "fufa": "Mr Ambalal ji (S-o)  Shri Babuji",
+          "mosa": "Mr Ashok Kumar ji (S-o)  Mr Chogji",
+          "chacha": "Mr Ashok ji (S-o)  Mr Poonma ji"
+        }
+      },
+      "Mr Jeetaji (S-o)  Shri Manrupji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Manrupji",
+        "gotra": "Padhiyaar",
+        "name": "Mr Jeetaji",
+        "number": "9549113159",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Jitendra Kumar (S-o)  Shri Roopchand ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Roopchand ji",
+        "gotra": "Parmar",
+        "name": "Mr Jitendra Kumar",
+        "number": "9829248872",
+        "number 2": "7296989899",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kalpesh Kumar (S-o)  Mr Masra ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Masra ji",
+        "gotra": "Solanki",
+        "name": "Mr Kalpesh Kumar",
+        "number": "9979558187",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kalu ji (S-o)  Mr Moti Ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Moti Ji",
+        "gotra": "Parmar",
+        "name": "Mr Kalu ji",
+        "number": "9460169798",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": "",
+        "relations": {
+          "sasur ji": "Mr Chandu ji (S-o)  Mr Gheva ji",
+          "chacha": "Mr Chandu ji (S-o)  Mr Gheva ji"
+        }
+      },
+      "Mr Kalu ji (S-o)  Mr Poonma ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Poonma ji",
+        "gotra": "Dabhi",
+        "name": "Mr Kalu ji",
+        "number": "9982244898",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kantilal ji (S-o)  Mr Haka ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Haka ji",
+        "gotra": "Makwana",
+        "name": "Mr Kantilal ji",
+        "number": "9413439191",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kapoor ji (S-o)  Shri Shankar Ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Shankar Ji",
+        "gotra": "Parmar",
+        "name": "Mr Kapoor ji",
+        "number": "9784717997",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kapoor ji (S-o)  Shri Shankar ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Shankar ji",
+        "gotra": "Parmar",
+        "name": "Mr Kapoor ji",
+        "number": "9784717997",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kesa ji (S-o)  Shri Rama Ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Rama Ji",
+        "gotra": "Parmar",
+        "name": "Mr Kesa ji",
+        "number": "9602715500",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kishore Kumar ji (S-o)  Mr Jamta ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Jamta ji",
+        "gotra": "Padhiyaar",
+        "name": "Mr Kishore Kumar ji",
+        "number": "9982641533",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kishore ji (S-o)  Shri Trikma Ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Trikma Ji",
+        "gotra": "Parmar",
+        "name": "Mr Kishore ji",
+        "number": "9828231584",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Madan ji (S-o)  Shri Shankar ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Shankar ji",
+        "gotra": "Parmar",
+        "name": "Mr Madan ji",
+        "number": "8003740252",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Mahendra Kumar (S-o)  Mr Jabararam ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Jabararam ji",
+        "gotra": "makwana",
+        "name": "Mr Mahendra Kumar",
+        "number": "9587329044",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Mahendra Kumar (S-o)  Shri Rupchandji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Rupchandji",
+        "gotra": "Parmar",
+        "name": "Mr Mahendra Kumar",
+        "number": "9783323254",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Mahendra ji (S-o)  Mr Himta ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Himta ji",
+        "gotra": "Padhiyaar",
+        "name": "Mr Mahendra ji",
+        "number": "9828489793",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Mahendra ji (S-o)  Mr Nanji Ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Nanji Ji",
+        "gotra": "Dabhi",
+        "name": "Mr Mahendra ji",
+        "number": "9001784576",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Mahendra ji (S-o)  Shri Varda ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Varda ji",
+        "gotra": "makwana",
+        "name": "Mr Mahendra ji",
+        "number": "8239255574",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Manchha ji (S-o)  Shri Trikmaji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Trikmaji",
+        "gotra": "Solanki",
+        "name": "Mr Manchha ji",
+        "number": "9461065565",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+    },
+    "suthana" : {
+      "Mr Ajmal ji (S-o)  Shri Pratapji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Pratapji",
+        "gotra": "Parmar",
+        "name": "Mr Ajmal ji",
+        "number": "9413854869",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": "",
+        "relations": {
+          "mama": "Mr Arjun Kumar ji (S-o)  Shri Krishna ji",
+          "fufa": "Mr Ambalal ji (S-o)  Shri Babuji",
+          "mosa": "Mr Ashok Kumar ji (S-o)  Mr Chogji",
+          "chacha": "Mr Ashok ji (S-o)  Mr Poonma ji"
+        }
+      },
+      "Mr Ambalal ji (S-o)  Shri Babuji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Babuji",
+        "gotra": "Dabhi",
+        "name": "Mr Ambalal ji",
+        "number": "8094471215",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": "",
+        "relations": {
+          "mama": "Mr Bhura ji (S-o)  Mr Dhukha ji",
+          "fufa": "Mr Kalu ji (S-o)  Mr Moti Ji",
+          "mosa": "Mr Himta ji (S-o)  Mr Pratap ji",
+          "chacha": "Mr Dhanraj ji (S-o)  Mr Sonaji",
+          "sasur ji": "Mr Hemant Kumar (S-o)  Mr Kantilal ji"
+        }
+      },
+      "Mr Arjun Kumar ji (S-o)  Shri Krishna ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Krishna ji",
+        "gotra": "Makwana",
+        "name": "Mr Arjun Kumar ji",
+        "number": "8875730563",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Ashok Kumar ji (S-o)  Mr Chogji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Chogji",
+        "gotra": "Dahiya",
+        "name": "Mr Ashok Kumar ji",
+        "number": "9602253043",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Ashok Kumar ji (S-o)  Mr Jamta ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Jamta ji",
+        "gotra": "Padhiyaar",
+        "name": "Mr Ashok Kumar ji",
+        "number": "9602108893",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Ashok ji (S-o)  Mr Samera ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Samera ji",
+        "gotra": "Parmar",
+        "name": "Mr Ashok ji",
+        "number": "8094521138",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Ashok ji (S-o)  Mr Sura Ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Sura Ji",
+        "gotra": "Makwana",
+        "name": "Mr Ashok ji",
+        "number": "9672797381",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Babu Ji (S-o)  Mr Fullaji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Fullaji",
+        "gotra": "Solanki",
+        "name": "Mr Babu Ji",
+        "number": "7568432067",
+        "number 2": "9549744952",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Bagda ji (S-o)  Mr Gaja ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Gaja ji",
+        "gotra": "Solanki",
+        "name": "Mr Bagda ji",
+        "number": "9829457034",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Jeetaji (S-o)  Shri Manrupji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Manrupji",
+        "gotra": "Padhiyaar",
+        "name": "Mr Jeetaji",
+        "number": "9549113159",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Jitendra Kumar (S-o)  Shri Roopchand ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Roopchand ji",
+        "gotra": "Parmar",
+        "name": "Mr Jitendra Kumar",
+        "number": "9829248872",
+        "number 2": "7296989899",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kalpesh Kumar (S-o)  Mr Masra ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Masra ji",
+        "gotra": "Solanki",
+        "name": "Mr Kalpesh Kumar",
+        "number": "9979558187",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kalu ji (S-o)  Mr Moti Ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Moti Ji",
+        "gotra": "Parmar",
+        "name": "Mr Kalu ji",
+        "number": "9460169798",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": "",
+        "relations": {
+          "sasur ji": "Mr Chandu ji (S-o)  Mr Gheva ji",
+          "chacha": "Mr Chandu ji (S-o)  Mr Gheva ji"
+        }
+      },
+      "Mr Kalu ji (S-o)  Mr Poonma ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Poonma ji",
+        "gotra": "Dabhi",
+        "name": "Mr Kalu ji",
+        "number": "9982244898",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kantilal ji (S-o)  Mr Haka ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Haka ji",
+        "gotra": "Makwana",
+        "name": "Mr Kantilal ji",
+        "number": "9413439191",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kapoor ji (S-o)  Shri Shankar Ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Shankar Ji",
+        "gotra": "Parmar",
+        "name": "Mr Kapoor ji",
+        "number": "9784717997",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kapoor ji (S-o)  Shri Shankar ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Shankar ji",
+        "gotra": "Parmar",
+        "name": "Mr Kapoor ji",
+        "number": "9784717997",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kesa ji (S-o)  Shri Rama Ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Rama Ji",
+        "gotra": "Parmar",
+        "name": "Mr Kesa ji",
+        "number": "9602715500",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kishore Kumar ji (S-o)  Mr Jamta ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Jamta ji",
+        "gotra": "Padhiyaar",
+        "name": "Mr Kishore Kumar ji",
+        "number": "9982641533",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kishore ji (S-o)  Shri Trikma Ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Trikma Ji",
+        "gotra": "Parmar",
+        "name": "Mr Kishore ji",
+        "number": "9828231584",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Madan ji (S-o)  Shri Shankar ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Shankar ji",
+        "gotra": "Parmar",
+        "name": "Mr Madan ji",
+        "number": "8003740252",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Mahendra Kumar (S-o)  Mr Jabararam ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Jabararam ji",
+        "gotra": "makwana",
+        "name": "Mr Mahendra Kumar",
+        "number": "9587329044",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Mahendra Kumar (S-o)  Shri Rupchandji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Rupchandji",
+        "gotra": "Parmar",
+        "name": "Mr Mahendra Kumar",
+        "number": "9783323254",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Mahendra ji (S-o)  Mr Himta ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Himta ji",
+        "gotra": "Padhiyaar",
+        "name": "Mr Mahendra ji",
+        "number": "9828489793",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Mahendra ji (S-o)  Mr Nanji Ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Nanji Ji",
+        "gotra": "Dabhi",
+        "name": "Mr Mahendra ji",
+        "number": "9001784576",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Mahendra ji (S-o)  Shri Varda ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Varda ji",
+        "gotra": "makwana",
+        "name": "Mr Mahendra ji",
+        "number": "8239255574",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Manchha ji (S-o)  Shri Trikmaji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Trikmaji",
+        "gotra": "Solanki",
+        "name": "Mr Manchha ji",
+        "number": "9461065565",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+    },
+    "Bhinmal" : {
+      "Mr Ajmal ji (S-o)  Shri Pratapji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Pratapji",
+        "gotra": "Parmar",
+        "name": "Mr Ajmal ji",
+        "number": "9413854869",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": "",
+        "relations": {
+          "mama": "Mr Arjun Kumar ji (S-o)  Shri Krishna ji",
+          "fufa": "Mr Ambalal ji (S-o)  Shri Babuji",
+          "mosa": "Mr Ashok Kumar ji (S-o)  Mr Chogji",
+          "chacha": "Mr Ashok ji (S-o)  Mr Poonma ji"
+        }
+      },
+      "Mr Ambalal ji (S-o)  Shri Babuji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Babuji",
+        "gotra": "Dabhi",
+        "name": "Mr Ambalal ji",
+        "number": "8094471215",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": "",
+        "relations": {
+          "mama": "Mr Bhura ji (S-o)  Mr Dhukha ji",
+          "fufa": "Mr Kalu ji (S-o)  Mr Moti Ji",
+          "mosa": "Mr Himta ji (S-o)  Mr Pratap ji",
+          "chacha": "Mr Dhanraj ji (S-o)  Mr Sonaji",
+          "sasur ji": "Mr Hemant Kumar (S-o)  Mr Kantilal ji"
+        }
+      },
+      "Mr Arjun Kumar ji (S-o)  Shri Krishna ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Krishna ji",
+        "gotra": "Makwana",
+        "name": "Mr Arjun Kumar ji",
+        "number": "8875730563",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Ashok Kumar ji (S-o)  Mr Chogji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Chogji",
+        "gotra": "Dahiya",
+        "name": "Mr Ashok Kumar ji",
+        "number": "9602253043",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Ashok Kumar ji (S-o)  Mr Jamta ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Jamta ji",
+        "gotra": "Padhiyaar",
+        "name": "Mr Ashok Kumar ji",
+        "number": "9602108893",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Ashok ji (S-o)  Mr Samera ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Samera ji",
+        "gotra": "Parmar",
+        "name": "Mr Ashok ji",
+        "number": "8094521138",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Ashok ji (S-o)  Mr Sura Ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Sura Ji",
+        "gotra": "Makwana",
+        "name": "Mr Ashok ji",
+        "number": "9672797381",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Babu Ji (S-o)  Mr Fullaji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Fullaji",
+        "gotra": "Solanki",
+        "name": "Mr Babu Ji",
+        "number": "7568432067",
+        "number 2": "9549744952",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Bagda ji (S-o)  Mr Gaja ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Gaja ji",
+        "gotra": "Solanki",
+        "name": "Mr Bagda ji",
+        "number": "9829457034",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Jeetaji (S-o)  Shri Manrupji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Manrupji",
+        "gotra": "Padhiyaar",
+        "name": "Mr Jeetaji",
+        "number": "9549113159",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Jitendra Kumar (S-o)  Shri Roopchand ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Roopchand ji",
+        "gotra": "Parmar",
+        "name": "Mr Jitendra Kumar",
+        "number": "9829248872",
+        "number 2": "7296989899",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kalpesh Kumar (S-o)  Mr Masra ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Masra ji",
+        "gotra": "Solanki",
+        "name": "Mr Kalpesh Kumar",
+        "number": "9979558187",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kalu ji (S-o)  Mr Moti Ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Moti Ji",
+        "gotra": "Parmar",
+        "name": "Mr Kalu ji",
+        "number": "9460169798",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": "",
+        "relations": {
+          "sasur ji": "Mr Chandu ji (S-o)  Mr Gheva ji",
+          "chacha": "Mr Chandu ji (S-o)  Mr Gheva ji"
+        }
+      },
+      "Mr Kalu ji (S-o)  Mr Poonma ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Poonma ji",
+        "gotra": "Dabhi",
+        "name": "Mr Kalu ji",
+        "number": "9982244898",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kantilal ji (S-o)  Mr Haka ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Haka ji",
+        "gotra": "Makwana",
+        "name": "Mr Kantilal ji",
+        "number": "9413439191",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kapoor ji (S-o)  Shri Shankar Ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Shankar Ji",
+        "gotra": "Parmar",
+        "name": "Mr Kapoor ji",
+        "number": "9784717997",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kapoor ji (S-o)  Shri Shankar ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Shankar ji",
+        "gotra": "Parmar",
+        "name": "Mr Kapoor ji",
+        "number": "9784717997",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kesa ji (S-o)  Shri Rama Ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Rama Ji",
+        "gotra": "Parmar",
+        "name": "Mr Kesa ji",
+        "number": "9602715500",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kishore Kumar ji (S-o)  Mr Jamta ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Jamta ji",
+        "gotra": "Padhiyaar",
+        "name": "Mr Kishore Kumar ji",
+        "number": "9982641533",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kishore ji (S-o)  Shri Trikma Ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Trikma Ji",
+        "gotra": "Parmar",
+        "name": "Mr Kishore ji",
+        "number": "9828231584",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Madan ji (S-o)  Shri Shankar ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Shankar ji",
+        "gotra": "Parmar",
+        "name": "Mr Madan ji",
+        "number": "8003740252",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Mahendra Kumar (S-o)  Mr Jabararam ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Jabararam ji",
+        "gotra": "makwana",
+        "name": "Mr Mahendra Kumar",
+        "number": "9587329044",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Mahendra Kumar (S-o)  Shri Rupchandji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Rupchandji",
+        "gotra": "Parmar",
+        "name": "Mr Mahendra Kumar",
+        "number": "9783323254",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Mahendra ji (S-o)  Mr Himta ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Himta ji",
+        "gotra": "Padhiyaar",
+        "name": "Mr Mahendra ji",
+        "number": "9828489793",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Mahendra ji (S-o)  Mr Nanji Ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Nanji Ji",
+        "gotra": "Dabhi",
+        "name": "Mr Mahendra ji",
+        "number": "9001784576",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Mahendra ji (S-o)  Shri Varda ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Varda ji",
+        "gotra": "makwana",
+        "name": "Mr Mahendra ji",
+        "number": "8239255574",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Manchha ji (S-o)  Shri Trikmaji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Trikmaji",
+        "gotra": "Solanki",
+        "name": "Mr Manchha ji",
+        "number": "9461065565",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+    },
+    "Sansore" : {
+      "Mr Ajmal ji (S-o)  Shri Pratapji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Pratapji",
+        "gotra": "Parmar",
+        "name": "Mr Ajmal ji",
+        "number": "9413854869",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": "",
+        "relations": {
+          "mama": "Mr Arjun Kumar ji (S-o)  Shri Krishna ji",
+          "fufa": "Mr Ambalal ji (S-o)  Shri Babuji",
+          "mosa": "Mr Ashok Kumar ji (S-o)  Mr Chogji",
+          "chacha": "Mr Ashok ji (S-o)  Mr Poonma ji"
+        }
+      },
+      "Mr Ambalal ji (S-o)  Shri Babuji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Babuji",
+        "gotra": "Dabhi",
+        "name": "Mr Ambalal ji",
+        "number": "8094471215",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": "",
+        "relations": {
+          "mama": "Mr Bhura ji (S-o)  Mr Dhukha ji",
+          "fufa": "Mr Kalu ji (S-o)  Mr Moti Ji",
+          "mosa": "Mr Himta ji (S-o)  Mr Pratap ji",
+          "chacha": "Mr Dhanraj ji (S-o)  Mr Sonaji",
+          "sasur ji": "Mr Hemant Kumar (S-o)  Mr Kantilal ji"
+        }
+      },
+      "Mr Arjun Kumar ji (S-o)  Shri Krishna ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Krishna ji",
+        "gotra": "Makwana",
+        "name": "Mr Arjun Kumar ji",
+        "number": "8875730563",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Ashok Kumar ji (S-o)  Mr Chogji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Chogji",
+        "gotra": "Dahiya",
+        "name": "Mr Ashok Kumar ji",
+        "number": "9602253043",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Ashok Kumar ji (S-o)  Mr Jamta ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Jamta ji",
+        "gotra": "Padhiyaar",
+        "name": "Mr Ashok Kumar ji",
+        "number": "9602108893",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Ashok ji (S-o)  Mr Samera ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Samera ji",
+        "gotra": "Parmar",
+        "name": "Mr Ashok ji",
+        "number": "8094521138",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Ashok ji (S-o)  Mr Sura Ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Sura Ji",
+        "gotra": "Makwana",
+        "name": "Mr Ashok ji",
+        "number": "9672797381",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Babu Ji (S-o)  Mr Fullaji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Fullaji",
+        "gotra": "Solanki",
+        "name": "Mr Babu Ji",
+        "number": "7568432067",
+        "number 2": "9549744952",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Bagda ji (S-o)  Mr Gaja ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Gaja ji",
+        "gotra": "Solanki",
+        "name": "Mr Bagda ji",
+        "number": "9829457034",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Jeetaji (S-o)  Shri Manrupji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Manrupji",
+        "gotra": "Padhiyaar",
+        "name": "Mr Jeetaji",
+        "number": "9549113159",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Jitendra Kumar (S-o)  Shri Roopchand ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Roopchand ji",
+        "gotra": "Parmar",
+        "name": "Mr Jitendra Kumar",
+        "number": "9829248872",
+        "number 2": "7296989899",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kalpesh Kumar (S-o)  Mr Masra ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Masra ji",
+        "gotra": "Solanki",
+        "name": "Mr Kalpesh Kumar",
+        "number": "9979558187",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kalu ji (S-o)  Mr Moti Ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Moti Ji",
+        "gotra": "Parmar",
+        "name": "Mr Kalu ji",
+        "number": "9460169798",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": "",
+        "relations": {
+          "sasur ji": "Mr Chandu ji (S-o)  Mr Gheva ji",
+          "chacha": "Mr Chandu ji (S-o)  Mr Gheva ji"
+        }
+      },
+      "Mr Kalu ji (S-o)  Mr Poonma ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Poonma ji",
+        "gotra": "Dabhi",
+        "name": "Mr Kalu ji",
+        "number": "9982244898",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kantilal ji (S-o)  Mr Haka ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Haka ji",
+        "gotra": "Makwana",
+        "name": "Mr Kantilal ji",
+        "number": "9413439191",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kapoor ji (S-o)  Shri Shankar Ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Shankar Ji",
+        "gotra": "Parmar",
+        "name": "Mr Kapoor ji",
+        "number": "9784717997",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kapoor ji (S-o)  Shri Shankar ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Shankar ji",
+        "gotra": "Parmar",
+        "name": "Mr Kapoor ji",
+        "number": "9784717997",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kesa ji (S-o)  Shri Rama Ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Rama Ji",
+        "gotra": "Parmar",
+        "name": "Mr Kesa ji",
+        "number": "9602715500",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kishore Kumar ji (S-o)  Mr Jamta ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Jamta ji",
+        "gotra": "Padhiyaar",
+        "name": "Mr Kishore Kumar ji",
+        "number": "9982641533",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kishore ji (S-o)  Shri Trikma Ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Trikma Ji",
+        "gotra": "Parmar",
+        "name": "Mr Kishore ji",
+        "number": "9828231584",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Madan ji (S-o)  Shri Shankar ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Shankar ji",
+        "gotra": "Parmar",
+        "name": "Mr Madan ji",
+        "number": "8003740252",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Mahendra Kumar (S-o)  Mr Jabararam ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Jabararam ji",
+        "gotra": "makwana",
+        "name": "Mr Mahendra Kumar",
+        "number": "9587329044",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Mahendra Kumar (S-o)  Shri Rupchandji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Rupchandji",
+        "gotra": "Parmar",
+        "name": "Mr Mahendra Kumar",
+        "number": "9783323254",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Mahendra ji (S-o)  Mr Himta ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Himta ji",
+        "gotra": "Padhiyaar",
+        "name": "Mr Mahendra ji",
+        "number": "9828489793",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Mahendra ji (S-o)  Mr Nanji Ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Nanji Ji",
+        "gotra": "Dabhi",
+        "name": "Mr Mahendra ji",
+        "number": "9001784576",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Mahendra ji (S-o)  Shri Varda ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Varda ji",
+        "gotra": "makwana",
+        "name": "Mr Mahendra ji",
+        "number": "8239255574",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Manchha ji (S-o)  Shri Trikmaji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Trikmaji",
+        "gotra": "Solanki",
+        "name": "Mr Manchha ji",
+        "number": "9461065565",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+    },
+    "Bhimpura" : {
+      "Mr Ajmal ji (S-o)  Shri Pratapji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Pratapji",
+        "gotra": "Parmar",
+        "name": "Mr Ajmal ji",
+        "number": "9413854869",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": "",
+        "relations": {
+          "mama": "Mr Arjun Kumar ji (S-o)  Shri Krishna ji",
+          "fufa": "Mr Ambalal ji (S-o)  Shri Babuji",
+          "mosa": "Mr Ashok Kumar ji (S-o)  Mr Chogji",
+          "chacha": "Mr Ashok ji (S-o)  Mr Poonma ji"
+        }
+      },
+      "Mr Ambalal ji (S-o)  Shri Babuji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Babuji",
+        "gotra": "Dabhi",
+        "name": "Mr Ambalal ji",
+        "number": "8094471215",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": "",
+        "relations": {
+          "mama": "Mr Bhura ji (S-o)  Mr Dhukha ji",
+          "fufa": "Mr Kalu ji (S-o)  Mr Moti Ji",
+          "mosa": "Mr Himta ji (S-o)  Mr Pratap ji",
+          "chacha": "Mr Dhanraj ji (S-o)  Mr Sonaji",
+          "sasur ji": "Mr Hemant Kumar (S-o)  Mr Kantilal ji"
+        }
+      },
+      "Mr Arjun Kumar ji (S-o)  Shri Krishna ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Krishna ji",
+        "gotra": "Makwana",
+        "name": "Mr Arjun Kumar ji",
+        "number": "8875730563",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Ashok Kumar ji (S-o)  Mr Chogji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Chogji",
+        "gotra": "Dahiya",
+        "name": "Mr Ashok Kumar ji",
+        "number": "9602253043",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Ashok Kumar ji (S-o)  Mr Jamta ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Jamta ji",
+        "gotra": "Padhiyaar",
+        "name": "Mr Ashok Kumar ji",
+        "number": "9602108893",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Ashok ji (S-o)  Mr Samera ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Samera ji",
+        "gotra": "Parmar",
+        "name": "Mr Ashok ji",
+        "number": "8094521138",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Ashok ji (S-o)  Mr Sura Ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Sura Ji",
+        "gotra": "Makwana",
+        "name": "Mr Ashok ji",
+        "number": "9672797381",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Babu Ji (S-o)  Mr Fullaji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Fullaji",
+        "gotra": "Solanki",
+        "name": "Mr Babu Ji",
+        "number": "7568432067",
+        "number 2": "9549744952",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Bagda ji (S-o)  Mr Gaja ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Gaja ji",
+        "gotra": "Solanki",
+        "name": "Mr Bagda ji",
+        "number": "9829457034",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Jeetaji (S-o)  Shri Manrupji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Manrupji",
+        "gotra": "Padhiyaar",
+        "name": "Mr Jeetaji",
+        "number": "9549113159",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Jitendra Kumar (S-o)  Shri Roopchand ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Roopchand ji",
+        "gotra": "Parmar",
+        "name": "Mr Jitendra Kumar",
+        "number": "9829248872",
+        "number 2": "7296989899",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kalpesh Kumar (S-o)  Mr Masra ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Masra ji",
+        "gotra": "Solanki",
+        "name": "Mr Kalpesh Kumar",
+        "number": "9979558187",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kalu ji (S-o)  Mr Moti Ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Moti Ji",
+        "gotra": "Parmar",
+        "name": "Mr Kalu ji",
+        "number": "9460169798",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": "",
+        "relations": {
+          "sasur ji": "Mr Chandu ji (S-o)  Mr Gheva ji",
+          "chacha": "Mr Chandu ji (S-o)  Mr Gheva ji"
+        }
+      },
+      "Mr Kalu ji (S-o)  Mr Poonma ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Poonma ji",
+        "gotra": "Dabhi",
+        "name": "Mr Kalu ji",
+        "number": "9982244898",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kantilal ji (S-o)  Mr Haka ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Haka ji",
+        "gotra": "Makwana",
+        "name": "Mr Kantilal ji",
+        "number": "9413439191",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kapoor ji (S-o)  Shri Shankar Ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Shankar Ji",
+        "gotra": "Parmar",
+        "name": "Mr Kapoor ji",
+        "number": "9784717997",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kapoor ji (S-o)  Shri Shankar ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Shankar ji",
+        "gotra": "Parmar",
+        "name": "Mr Kapoor ji",
+        "number": "9784717997",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kesa ji (S-o)  Shri Rama Ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Rama Ji",
+        "gotra": "Parmar",
+        "name": "Mr Kesa ji",
+        "number": "9602715500",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kishore Kumar ji (S-o)  Mr Jamta ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Jamta ji",
+        "gotra": "Padhiyaar",
+        "name": "Mr Kishore Kumar ji",
+        "number": "9982641533",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kishore ji (S-o)  Shri Trikma Ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Trikma Ji",
+        "gotra": "Parmar",
+        "name": "Mr Kishore ji",
+        "number": "9828231584",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Madan ji (S-o)  Shri Shankar ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Shankar ji",
+        "gotra": "Parmar",
+        "name": "Mr Madan ji",
+        "number": "8003740252",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Mahendra Kumar (S-o)  Mr Jabararam ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Jabararam ji",
+        "gotra": "makwana",
+        "name": "Mr Mahendra Kumar",
+        "number": "9587329044",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Mahendra Kumar (S-o)  Shri Rupchandji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Rupchandji",
+        "gotra": "Parmar",
+        "name": "Mr Mahendra Kumar",
+        "number": "9783323254",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Mahendra ji (S-o)  Mr Himta ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Himta ji",
+        "gotra": "Padhiyaar",
+        "name": "Mr Mahendra ji",
+        "number": "9828489793",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Mahendra ji (S-o)  Mr Nanji Ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Nanji Ji",
+        "gotra": "Dabhi",
+        "name": "Mr Mahendra ji",
+        "number": "9001784576",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Mahendra ji (S-o)  Shri Varda ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Varda ji",
+        "gotra": "makwana",
+        "name": "Mr Mahendra ji",
+        "number": "8239255574",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Manchha ji (S-o)  Shri Trikmaji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Trikmaji",
+        "gotra": "Solanki",
+        "name": "Mr Manchha ji",
+        "number": "9461065565",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+    },
+    "Navsari" : {
+      "Mr Ajmal ji (S-o)  Shri Pratapji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Pratapji",
+        "gotra": "Parmar",
+        "name": "Mr Ajmal ji",
+        "number": "9413854869",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": "",
+        "relations": {
+          "mama": "Mr Arjun Kumar ji (S-o)  Shri Krishna ji",
+          "fufa": "Mr Ambalal ji (S-o)  Shri Babuji",
+          "mosa": "Mr Ashok Kumar ji (S-o)  Mr Chogji",
+          "chacha": "Mr Ashok ji (S-o)  Mr Poonma ji"
+        }
+      },
+      "Mr Ambalal ji (S-o)  Shri Babuji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Babuji",
+        "gotra": "Dabhi",
+        "name": "Mr Ambalal ji",
+        "number": "8094471215",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": "",
+        "relations": {
+          "mama": "Mr Bhura ji (S-o)  Mr Dhukha ji",
+          "fufa": "Mr Kalu ji (S-o)  Mr Moti Ji",
+          "mosa": "Mr Himta ji (S-o)  Mr Pratap ji",
+          "chacha": "Mr Dhanraj ji (S-o)  Mr Sonaji",
+          "sasur ji": "Mr Hemant Kumar (S-o)  Mr Kantilal ji"
+        }
+      },
+      "Mr Arjun Kumar ji (S-o)  Shri Krishna ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Krishna ji",
+        "gotra": "Makwana",
+        "name": "Mr Arjun Kumar ji",
+        "number": "8875730563",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Ashok Kumar ji (S-o)  Mr Chogji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Chogji",
+        "gotra": "Dahiya",
+        "name": "Mr Ashok Kumar ji",
+        "number": "9602253043",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Ashok Kumar ji (S-o)  Mr Jamta ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Jamta ji",
+        "gotra": "Padhiyaar",
+        "name": "Mr Ashok Kumar ji",
+        "number": "9602108893",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Ashok ji (S-o)  Mr Samera ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Samera ji",
+        "gotra": "Parmar",
+        "name": "Mr Ashok ji",
+        "number": "8094521138",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Ashok ji (S-o)  Mr Sura Ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Sura Ji",
+        "gotra": "Makwana",
+        "name": "Mr Ashok ji",
+        "number": "9672797381",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Babu Ji (S-o)  Mr Fullaji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Fullaji",
+        "gotra": "Solanki",
+        "name": "Mr Babu Ji",
+        "number": "7568432067",
+        "number 2": "9549744952",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Bagda ji (S-o)  Mr Gaja ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Gaja ji",
+        "gotra": "Solanki",
+        "name": "Mr Bagda ji",
+        "number": "9829457034",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Jeetaji (S-o)  Shri Manrupji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Manrupji",
+        "gotra": "Padhiyaar",
+        "name": "Mr Jeetaji",
+        "number": "9549113159",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Jitendra Kumar (S-o)  Shri Roopchand ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Roopchand ji",
+        "gotra": "Parmar",
+        "name": "Mr Jitendra Kumar",
+        "number": "9829248872",
+        "number 2": "7296989899",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kalpesh Kumar (S-o)  Mr Masra ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Masra ji",
+        "gotra": "Solanki",
+        "name": "Mr Kalpesh Kumar",
+        "number": "9979558187",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kalu ji (S-o)  Mr Moti Ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Moti Ji",
+        "gotra": "Parmar",
+        "name": "Mr Kalu ji",
+        "number": "9460169798",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": "",
+        "relations": {
+          "sasur ji": "Mr Chandu ji (S-o)  Mr Gheva ji",
+          "chacha": "Mr Chandu ji (S-o)  Mr Gheva ji"
+        }
+      },
+      "Mr Kalu ji (S-o)  Mr Poonma ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Poonma ji",
+        "gotra": "Dabhi",
+        "name": "Mr Kalu ji",
+        "number": "9982244898",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kantilal ji (S-o)  Mr Haka ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Haka ji",
+        "gotra": "Makwana",
+        "name": "Mr Kantilal ji",
+        "number": "9413439191",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kapoor ji (S-o)  Shri Shankar Ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Shankar Ji",
+        "gotra": "Parmar",
+        "name": "Mr Kapoor ji",
+        "number": "9784717997",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kapoor ji (S-o)  Shri Shankar ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Shankar ji",
+        "gotra": "Parmar",
+        "name": "Mr Kapoor ji",
+        "number": "9784717997",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kesa ji (S-o)  Shri Rama Ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Rama Ji",
+        "gotra": "Parmar",
+        "name": "Mr Kesa ji",
+        "number": "9602715500",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kishore Kumar ji (S-o)  Mr Jamta ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Jamta ji",
+        "gotra": "Padhiyaar",
+        "name": "Mr Kishore Kumar ji",
+        "number": "9982641533",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kishore ji (S-o)  Shri Trikma Ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Trikma Ji",
+        "gotra": "Parmar",
+        "name": "Mr Kishore ji",
+        "number": "9828231584",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Madan ji (S-o)  Shri Shankar ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Shankar ji",
+        "gotra": "Parmar",
+        "name": "Mr Madan ji",
+        "number": "8003740252",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Mahendra Kumar (S-o)  Mr Jabararam ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Jabararam ji",
+        "gotra": "makwana",
+        "name": "Mr Mahendra Kumar",
+        "number": "9587329044",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Mahendra Kumar (S-o)  Shri Rupchandji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Rupchandji",
+        "gotra": "Parmar",
+        "name": "Mr Mahendra Kumar",
+        "number": "9783323254",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Mahendra ji (S-o)  Mr Himta ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Himta ji",
+        "gotra": "Padhiyaar",
+        "name": "Mr Mahendra ji",
+        "number": "9828489793",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Mahendra ji (S-o)  Mr Nanji Ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Nanji Ji",
+        "gotra": "Dabhi",
+        "name": "Mr Mahendra ji",
+        "number": "9001784576",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Mahendra ji (S-o)  Shri Varda ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Varda ji",
+        "gotra": "makwana",
+        "name": "Mr Mahendra ji",
+        "number": "8239255574",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Manchha ji (S-o)  Shri Trikmaji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Trikmaji",
+        "gotra": "Solanki",
+        "name": "Mr Manchha ji",
+        "number": "9461065565",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+    },
+    "Bevta" : {
+      "Mr Ajmal ji (S-o)  Shri Pratapji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Pratapji",
+        "gotra": "Parmar",
+        "name": "Mr Ajmal ji",
+        "number": "9413854869",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": "",
+        "relations": {
+          "mama": "Mr Arjun Kumar ji (S-o)  Shri Krishna ji",
+          "fufa": "Mr Ambalal ji (S-o)  Shri Babuji",
+          "mosa": "Mr Ashok Kumar ji (S-o)  Mr Chogji",
+          "chacha": "Mr Ashok ji (S-o)  Mr Poonma ji"
+        }
+      },
+      "Mr Ambalal ji (S-o)  Shri Babuji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Babuji",
+        "gotra": "Dabhi",
+        "name": "Mr Ambalal ji",
+        "number": "8094471215",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": "",
+        "relations": {
+          "mama": "Mr Bhura ji (S-o)  Mr Dhukha ji",
+          "fufa": "Mr Kalu ji (S-o)  Mr Moti Ji",
+          "mosa": "Mr Himta ji (S-o)  Mr Pratap ji",
+          "chacha": "Mr Dhanraj ji (S-o)  Mr Sonaji",
+          "sasur ji": "Mr Hemant Kumar (S-o)  Mr Kantilal ji"
+        }
+      },
+      "Mr Arjun Kumar ji (S-o)  Shri Krishna ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Krishna ji",
+        "gotra": "Makwana",
+        "name": "Mr Arjun Kumar ji",
+        "number": "8875730563",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Ashok Kumar ji (S-o)  Mr Chogji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Chogji",
+        "gotra": "Dahiya",
+        "name": "Mr Ashok Kumar ji",
+        "number": "9602253043",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Ashok Kumar ji (S-o)  Mr Jamta ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Jamta ji",
+        "gotra": "Padhiyaar",
+        "name": "Mr Ashok Kumar ji",
+        "number": "9602108893",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Ashok ji (S-o)  Mr Samera ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Samera ji",
+        "gotra": "Parmar",
+        "name": "Mr Ashok ji",
+        "number": "8094521138",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Ashok ji (S-o)  Mr Sura Ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Sura Ji",
+        "gotra": "Makwana",
+        "name": "Mr Ashok ji",
+        "number": "9672797381",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Babu Ji (S-o)  Mr Fullaji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Fullaji",
+        "gotra": "Solanki",
+        "name": "Mr Babu Ji",
+        "number": "7568432067",
+        "number 2": "9549744952",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Bagda ji (S-o)  Mr Gaja ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Gaja ji",
+        "gotra": "Solanki",
+        "name": "Mr Bagda ji",
+        "number": "9829457034",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Jeetaji (S-o)  Shri Manrupji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Manrupji",
+        "gotra": "Padhiyaar",
+        "name": "Mr Jeetaji",
+        "number": "9549113159",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Jitendra Kumar (S-o)  Shri Roopchand ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Roopchand ji",
+        "gotra": "Parmar",
+        "name": "Mr Jitendra Kumar",
+        "number": "9829248872",
+        "number 2": "7296989899",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kalpesh Kumar (S-o)  Mr Masra ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Masra ji",
+        "gotra": "Solanki",
+        "name": "Mr Kalpesh Kumar",
+        "number": "9979558187",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kalu ji (S-o)  Mr Moti Ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Moti Ji",
+        "gotra": "Parmar",
+        "name": "Mr Kalu ji",
+        "number": "9460169798",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": "",
+        "relations": {
+          "sasur ji": "Mr Chandu ji (S-o)  Mr Gheva ji",
+          "chacha": "Mr Chandu ji (S-o)  Mr Gheva ji"
+        }
+      },
+      "Mr Kalu ji (S-o)  Mr Poonma ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Poonma ji",
+        "gotra": "Dabhi",
+        "name": "Mr Kalu ji",
+        "number": "9982244898",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kantilal ji (S-o)  Mr Haka ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Haka ji",
+        "gotra": "Makwana",
+        "name": "Mr Kantilal ji",
+        "number": "9413439191",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kapoor ji (S-o)  Shri Shankar Ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Shankar Ji",
+        "gotra": "Parmar",
+        "name": "Mr Kapoor ji",
+        "number": "9784717997",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kapoor ji (S-o)  Shri Shankar ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Shankar ji",
+        "gotra": "Parmar",
+        "name": "Mr Kapoor ji",
+        "number": "9784717997",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kesa ji (S-o)  Shri Rama Ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Rama Ji",
+        "gotra": "Parmar",
+        "name": "Mr Kesa ji",
+        "number": "9602715500",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kishore Kumar ji (S-o)  Mr Jamta ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Jamta ji",
+        "gotra": "Padhiyaar",
+        "name": "Mr Kishore Kumar ji",
+        "number": "9982641533",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Kishore ji (S-o)  Shri Trikma Ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Trikma Ji",
+        "gotra": "Parmar",
+        "name": "Mr Kishore ji",
+        "number": "9828231584",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Madan ji (S-o)  Shri Shankar ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Shankar ji",
+        "gotra": "Parmar",
+        "name": "Mr Madan ji",
+        "number": "8003740252",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Mahendra Kumar (S-o)  Mr Jabararam ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Jabararam ji",
+        "gotra": "makwana",
+        "name": "Mr Mahendra Kumar",
+        "number": "9587329044",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Mahendra Kumar (S-o)  Shri Rupchandji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Rupchandji",
+        "gotra": "Parmar",
+        "name": "Mr Mahendra Kumar",
+        "number": "9783323254",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Mahendra ji (S-o)  Mr Himta ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Himta ji",
+        "gotra": "Padhiyaar",
+        "name": "Mr Mahendra ji",
+        "number": "9828489793",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Mahendra ji (S-o)  Mr Nanji Ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Mr Nanji Ji",
+        "gotra": "Dabhi",
+        "name": "Mr Mahendra ji",
+        "number": "9001784576",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Mahendra ji (S-o)  Shri Varda ji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Varda ji",
+        "gotra": "makwana",
+        "name": "Mr Mahendra ji",
+        "number": "8239255574",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+      "Mr Manchha ji (S-o)  Shri Trikmaji": {
+        "address": "Bhinmal",
+        "current living address": "",
+        "father name": "Shri Trikmaji",
+        "gotra": "Solanki",
+        "name": "Mr Manchha ji",
+        "number": "9461065565",
+        "number 2": "",
+        "number 3": "",
+        "pin code": "",
+        "work": ""
+      },
+    },
+  };
   double _uploadProgress = 0.0;
   @override
   void initState() {
@@ -65,9 +2368,8 @@ class _EditProfileState extends State<EditProfile> {
     currentCityController.text = UserDataManager().currentUser!.currentAddress;
     userId = UserDataManager().currentUser!.userId;
     profilePicUrl = UserDataManager().currentUser?.profilePic ?? '';
-    numbers = UserDataManager().currentUser!.phoneNumber;
-    relationships = UserDataManager().currentUser!.relationships;
-
+    numbers = List.from(UserDataManager().currentUser!.phoneNumber);
+    relationships = List.from(UserDataManager().currentUser!.relationships);
     if(numbers.isNotEmpty){
       createNumberController();
     }else {
@@ -93,7 +2395,6 @@ class _EditProfileState extends State<EditProfile> {
 
       pickedFile = await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
       if (pickedFile == null) {
-        print('No image selected.');
         return;
       }
       setState(() {
@@ -119,7 +2420,6 @@ class _EditProfileState extends State<EditProfile> {
 
       // Step 4: Get download URL
       uploadedImageUrl = await snapshot.ref.getDownloadURL();
-      print(uploadedImageUrl);
       await UserDataManager().updateUserField((user) {
         user.profilePic = uploadedImageUrl!;
       });
@@ -144,7 +2444,7 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   Future<void> _uploadUserInfoToFirestore() async{
-
+    statusId = true;
     String name = nameController.text.trim();
     String fatherName = fatherNameController.text.trim();
     String gotra = gotraController.text.trim();
@@ -166,8 +2466,25 @@ class _EditProfileState extends State<EditProfile> {
         "relations" : relations,
         "numbers" : numbers,
       });
+
+      // await FirebaseFirestore.instance
+      //     .collection('users')
+      //     .doc(userid)
+      //     .collection('proUpdateHistory')
+      //     .doc(DateTime.now().toString())
+      //     .set({
+      //   "name" : name,
+      //   "fatherName" : fatherName,
+      //   "gotra" : gotra,
+      //   "actualAddress" : city,
+      //   "currentAddress" : currentCity,
+      //   "relations" : relations,
+      //   "numbers" : numbers,
+      //   "profilePic" : UserDataManager().currentUser!.profilePic,
+      //   "createdAt" : FieldValue.serverTimestamp()
+      // });
     }catch (e){
-      print("\n\n\n\Error to store on firestore : $e");
+      print("Error to store on firestore : $e");
     }
 
     try{
@@ -179,7 +2496,7 @@ class _EditProfileState extends State<EditProfile> {
         actualAddress: city,
         currentAddress: currentCity,
         phoneNumber: numbers,
-        relationships: UserDataManager().currentUser!.relationships,
+        relationships: relationships,
         loginInfo: UserDataManager().currentUser!.loginInfo,
         profilePic: UserDataManager().currentUser!.profilePic,
         contacts: UserDataManager().currentUser!.contacts,
@@ -187,12 +2504,9 @@ class _EditProfileState extends State<EditProfile> {
       );
 
       await UserDataManager().updateUser(user);
-      await UserDataManager().init();
     }catch (e){
       print(e);
     }
-
-    statusId = true;
   }
 
   void createNumberController() {
@@ -242,10 +2556,15 @@ class _EditProfileState extends State<EditProfile> {
     super.dispose();
   }
 
-  Future<bool> _showItemDialog(BuildContext context, int indexFromPara, String oldValue) async {
-    List<String> fltdlist = reltionTypes;
+  Future<bool> _showItemDialog(
+      BuildContext context,
+      int indexFromPara,
+      List<String> elements,
+      String hintText,
+      String hintMessage) async {
+    List<String> fltdlist = elements;
     String searchQuery = '';
-    final result = await showDialog<String>(
+    await showDialog<String>(
       context: context,
       builder: (BuildContext context) {
         return StatefulBuilder(
@@ -260,7 +2579,7 @@ class _EditProfileState extends State<EditProfile> {
                     TextFormField(
                       controller: _searchController,
                       decoration: InputDecoration(
-                        hintText: 'City...',
+                        hintText: hintText,
                         prefixIcon: Icon(Icons.search, color: Color(0xFF23255D)),
                         suffixIcon: _searchController.text.isEmpty
                             ? IconButton(
@@ -270,7 +2589,7 @@ class _EditProfileState extends State<EditProfile> {
                               context: context,
                               builder: (context) => AlertDialog(
                                 content: Text(
-                                  'First select city in which person lives',
+                                  hintMessage,
                                   style: TextStyle(
                                     color: Color(0xFF23255D),
                                     fontWeight: FontWeight.w500,
@@ -292,7 +2611,7 @@ class _EditProfileState extends State<EditProfile> {
                             _searchController.clear();
                             setState(() {
                               searchQuery = '';
-                              fltdlist = reltionTypes;
+                              fltdlist = elements;
                             });
                           },
                         ),
@@ -300,7 +2619,7 @@ class _EditProfileState extends State<EditProfile> {
                       onChanged: (value) {
                         setState(() {
                           searchQuery = value.trim().toLowerCase();
-                          fltdlist = reltionTypes
+                          fltdlist = elements
                               .where((item) => item.toLowerCase().contains(searchQuery))
                               .toList();
                         });
@@ -318,9 +2637,17 @@ class _EditProfileState extends State<EditProfile> {
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                            onTap: () {
-                              relationships[indexFromPara] = {reltionTypes[index]: oldValue};
-                              Navigator.of(context).pop(fltdlist[index]);
+                            onTap: () async{
+                              if(hintText == "City..."){
+                                relationships[indexFromPara] = {relationships[indexFromPara].keys.first : fltdlist[index]};
+                                Navigator.of(context).pop(fltdlist[index]);
+                              }else if(hintText == "Relation type"){
+                                relationships[indexFromPara] = {fltdlist[index]: relationships[indexFromPara].keys.first};
+                                Navigator.of(context).pop(fltdlist[index]);
+                              }else if(hintText == "Person..."){
+                                relationships[indexFromPara] = {relationships[indexFromPara].keys.first : fltdlist[index]};
+                                Navigator.of(context).pop(fltdlist[index]);
+                              }
                             },
                           );
                         },
@@ -346,7 +2673,11 @@ class _EditProfileState extends State<EditProfile> {
       canPop: false,
       onPopInvokedWithResult: (bool didPop, Object? result) async {
         if (!didPop) {
-          Navigator.pop(context, true);
+          if(statusId){
+            Navigator.pop(context, true);
+          }else {
+            Navigator.pop(context, false);
+          }
         }
       },
       child: Scaffold(
@@ -696,7 +3027,8 @@ class _EditProfileState extends State<EditProfile> {
                                 children: [
                                   GestureDetector(
                                     onTap: () async{
-                                      await _showItemDialog(context ,index, indexMapValues.values.first);
+                                      FocusManager.instance.primaryFocus?.unfocus();
+                                      await _showItemDialog(context ,index, reltionTypes, "Relation type", "Select which type of relative you want to add.");
                                       setState(() {});
                                     },
                                     child: Container(
@@ -723,8 +3055,16 @@ class _EditProfileState extends State<EditProfile> {
                                   ),
                                   Expanded(
                                       child: GestureDetector(
-                                        onTap: () {},
+                                        onTap: () async{
+                                          FocusManager.instance.primaryFocus?.unfocus();
+                                          List<String> a = bhinmal.keys.toList();
+                                          await _showItemDialog(context, index, bhinmal.keys.toList(), "City...", "Select city in which your relative live in.");
+
+                                          await _showItemDialog(context ,index, bhinmal[relationships[index].values.first]!.keys.toList(), "Person...", "Select your relative.");
+                                          setState(() {});
+                                        },
                                         child: Container(
+                                          padding: EdgeInsets.symmetric(horizontal: 5),
                                             height: 50,
                                             decoration: BoxDecoration(
                                               color: Color(0xA9666AC6),
@@ -858,8 +3198,6 @@ class _EditProfileState extends State<EditProfile> {
                             )
                         );
                       }
-
-                      print(UserDataManager().currentUser?.profilePic ?? "hello");
                     },
                     style: ElevatedButton.styleFrom(
                       textStyle: TextStyle(fontSize: 20,),
