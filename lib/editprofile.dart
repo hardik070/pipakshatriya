@@ -6,12 +6,10 @@ import 'package:path_provider/path_provider.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:pipakshatriya/datamodels/user_model.dart';
 import 'datamodels/datamanager/data_manager.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 
 
@@ -37,8 +35,6 @@ class _EditProfileState extends State<EditProfile> {
 
   String userId = '';
   String profilePicUrl = '';
-
-  bool statusId= false;
 
   List<String> numbers = ["9982875922", "8696282986"];
   List<String> reltionTypes = ["Mama", "Fufa", "Chacha", "Mosa", "Sala", "Sasur", "Sadu", ];
@@ -2445,7 +2441,6 @@ class _EditProfileState extends State<EditProfile> {
   //   statusId = false;
   // }
   Future<void> pickAndUploadImage() async {
-    statusId = true;
     try {
 
       pickedFile = await _picker.pickImage(source: ImageSource.gallery);
@@ -2514,11 +2509,10 @@ class _EditProfileState extends State<EditProfile> {
     } catch (e) {
       print('Error uploading image: $e');
     }
-    statusId = false;
   }
 
   Future<void> _uploadUserInfoToFirestore() async{
-    statusId = true;
+
     String name = nameController.text.trim();
     String fatherName = fatherNameController.text.trim();
     String gotra = gotraController.text.trim();
@@ -2581,7 +2575,7 @@ class _EditProfileState extends State<EditProfile> {
     }catch (e){
       print(e);
     }
-    statusId = false;
+
   }
 
   void createNumberController() {
@@ -2748,7 +2742,7 @@ class _EditProfileState extends State<EditProfile> {
       canPop: false,
       onPopInvokedWithResult: (bool didPop, Object? result) async {
         if (!didPop) {
-          Navigator.pop(context, statusId);
+          Navigator.pop(context);
         }
       },
       child: Scaffold(
@@ -2758,7 +2752,7 @@ class _EditProfileState extends State<EditProfile> {
           backgroundColor: Color(0xFF23255D),
           leading: InkWell(
             onTap: () {
-              Navigator.pop(context, statusId); // Indicate no changes
+              Navigator.pop(context); // Indicate no changes
             },
             child: Icon(Icons.arrow_back_rounded, size: 30, color: Colors.white),
           ),
@@ -3214,7 +3208,7 @@ class _EditProfileState extends State<EditProfile> {
                                       isSaving = true;
                                     });
                                     await _uploadUserInfoToFirestore();
-                                    Navigator.pop(context, statusId);
+                                    Navigator.pop(context);
                                     setState(() {
                                       isSaving = false;
                                     });
