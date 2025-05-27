@@ -2390,7 +2390,7 @@ class _EditProfileState extends State<EditProfile> {
   XFile? pickedFile;
 
   Future<void> pickAndUploadImage() async {
-
+    statusId = true;
     try {
 
       pickedFile = await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
@@ -2440,7 +2440,7 @@ class _EditProfileState extends State<EditProfile> {
     } catch (e) {
       print('Error uploading image: $e');
     }
-    statusId = true;
+
   }
 
   Future<void> _uploadUserInfoToFirestore() async{

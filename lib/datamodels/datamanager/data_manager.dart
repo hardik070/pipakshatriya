@@ -36,11 +36,12 @@ class UserDataManager {
     final user = _userBox.get('currentUser');
     if (user != null) {
       updateCallback(user); // modify the field(s)
-      await user.save();    // persist changes
+      await user.save();
+      userStreamController.add(user);// persist changes
       _currentUser = user;  // update in-memory copy
     } else {
       print('No user found to update');
     }
-    userStreamController.add(user!);
+
   }
 }

@@ -51,7 +51,7 @@ class _Dashboard extends State<Dashboard> {
   }
 
   Future<bool> _showItemDialog() async {
-    String searchQuery = '';
+
     await showDialog<String>(
       context: context,
       builder: (BuildContext context) {
