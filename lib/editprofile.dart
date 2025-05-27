@@ -6,7 +6,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:pipakshatriya/datamodels/user_model.dart';
 import 'datamodels/datamanager/data_manager.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -2389,23 +2391,95 @@ class _EditProfileState extends State<EditProfile> {
   File? _profileImage;
   XFile? pickedFile;
 
+  // Future<void> pickAndUploadImage() async {
+  //   statusId = true;
+  //   try {
+  //
+  //     pickedFile = await _picker.pickImage(source: ImageSource.gallery, imageQuality: 20);
+  //     if (pickedFile == null) {
+  //       return;
+  //     }
+  //     setState(() {
+  //       _profileImage = File(pickedFile!.path);
+  //     });
+  //     // Step 2: Create unique file name
+  //     String fileName = basename("${userId}_profilePic");
+  //     Reference storageRef = FirebaseStorage.instance.ref().child('profilePic/$fileName');
+  //
+  //     // Step 3: Upload image
+  //     UploadTask uploadTask = storageRef.putFile(_profileImage!);
+  //
+  //     uploadTask.snapshotEvents.listen((TaskSnapshot snapshot) {
+  //       final progress = snapshot.bytesTransferred / snapshot.totalBytes;
+  //       setState(() {
+  //         _uploadProgress = progress;
+  //       });
+  //     }).onError((error) {
+  //       print("Upload failed: $error");
+  //     });
+  //
+  //     TaskSnapshot snapshot = await uploadTask;
+  //
+  //     // Step 4: Get download URL
+  //     uploadedImageUrl = await snapshot.ref.getDownloadURL();
+  //     await UserDataManager().updateUserField((user) {
+  //       user.profilePic = uploadedImageUrl!;
+  //     });
+  //     try{
+  //       await FirebaseFirestore.instance
+  //           .collection('users')
+  //           .doc(userId).update({
+  //         "profilePic" : uploadedImageUrl
+  //       });
+  //     }catch (e){
+  //       print("\n\n\n\Error to store on firestore : $e");
+  //     }
+  //     setState(() {
+  //       profilePicUrl = uploadedImageUrl!;
+  //     });
+  //
+  //
+  //   } catch (e) {
+  //     print('Error uploading image: $e');
+  //   }
+  //   statusId = false;
+  // }
   Future<void> pickAndUploadImage() async {
     statusId = true;
     try {
 
-      pickedFile = await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
+      pickedFile = await _picker.pickImage(source: ImageSource.gallery);
       if (pickedFile == null) {
         return;
       }
+
       setState(() {
         _profileImage = File(pickedFile!.path);
       });
+
+      final file = File(pickedFile!.path);
+      final ext = path.extension(file.path).toLowerCase(); // .jpg or .png
+
+      int quality = (ext == '.jpg' || ext == '.jpeg') ? 20 : 70;
+
+      // 2. Compress accordingly
+      final dir = await getTemporaryDirectory();
+      final targetPath = path.join(dir.path, "compressed.jpg");
+
+      final compressedFile = await FlutterImageCompress.compressAndGetFile(
+        file.absolute.path,
+        targetPath,
+        quality: quality,
+      );
+
+
+      File? compresedImage = File(compressedFile!.path);
       // Step 2: Create unique file name
       String fileName = basename("${userId}_profilePic");
       Reference storageRef = FirebaseStorage.instance.ref().child('profilePic/$fileName');
 
       // Step 3: Upload image
-      UploadTask uploadTask = storageRef.putFile(_profileImage!);
+      UploadTask uploadTask = storageRef.putFile(compresedImage);
 
       uploadTask.snapshotEvents.listen((TaskSnapshot snapshot) {
         final progress = snapshot.bytesTransferred / snapshot.totalBytes;
@@ -2440,7 +2514,7 @@ class _EditProfileState extends State<EditProfile> {
     } catch (e) {
       print('Error uploading image: $e');
     }
-
+    statusId = false;
   }
 
   Future<void> _uploadUserInfoToFirestore() async{
@@ -2507,6 +2581,7 @@ class _EditProfileState extends State<EditProfile> {
     }catch (e){
       print(e);
     }
+    statusId = false;
   }
 
   void createNumberController() {
@@ -2673,11 +2748,7 @@ class _EditProfileState extends State<EditProfile> {
       canPop: false,
       onPopInvokedWithResult: (bool didPop, Object? result) async {
         if (!didPop) {
-          if(statusId){
-            Navigator.pop(context, true);
-          }else {
-            Navigator.pop(context, false);
-          }
+          Navigator.pop(context, statusId);
         }
       },
       child: Scaffold(
@@ -2702,16 +2773,17 @@ class _EditProfileState extends State<EditProfile> {
                 Center(
                     child: GestureDetector(
                       onTap: () async{
+                        profilePicUrl = '';
                         await pickAndUploadImage();
                       },
                       child: SizedBox(
-                          height: 120,
-                          width: 120,
+                          height: 300,
+                          width: 300,
                           child: Stack(
                             children: [
-                              _profileImage == null ?
+
                               ClipRRect(
-                                borderRadius: BorderRadius.circular(100),
+                                borderRadius: BorderRadius.circular(90),
                                 child: CachedNetworkImage(
                                   imageUrl: profilePicUrl,
                                   placeholder: (context, url) => CircleAvatar(
@@ -2722,18 +2794,13 @@ class _EditProfileState extends State<EditProfile> {
 
                                   errorWidget: (context, url, error) => CircleAvatar(
                                     radius: 60,
-                                    child: Icon(url == '' ? Icons.person: Icons.error, size: 60, color: Color(0xFF666AC6)),
+                                    backgroundImage: _profileImage != null ? FileImage(_profileImage!) : null,
+                                    child: _profileImage != null ? null : Icon(Icons.person, size: 60, color: Color(0xFF666AC6)),
                                   ),
                                   fit: BoxFit.cover,
-                                  width: 120,
-                                  height: 120,
+                                  width: 300,
+                                  height: 300,
                                 ),
-                              )
-                                  :
-                              CircleAvatar(
-                                radius: 60,
-                                backgroundImage: _profileImage != null ? FileImage(_profileImage!) : null,
-                                child: _profileImage != null ? null : Icon(Icons.person, size: 60, color: Color(0xFF666AC6)),
                               ),
 
                               Align(

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:pipakshatriya/datamodels/user_model.dart';
 import 'datamodels/datamanager/data_manager.dart';
 import 'createaccount.dart';
 import 'editprofile.dart';
@@ -32,27 +31,10 @@ class _profileManageState extends State<profileManage>{
 
   String profilePicUrl = '';
 
-  StreamSubscription? _userSubscription;
-
-  void listenToUserDataChanges() {
-    _userSubscription = UserDataManager().userStreamController.stream.listen((userData) {
-      updateProfile();
-    });
-  }
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
-  }
-
-  void updateProfile() {
-    setState(() {});
-    stopListeningToUserDataChanges();
-  }
-
-  void stopListeningToUserDataChanges() {
-    _userSubscription?.cancel();
-    _userSubscription = null;
   }
 
 
@@ -68,9 +50,9 @@ class _profileManageState extends State<profileManage>{
             SizedBox(height: 30),
             Row(
               children: [
-                UserDataManager().currentUser!.profilePic.isNotEmpty ?
+
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(100),
+                  borderRadius: BorderRadius.circular(18),
                   child: CachedNetworkImage(
                     imageUrl: UserDataManager().currentUser!.profilePic,
                     placeholder: (context, url) => CircleAvatar(
@@ -80,19 +62,14 @@ class _profileManageState extends State<profileManage>{
                     ),
                     errorWidget: (context, url, error) => CircleAvatar(
                       radius: 60,
-                      child: Icon(Icons.error, size: 30, color: Color(0xFF666AC6)),
+                      //backgroundImage: _profileImage != null ? FileImage(_profileImage!) : null,
+                      child: Icon(Icons.person, size: 30, color: Color(0xFF666AC6)),
                     ),
                     fit: BoxFit.cover,
                     width: 50,
                     height: 50,
                   ),
-                )
-                    :
-                SizedBox(height: 50, width: 50, child: CircleAvatar(
-                    radius: 60,
-                  //backgroundImage: _profileImage != null ? FileImage(_profileImage!) : null,
-                  child: Icon(Icons.person, size: 30, color: Color(0xFF666AC6)),
-                ),),
+                ),
                 SizedBox(width: 10),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -122,16 +99,13 @@ class _profileManageState extends State<profileManage>{
                 const Spacer(),
                 GestureDetector(
                   onTap: () async{
-                    listenToUserDataChanges();
-                    final bool status = await Navigator.push(
+                    await Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (_) => EditProfile()
                         )
                     );
-                    if(!status){
-                      stopListeningToUserDataChanges();
-                    }
+                    setState(() {});
                   },
                   child: Container(
                     padding: EdgeInsets.all(5),
