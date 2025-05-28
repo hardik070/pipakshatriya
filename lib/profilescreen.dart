@@ -28,12 +28,12 @@ class _profileManageState extends State<profileManage>{
   //   );
   // }
 
-  String profilePicUrl = '';
-
+  var user;
 
   @override
   void initState() {
     super.initState();
+    user = UserDataManager().currentUser;
   }
 
 
@@ -53,7 +53,7 @@ class _profileManageState extends State<profileManage>{
                 ClipRRect(
                   borderRadius: BorderRadius.circular(18),
                   child: CachedNetworkImage(
-                    imageUrl: UserDataManager().currentUser!.profilePic,
+                    imageUrl: user.profilePic,
                     placeholder: (context, url) => CircleAvatar(
                         radius: 60,
                         //backgroundImage: uploadedImageUrl != null ? FileImage(_profileImage!) : null,
@@ -76,7 +76,7 @@ class _profileManageState extends State<profileManage>{
                   children: [
                     Text(
                       //GlobalVariables().name.isNotEmpty ? GlobalVariables().name : 'Name',
-                      UserDataManager().currentUser?.name ?? "Name",
+                      user.name,
                       style: GoogleFonts.openSans(
                         color: Color(0xFF666AC6),
                         fontWeight: FontWeight.w600,
@@ -86,7 +86,7 @@ class _profileManageState extends State<profileManage>{
                     ),
                     Text(
                       //GlobalVariables().course.isNotEmpty ? GlobalVariables().course : 'Course' ,
-                      UserDataManager().currentUser?.fatherName ?? "Father",
+                      user.fatherName,
                       style: GoogleFonts.poppins(
                         color: Color(0xFF666AC6),
                         fontWeight: FontWeight.w400,
@@ -162,17 +162,17 @@ class _profileManageState extends State<profileManage>{
                               ),
                             ),
                           ),
-                          profileTile(UserDataManager().currentUser?.name ?? "Username", "username", Icons.person),
+                          profileTile(user.name, "username", Icons.person),
                           Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
-                          profileTile(UserDataManager().currentUser?.fatherName ?? "Father name", "Father Name", Icons.person),
+                          profileTile(user.fatherName, "Father Name", Icons.person),
                           Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
-                          profileTile(UserDataManager().currentUser?.email ?? "Email", "E-mail", Icons.email_rounded),
+                          profileTile(user.email, "E-mail", Icons.email_rounded),
                           Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
-                          profileTile(UserDataManager().currentUser?.gotra ?? "Gotra", "Gotra", Icons.book_rounded),
+                          profileTile(user.gotra, "Gotra", Icons.book_rounded),
                           Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
-                          profileTile(UserDataManager().currentUser?.actualAddress ?? "City", "Address", Icons.location_city_rounded),
+                          profileTile(user.actualAddress, "Address", Icons.location_city_rounded),
                           Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
-                          profileTile(UserDataManager().currentUser?.currentAddress ?? "Current City", "Current Living Address", Icons.location_city_rounded),
+                          profileTile(user.currentAddress , "Current Living Address", Icons.location_city_rounded),
                         ],
                       ),
                     ),
@@ -212,7 +212,7 @@ class _profileManageState extends State<profileManage>{
                               ),
                             ),
                           ),
-                          ...UserDataManager().currentUser!.phoneNumber.asMap().entries.map((item) {
+                          ...user.phoneNumber.asMap().entries.map((item) {
                             int index = item.key;
 
                             return Column(
@@ -263,7 +263,7 @@ class _profileManageState extends State<profileManage>{
                               ),
                             ),
                           ),
-                          ...UserDataManager().currentUser!.relationships.asMap().entries.map((item) {
+                          ...user.relationships.asMap().entries.map((item) {
                             int index = item.key;
                             String relationType = item.value.keys.first;
                             String relative = item.value.values.first;
