@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dashboard.dart';
-import 'package:hive/hive.dart';
 import 'datamodels/user_model.dart';
 import 'datamodels/datamanager/data_manager.dart';
 import 'datamodels/login_info.dart';
@@ -26,10 +25,10 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _ref = FirebaseFirestore.instance;
 
-  Future<void> sendPasswordResetEmail(BuildContext context, String email) async {
+  Future<void> sendPasswordResetEmail(ScaffoldMessengerState messenger, String email) async {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
-      ScaffoldMessenger.of(context).showSnackBar(
+      messenger.showSnackBar(
         SnackBar(
           content: Text(
             'Password reset email sent to $email',
@@ -51,7 +50,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
         default:
           errorMessage = 'An error occurred. Please try again.';
       }
-      ScaffoldMessenger.of(context).showSnackBar(
+      messenger.showSnackBar(
         SnackBar(
           content: Text(
             errorMessage,
@@ -65,24 +64,23 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
   }
 
 
-  Future<void> userAuthSignIn() async{
+  Future<void> userAuthSignIn(ScaffoldMessengerState messenger) async{
     String email = emailController.text;
     String password = passwordController.text;
 
 
     try{
-      UserCredential user = await _auth.signInWithEmailAndPassword(
+      await _auth.signInWithEmailAndPassword(
           email: email,
           password: password
       );
       String userId = email.replaceAll('@gmail.com', '').replaceAll('.', '_');
       await fatchDataFirestore(userId);
-
       setState(() {
         isLoading = false;
       });
     }catch (e){
-      ScaffoldMessenger.of(context).showSnackBar(
+      messenger.showSnackBar(
           SnackBar(
             backgroundColor: Colors.deepPurpleAccent,
             content: Text("$e",style: TextStyle(fontSize: 15),),
@@ -94,7 +92,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
       });
       return ;
     }
-
+    if (!mounted) return;
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
@@ -104,11 +102,9 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
   }
 
   Future<void> fatchDataFirestore(String userId) async{
-    try{
-      final snapshot = await _ref.collection('users').doc(userId).get();
-      final data = snapshot.data();
-      print("i am with data\n $data");
-      print("\n${data!['name']} \n ${data['email']} \n ${data['createdAt']} \n ${data['userId']}");
+    final snapshot = await _ref.collection('users').doc(userId).get();
+    final data = snapshot.data();
+    if(data != null) {
       final user = UserModel(
           name: data['name'] ?? '',
           profilePic: data['profilePic'] ?? '',
@@ -120,15 +116,13 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
           relationships: List<Map<String, String>>.from(
             (data['relations'] ?? []).map((e) => Map<String, String>.from(e)),
           ),
-          loginInfo: LoginInfo(token: data['userId'] ?? '', loginTime: DateTime.now()),
+          loginInfo: LoginInfo(
+              token: data['userId'] ?? '', loginTime: DateTime.now()),
           contacts: [],
           currentAddress: data['currentAddress'] ?? '',
           userId: data['userId'] ?? ''
       );
-      print("i am with data\n $data");
       await UserDataManager().updateUser(user);
-    }catch (e) {
-      print("i am with eerror \n \n\n\n $e");
     }
   }
 
@@ -144,6 +138,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
       );
      await storeFirestoreAccountCreation(email, name);
     }catch (e){
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: Colors.deepPurpleAccent,
@@ -160,7 +155,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
     setState(() {
       isLoading = false;
     });
-
+    if (!mounted) return;
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
@@ -182,6 +177,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
 
      await storeHiveAccountCreation(email, name, userId);
     }catch (e){
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: Colors.deepPurpleAccent,
@@ -212,6 +208,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
 
       await UserDataManager().updateUser(user);
     }catch (e){
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: Colors.deepPurpleAccent,
@@ -279,7 +276,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
                       ),
                     ),
                   ),
-                  forgetPassword ? ForgetPassword(context) : (isSignInMode ? SignIn(context) : SignUp(context)),
+                  forgetPassword ? ForgetPassword(context) : (isSignInMode ? signIn(context) : signUp(context)),
                   //SignInScreen()
                 ],
               ),
@@ -290,7 +287,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
     );
   }
 
-  Widget SignIn(BuildContext context) {
+  Widget signIn(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Container(
@@ -301,7 +298,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
           boxShadow: [
             BoxShadow(
               blurRadius: 4,
-              color: Colors.black.withOpacity(0.2),
+              color: Colors.black.withAlpha((0.2 * 255).toInt()),
               offset: const Offset(0, 2),
             ),
           ],
@@ -401,7 +398,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
               const SizedBox(height: 35),
               isLoading ? CircularProgressIndicator() : ElevatedButton(
                 onPressed: () {
-                  userAuthSignIn();
+                  userAuthSignIn(ScaffoldMessenger.of(context));
                   setState(() {
                     isLoading = true;
                   });
@@ -494,7 +491,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
           boxShadow: [
             BoxShadow(
               blurRadius: 4,
-              color: Colors.black.withOpacity(0.2),
+              color: Colors.black.withAlpha((0.2 * 255).toInt()),
               offset: const Offset(0, 2),
             ),
           ],
@@ -562,7 +559,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
                 onPressed: () {
                   final email = emailController.text.trim();
                   if (email.isNotEmpty) {
-                    sendPasswordResetEmail(context, email);
+                    sendPasswordResetEmail(ScaffoldMessenger.of(context), email);
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
@@ -631,7 +628,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
     );
   }
 
-  Widget SignUp(BuildContext context) {
+  Widget signUp(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Container(
@@ -642,7 +639,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
           boxShadow: [
             BoxShadow(
               blurRadius: 4,
-              color: Colors.black.withOpacity(0.2),
+              color: Colors.black.withAlpha((0.2 * 255).toInt()),
               offset: Offset(0, 2),
             ),
           ],
@@ -774,22 +771,28 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
                             )
                         );
                       }
-
-                    }else
+                    }else {
                       ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             backgroundColor: Colors.deepPurpleAccent,
-                            content: Text("Password length should be 8 Character",style: TextStyle(fontSize: 15),),
+                            content: Text(
+                              "Password length should be 8 Character",
+                              style: TextStyle(fontSize: 15),),
                             duration: Duration(milliseconds: 1000),
                           )
                       );
-                  }else ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        backgroundColor: Colors.deepPurpleAccent,
-                        content: Text("Please enter valid email",style: TextStyle(fontSize: 15),),
-                        duration: Duration(milliseconds: 1000),
-                      )
-                  );
+                    }
+                  }else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          backgroundColor: Colors.deepPurpleAccent,
+                          content: Text(
+                            "Please enter valid email", style: TextStyle(
+                              fontSize: 15),),
+                          duration: Duration(milliseconds: 1000),
+                        )
+                    );
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF4B39EF),

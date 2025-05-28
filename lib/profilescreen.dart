@@ -6,13 +6,13 @@ import 'editprofile.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 
-class profileManage extends StatefulWidget{
-
+class ProfileManage extends StatefulWidget{
+  const ProfileManage({super.key});
   @override
-  _profileManageState createState() => _profileManageState();
+  ProfileManageState createState() => ProfileManageState();
 }
 
-class _profileManageState extends State<profileManage>{
+class ProfileManageState extends State<ProfileManage>{
 
   // Future<void> handleSignOut(BuildContext context) async {
   //   await FirebaseAuth.instance.signOut();
@@ -335,13 +335,15 @@ class _profileManageState extends State<profileManage>{
                           SizedBox(width: 10),
                           GestureDetector(
                             onTap: () async {
-                              await UserDataManager().clearUserData();
+
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) => CreateAccountWidget()
                                   )
                               );
+
+                              await UserDataManager().clearUserData();
                             },
                             child:const Text(
                               "Log out",
@@ -359,7 +361,8 @@ class _profileManageState extends State<profileManage>{
                   ],
                 ),
               ),
-            )
+            ),
+
           ],
         ),
       ),
@@ -411,17 +414,16 @@ Widget profileTile(String title, String subtitle, final icon){
 }
 
 class MessageInputWidget extends StatefulWidget {
+  const MessageInputWidget({super.key});
 
   @override
-  _MessageInputWidgetState createState() => _MessageInputWidgetState();
+  MessageInputWidgetState createState() => MessageInputWidgetState();
 }
 
-class _MessageInputWidgetState extends State<MessageInputWidget> {
+class MessageInputWidgetState extends State<MessageInputWidget> {
   TextEditingController? _feedbackController;
 
   bool isFeedBackFormActive = false;
-
-  bool deletButtonIcon = false;
 
   void wantsToGiveFeedback(){
     if (_feedbackController != null) return;
@@ -472,7 +474,7 @@ class _MessageInputWidgetState extends State<MessageInputWidget> {
                 maxHeight: 150, // Maximum height
               ),
               hintText: "Give feedback...",
-              hintStyle: TextStyle(
+              hintStyle: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w300,
                   fontSize: 17),
@@ -490,7 +492,7 @@ class _MessageInputWidgetState extends State<MessageInputWidget> {
                     _feedbackController!.clear();
                   });
                 },
-                icon: Icon(Icons.close_rounded),
+                icon: const Icon(Icons.close_rounded),
                 color: Colors.white54,
               ),
             ),

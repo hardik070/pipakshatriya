@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pipakshatriya/datamodels/datamanager/data_manager.dart';
 import 'package:pipakshatriya/editprofile.dart';
-import 'community screen.dart';
-import 'contact screen.dart';
-import 'relation screen.dart';
+import 'community_screen.dart';
+import 'contact_screen.dart';
+import 'relation_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'profilescreen.dart';
 import 'communitydiscover.dart';
@@ -62,7 +62,7 @@ class _Dashboard extends State<Dashboard> {
           builder: (context, setState) {
             return AlertDialog(
               insetPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              content: Container(
+              content: SizedBox(
                 height: 100,
                 width: 200,
                 child: Column(
@@ -107,7 +107,7 @@ class _Dashboard extends State<Dashboard> {
     ContactScreen(),
     CommunityMessage(),
     ItemSelectionScreen(),
-    profileManage()
+    ProfileManage()
   ];
 
   @override

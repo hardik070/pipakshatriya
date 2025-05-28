@@ -7,10 +7,10 @@ class CityTile extends StatelessWidget{
   final String state;
 
   const CityTile({
-    Key? key,
+    super.key,
     required this.city,
     required this.state,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context){
@@ -48,14 +48,14 @@ class CityTile extends StatelessWidget{
 }
 
 class PersonTile extends StatelessWidget{
-  final String Name;
-  final String Village;
+  final String name;
+  final String village;
 
   const PersonTile({
-    Key? key,
-    required this.Name,
-    required this.Village
-  }) : super(key: key);
+    required this.name,
+    required this.village,
+    super.key
+  }) ;
 
   @override
   Widget build(BuildContext context){
@@ -133,17 +133,6 @@ class PersonTile extends StatelessWidget{
                         fit: BoxFit.cover,
                       ),
                     ),
-                    Align(
-                        alignment: Alignment(0.96, -0.96),
-                        child: false ?
-                        Icon(
-                          Icons.circle_rounded,
-                          color: Colors.greenAccent,
-                          size: 12,
-                        )
-                            :
-                        Container()
-                    ),
                   ],
                 ),
               ),
@@ -168,7 +157,7 @@ class PersonTile extends StatelessWidget{
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      Name ?? 'User',
+                      name ,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 17.0,
@@ -228,10 +217,6 @@ class PersonTile extends StatelessWidget{
                   ],
                 ),
               ),
-              true ?
-              Icon(Icons.notifications_active_rounded, color: Colors.yellowAccent)
-                  :
-              Container()
             ],
           ),
         ),
@@ -244,6 +229,8 @@ class FloatButton extends StatefulWidget {
   //final VoidCallback onRefresh; // Add callback parameter
 
  // FloatButton({required this.onRefresh}); // Constructor to accept the callback
+
+  const FloatButton({super.key});
 
   @override
   State<FloatButton> createState() => _FloatButtonState();
@@ -376,14 +363,14 @@ class QuizWidget extends StatefulWidget {
   final String name;
   final String course;
   final String quizID;
-  int mySelection;
+  final int mySelection;
   final bool singleTime;
   final String userid;
   final bool viewResult;
   final bool delete;
-  String time;
-  QuizWidget({
-    Key? key,
+  final String time;
+  const QuizWidget({
+    super.key,
     required this.updatedShared,
     required this.image,
     required this.name,
@@ -399,7 +386,7 @@ class QuizWidget extends StatefulWidget {
     required this.viewResult,
     required this.delete,
     required this.time
-  }) : super(key: key);
+  }) ;
 
   @override
   State<QuizWidget> createState() => _QuizWidgetState();
@@ -647,7 +634,7 @@ class _QuizWidgetState extends State<QuizWidget> {
                 children: [
                   const Text(
                     "🙋‍♀️ ",
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -670,7 +657,7 @@ class _QuizWidgetState extends State<QuizWidget> {
                 String option = entry.value;
 
 
-                Color backgroundColor = widget.mySelection != index ? Colors.white.withOpacity(0.15) :
+                Color backgroundColor = widget.mySelection != index ? Colors.white.withAlpha((0.15 * 255).toInt()) :
                 widget.mySelection == widget.correctAnswerIndex ?
                 Colors.green : const Color(0xFFFE854F);
 
@@ -832,7 +819,7 @@ class _QuizWidgetState extends State<QuizWidget> {
                           showAnswer ? "Hide answer" : "Show answer",
                           style: TextStyle(
                             fontSize: 14,
-                            color: Colors.white.withOpacity(0.9),
+                            color: Colors.white.withAlpha((0.9 * 255).toInt()),
                           ),
                         ),
                       ],
@@ -844,7 +831,7 @@ class _QuizWidgetState extends State<QuizWidget> {
               Align(
                 alignment: Alignment(1, 0),
                 child: Text(
-                  'Posted on : ' +widget.time,
+                  "Posted on :  ${widget.time}",
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 10.0,
@@ -869,13 +856,13 @@ class TextQuizWidget extends StatefulWidget {
   final String course;
   final String quizID;
   final String userid;
-  bool alreadyAnswered;
+  final bool alreadyAnswered;
   final String answerText;
   final bool viewreplay;
   final bool delete;
-  String time;
-  TextQuizWidget({
-    Key? key,
+  final String time;
+  const TextQuizWidget({
+    super.key,
     required this.updatedShared,
     required this.image,
     required this.name,
@@ -889,7 +876,7 @@ class TextQuizWidget extends StatefulWidget {
     required this.viewreplay,
     required this.delete,
     required this.time
-  }) : super(key: key);
+  });
 
   @override
   State<TextQuizWidget> createState() => _TextQuizWidgetState();
@@ -1286,7 +1273,7 @@ class BuildPoll extends StatefulWidget{
   final bool delete;
   String time;
   BuildPoll({
-    Key? key,
+    super.key,
     required this.image,
     required this.name,
     required this.course,
@@ -1302,7 +1289,7 @@ class BuildPoll extends StatefulWidget{
     required this.delete,
     required this.updatedShared,
     required this.time
-  }) : super(key : key);
+  });
   @override
   State<BuildPoll> createState() => _BuildPollState();
 }

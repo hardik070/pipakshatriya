@@ -1,25 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'helper widgets.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
 
 
 class ItemSelectionScreen extends StatefulWidget {
+  const ItemSelectionScreen({super.key});
   @override
-  _ItemSelectionScreenState createState() => _ItemSelectionScreenState();
+  ItemSelectionScreenState createState() => ItemSelectionScreenState();
 }
 
-class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
+class ItemSelectionScreenState extends State<ItemSelectionScreen> {
   String? selectedItem1;
   String? selectedItem2;
-  final TextEditingController _searchController = TextEditingController();
-  //List<String> fltdlist = [];
-  //String searchQuery= '';
+
   bool postition= false;
   Map<String, Map<String, dynamic>> bhinmal = {
     "Mr Ajmal ji (S-o)  Shri Pratapji": {
@@ -569,7 +563,8 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
         "fufa" : "Mr Jitendra Kumar (S-o)  Shri Roopchand ji",
         "mosa" : "Mr Kalpesh Kumar (S-o)  Mr Masra ji",
         "chacha" : "Mr Kalu ji (S-o)  Mr Moti Ji",
-        "sasur ji" : "Mr Ambalal ji (S-o)  Shri Babuji"
+        "sasur ji" : "Mr Ambalal ji (S-o)  Shri Babuji",
+
       }
     },
     "Mr Himta ji (S-o)  Mr Pratap ji": {
@@ -716,7 +711,8 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
       "pin code": "",
       "work": "",
       "relations" :{
-        "sasur ji" : "Mr Chandu ji (S-o)  Mr Gheva ji"
+        "sasur ji" : "Mr Chandu ji (S-o)  Mr Gheva ji",
+        "chacha" : "Mr Chandu ji (S-o)  Mr Gheva ji"
       }
     },
     "Mr Kalu ji (S-o)  Mr Poonma ji": {
@@ -1978,77 +1974,130 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
       "number 3": "",
       "pin code": "",
       "work": ""
-    }
+    },
+    "Sri Dinesh Ji (S-o)  Mr Uka Ji": {
+      "address": "Bhinmal",
+      "current living address": "",
+      "father name": "Mr Kala Ji",
+      "gotra": "Dabhi",
+      "name": "Sri Arvind Ji",
+      "number": "7690802737",
+      "number 2": "",
+      "number 3": "",
+      "pin code": "",
+      "work": ""
+    },
+    "Sri Babu Ji (S-o)  Mr Uka Ji": {
+      "address": "Bhinmal",
+      "current living address": "",
+      "father name": "Mr Kala Ji",
+      "gotra": "Dabhi",
+      "name": "Sri Arvind Ji",
+      "number": "7690802737",
+      "number 2": "",
+      "number 3": "",
+      "pin code": "",
+      "work": ""
+    },
+    "Sri Ashok Ji (S-o)  Mr Uka Ji": {
+      "address": "Bhinmal",
+      "current living address": "",
+      "father name": "Mr Kala Ji",
+      "gotra": "Dabhi",
+      "name": "Sri Arvind Ji",
+      "number": "7690802737",
+      "number 2": "",
+      "number 3": "",
+      "pin code": "",
+      "work": ""
+    },
+    "Sri Sankar Ji (S-o)  Mr Uka Ji": {
+      "address": "Bhinmal",
+      "current living address": "",
+      "father name": "Mr Kala Ji",
+      "gotra": "Dabhi",
+      "name": "Sri Arvind Ji",
+      "number": "7690802737",
+      "number 2": "",
+      "number 3": "",
+      "pin code": "",
+      "work": ""
+    },
+    "Sri Bhala Ji (S-o)  Mr Uka Ji": {
+      "address": "Bhinmal",
+      "current living address": "",
+      "father name": "Mr Kala Ji",
+      "gotra": "Dabhi",
+      "name": "Sri Arvind Ji",
+      "number": "7690802737",
+      "number 2": "",
+      "number 3": "",
+      "pin code": "",
+      "work": ""
+    },
+    "Sri Karsan Ji (S-o)  Mr Lehra Ji": {
+      "address": "Bhinmal",
+      "current living address": "",
+      "father name": "Mr Kala Ji",
+      "gotra": "Dabhi",
+      "name": "Sri Arvind Ji",
+      "number": "7690802737",
+      "number 2": "",
+      "number 3": "",
+      "pin code": "",
+      "work": ""
+    },
+    "Sri Hardik Ji (S-o)  Mr Reva Ji": {
+      "address": "Bhinmal",
+      "current living address": "",
+      "father name": "Mr Kala Ji",
+      "gotra": "Dabhi",
+      "name": "Sri Arvind Ji",
+      "number": "7690802737",
+      "number 2": "",
+      "number 3": "",
+      "pin code": "",
+      "work": "",
+      "relations" :{
+        "mama" : "Sri Babu Ji (S-o)  Mr Uka Ji",
+        "fufa" : "Sri Mohan Ji (S-o)  Mr Sagna Ji",
+        "mosa" : "Sri Karsan Ji (S-o)  Mr Lehra Ji",
+      }
+    },
+    "Sri Mohan Ji (S-o)  Mr Sagna Ji": {
+      "address": "Bhinmal",
+      "current living address": "",
+      "father name": "Mr Kala Ji",
+      "gotra": "Dabhi",
+      "name": "Sri Arvind Ji",
+      "number": "7690802737",
+      "number 2": "",
+      "number 3": "",
+      "pin code": "",
+      "work": "",
+      "relations" :{
+        "sadu ji" : "Sri Babu Ji (S-o)  Mr Uka Ji",
+        "sale ji" : "Sri Reva Ji (S-o)  Mr Bhoma Ji"
+      }
+    },
+    "Sri Reva Ji (S-o)  Mr Bhoma Ji": {
+      "address": "Bhinmal",
+      "current living address": "",
+      "father name": "Mr Kala Ji",
+      "gotra": "Dabhi",
+      "name": "Sri Arvind Ji",
+      "number": "7690802737",
+      "number 2": "",
+      "number 3": "",
+      "pin code": "",
+      "work": "",
+      "relations" :{
+        "sale ji" : "Sri Babu Ji (S-o)  Mr Uka Ji",
+      }
+    },
   };
   int outputType = 0;
-
-  File? _imageFile;
-  String? _downloadUrl;
   bool _isUploading = false;
-  double _uploadProgress = 0.0;
-
-  Future<void> pickAndUploadImage() async {
-    final picker = ImagePicker();
-
-    // 1️⃣ Pick image from gallery
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('No image selected')),
-      );
-      return;
-    }
-
-    setState(() {
-      _imageFile = File(pickedFile.path);
-      _isUploading = true;
-      _uploadProgress = 0.0;
-    });
-
-    try {
-      // 2️⃣ Create Firebase Storage reference
-      final fileName = DateTime.now().toString();
-      final ref = FirebaseStorage.instance.ref().child('uploads/$fileName.jpg');
-
-      // 3️⃣ Upload file
-      UploadTask uploadTask = ref.putFile(_imageFile!);
-
-      uploadTask.snapshotEvents.listen((TaskSnapshot snapshot) {
-        final progress = snapshot.bytesTransferred / snapshot.totalBytes;
-        setState(() {
-          _uploadProgress = progress;
-        });
-      });
-
-      TaskSnapshot snapshot = await uploadTask;
-      // 4️⃣ Get download URL
-      String url = await snapshot.ref.getDownloadURL();
-
-      await FirebaseFirestore.instance.collection('users').doc('hardik').set(
-          {
-            'profilePicture': url,
-            'name' : 'Hardik kumar'
-          }
-      );
-
-      setState(() {
-        _downloadUrl = url;
-        _isUploading = false;
-      });
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Image uploaded successfully')),
-      );
-    } catch (e) {
-      setState(() {
-        _isUploading = false;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Upload failed: $e')),
-      );
-    }
-  }
 
 
   List<String> findRelationBetween(
@@ -2084,7 +2133,7 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
         visited.add(nextPerson);
 
         List<String> newPath = [
-          "$nextPerson ${relation} हे $current के",
+          "$nextPerson $relation हे $current के",
           ...path
         ];
 
@@ -2122,6 +2171,7 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
     super.initState();
   }
   void _showItemDialog() async {
+    final TextEditingController _searchController = TextEditingController();
     List<String> fltdlist = bhinmal.keys.toList();
     String searchQuery= '';
     final result = await showDialog<String>(
@@ -2244,6 +2294,7 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
       }
     }
     _searchController.clear();
+    _searchController.dispose();
   }
 
   List<String> splitAndKeep(String input, List<String> delimiters) {
@@ -2298,7 +2349,7 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
 
   void graphObjectsList(int triger) {
 
-    List<String> delimiters = [selectedItem1!, selectedItem2!, 'fufa', 'हे', 'के', 'chacha','mama', 'mosa', 'sasur ji'];
+    List<String> delimiters = [selectedItem1!, selectedItem2!, 'fufa', 'हे', 'के', 'chacha','mama', 'mosa', 'sasur ji', 'sale ji', 'sadu ji', ];
     String input = reltions[triger];
     final pattern = RegExp('(${delimiters.join('|')})');
     final matches = pattern.allMatches(input);
@@ -2323,6 +2374,7 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
     // indexWiseTextLength.clear();
 
     for(int index = 0; index < result.length ; index++){
+
       if((!result[index].contains("हे"))
           &&(!result[index].contains("के"))
           &&(index < result.length-2)
@@ -2330,6 +2382,12 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
           ||(index==result.length-2)
       ){
         graph.add(result[index]);
+      }else {
+        if(result[index].contains("No relation found")){
+          graph.add(selectedItem2!);
+          graph.add("❌");
+          graph.add(selectedItem1!);
+        }
       }
     }
 
@@ -2670,7 +2728,7 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
           );
         }else{
           List<String> splitedRelation = splitAndKeep(reltions[index],
-              [selectedItem1!, selectedItem2!, 'fufa', 'हे', 'के', 'chacha','mama', 'mosa', 'sasur ji', 'damad ji', 'beta']);
+              [selectedItem1!, selectedItem2!, 'fufa', 'हे', 'के', 'chacha','mama', 'mosa', 'sasur ji', 'sale ji', 'sadu ji',]);
 
           if(outputType == 0){
             return Column(
@@ -2685,7 +2743,7 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
                           end: Alignment.bottomCenter
                       ),
                       boxShadow: [BoxShadow(
-                          color: Color(0xffb6bbff).withOpacity(1),
+                          color: Color(0xffb6bbff),
                           blurRadius: 5,
                           offset: Offset(0.5, 0.5)
                       )],
@@ -2710,7 +2768,7 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(20),
                               boxShadow: [BoxShadow(
-                                  color: Color(0xffffffff).withOpacity(1),
+                                  color: Color(0xffffffff).withAlpha((1 * 255).toInt()),
                                   blurRadius: 5,
                                   offset: Offset(0.5, 0.5)
                               )],
@@ -2750,8 +2808,8 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
                                     textBackColor = Color(0xFFE8F5E9);
 
                                   }else if(splitedRelation[index].contains("mama")){
-                                    textColorType = Color(0xFFFFEB3B);
-                                    textBackColor = Color(0xFF0D1B2A);
+                                    textColorType = Color(0xFF304D6C);
+                                    textBackColor = Color(0x34304D6C);
 
                                   }else if(splitedRelation[index].contains("chacha")){
                                     textColorType = Color(0xFF2196F3);
@@ -2794,7 +2852,7 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
                                       ),
                                       splitedRelation[index].contains('के') ?
                                       Divider(
-                                        color: Colors.deepPurpleAccent.withOpacity(0.2),
+                                        color: Colors.deepPurpleAccent.withAlpha((0.2 * 255).toInt()),
                                         endIndent: 100,
                                         indent: 100,
                                         thickness: 3,
@@ -2866,7 +2924,7 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
                 index == reltions.length-1 ? SizedBox(height: 50,)
                     :
                 Divider(
-                  color: Colors.deepPurpleAccent.withOpacity(0.3),
+                  color: Colors.deepPurpleAccent.withAlpha((0.3 * 255).toInt()),
                   thickness: 3,
                   height: 70,
                   indent: 40,
@@ -2896,7 +2954,6 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
                     ...splitedRelation.asMap().entries.map((entry){
                       int index= entry.key;
                       Color textColorType = Color(0xff000485);
-                      int textType;
                       Color? textBackColor;
 
                       if(splitedRelation[index].contains("हे")){
@@ -2921,37 +2978,34 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
                       }else if(splitedRelation[index].contains("के")){
                         return Container();
                       }else if(index < splitedRelation.length-2){
-                        if(splitedRelation[index].contains(splitedRelation[index+2]))
+                        if(splitedRelation[index].contains(splitedRelation[index+2])){
                           return Container();
+                        }
                       }
 
                       if(splitedRelation[index].contains("fufa")){
                         textColorType = Color(0xFF4CAF50);
                         textBackColor = Color(0xFFE8F5E9);
-                        textType = 1;
                       }else if(splitedRelation[index].contains("mama")){
-                        textColorType = Color(0xFFFFEB3B);
-                        textBackColor = Color(0xFF0D1B2A);
-                        textType = 2;
+                        textColorType = Color(0xFF304D6C);
+                        textBackColor = Color(0x34304D6C);
+
                       }else if(splitedRelation[index].contains("chacha")){
                         textColorType = Color(0xFF2196F3);
                         textBackColor = Color(0xFFE3F2FD);
-                        textType = 3;
                       }else if(splitedRelation[index].contains("mosa")){
                         textColorType = Color(0xFFFF5722);
                         textBackColor = Color(0xFFFFEBEE);
-                        textType = 4;
+
                       }else if(splitedRelation[index].contains("sasur ji")){
                         textColorType = Color(0xFF3955EF);
                         textBackColor = Color(0x4F6073DC);
-                        textType = 2;
+
                       }else if(splitedRelation[index].contains(selectedItem1!)){
                         textColorType = Color(0xffe06eff);
-                        textType = 6;
                         textBackColor = Color(0xfff6dcff);
                       }else if(splitedRelation[index].contains(selectedItem2!)){
                         textColorType = Colors.deepPurpleAccent;
-                        textType = 6;
                         textBackColor = Color(0xffdcdeff);
                       }
 
@@ -3031,7 +3085,7 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
             double positionIng = 0;
             double start = 0;
             Map<String, Map<String, double>> codinates= {};
-
+            Map<String, Map<String, Map<String, double>>> codinatesOfArrows= {};
             return SizedBox(
               height: 500, // fixed height required!
               child: InteractiveViewer(
@@ -3050,8 +3104,8 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
                         start +=50;
                         double fromLeft = start;
                         double fromTop = 50+positionIng*60;
-                        double toLeft = start+50;
-                        double toTop = 50+positionIng*60;
+
+
                         if(entry.value != "End"){
                           if(drawIndex%2 == 0){
                             Color textColorType = Color(0xFF8487CA);
@@ -3100,6 +3154,102 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
 
                             // Check if both previous and next entries exist in codinates
                             if (codinates.containsKey(prevKey) && codinates.containsKey(nextKey)) {
+
+
+                              double fromLeft =50+ codinates[prevKey]!['fromLeft']!;
+                              double fromTop = codinates[prevKey]!['fromTop']!;
+                              double toLeft = 50+codinates[nextKey]!['fromLeft']!; // not 'toLeft'
+                              double toTop = codinates[nextKey]!['fromTop']!;
+                              bool curveAxis = false;
+
+                              final relationKey = graph[drawIndex];
+
+                              if(codinatesOfArrows.containsKey("$prevKey $nextKey")){
+                                final Map<String, Map<String, double>> relationMap = codinatesOfArrows["$prevKey $nextKey"]!;
+                                if(relationMap.containsKey(relationKey)){
+
+                                  return Container();
+                                }else {
+                                  relationMap.addAll({
+                                    relationKey : {
+                                      'fromTop' : fromTop,
+                                      'fromLeft' : fromLeft,
+                                      'toTop' : toTop,
+                                      'toLeft' : toLeft,
+                                    }
+                                  });
+                                  codinatesOfArrows.addAll({
+                                    "$prevKey $nextKey" : relationMap
+                                  });
+
+                                  if(fromTop == toTop && fromLeft < toLeft){
+                                    toLeft = toLeft - 50;
+                                    fromTop = fromTop + 20;
+                                    toTop = toTop + 20;
+                                    curveAxis=false;
+                                  }
+                                  if(fromTop < toTop && fromLeft < toLeft){
+                                    toLeft = toLeft - 50;
+                                    fromTop = fromTop + 17;
+                                    curveAxis=false;
+                                  }
+                                  if(fromTop > toTop && fromLeft > toLeft){
+                                    toTop = toTop + 17;
+                                    curveAxis=true;
+                                  }
+                                  if(fromTop > toTop && fromLeft == toLeft){
+                                    toTop = toTop + 19;
+
+                                    curveAxis=true;
+                                  }
+                                  if(codinatesOfArrows.containsKey(nextKey)){
+                                    if(fromTop == toTop && fromLeft < toLeft){
+                                      fromTop += 15;
+                                      toTop += 15;
+                                      curveAxis=false;
+                                    }
+                                  }
+                                }
+
+
+                              }else {
+                                codinatesOfArrows.addAll({
+                                  "$prevKey $nextKey" : {
+                                    graph[drawIndex] : {
+                                      'fromTop' : fromTop,
+                                      'fromLeft' : fromLeft,
+                                      'toTop' : toTop,
+                                      'toLeft' : toLeft,
+                                    }
+                                  }
+                                });
+                                if(fromTop == toTop && fromLeft < toLeft){
+                                  toLeft = toLeft - 50;
+                                  curveAxis=true;
+                                }
+                                if(fromTop < toTop && fromLeft < toLeft){
+                                  toLeft = toLeft - 50;
+                                  fromTop = fromTop + 17;
+                                  curveAxis=false;
+                                }
+                                if(fromTop > toTop && fromLeft > toLeft){
+                                  toTop = toTop + 17;
+                                  curveAxis=true;
+                                }
+                                if(fromTop > toTop && fromLeft == toLeft){
+                                  toTop = toTop + 19;
+
+                                  curveAxis=true;
+                                }
+                                if(codinatesOfArrows.containsKey(nextKey)){
+                                  if(fromTop == toTop && fromLeft < toLeft){
+                                    fromTop += 15;
+                                    toTop += 15;
+                                    curveAxis=false;
+                                  }
+                                }
+                              }
+
                               Color textColorType = Color(0xFF666AC6);
                               Color textBackColor = Color(0xFF666AC6);
                               Color arrowColor = Color(0xFF666AC6);
@@ -3108,9 +3258,9 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
                                 textBackColor = Color(0xFFC2FBC7);
                                 arrowColor = Color(0xFF4CAF50);
                               }else if(graph[drawIndex].contains("mama")){
-                                textColorType = Color(0xFFFFEB3B);
-                                textBackColor = Color(0xFF0D1B2A);
-                                arrowColor = Color(0xFFFFEB3B);
+                                textColorType = Color(0xFF304D6C);
+                                textBackColor = Color(0x34304D6C);
+                                arrowColor = Color(0x34304D6C);
                               }else if(graph[drawIndex].contains("chacha")){
                                 textColorType = Color(0xFF2196F3);
                                 textBackColor = Color(0xFFB4DFFF);
@@ -3125,38 +3275,10 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
                                 arrowColor = Color(0xFF3955EF);
                               }
 
-
-                              double fromLeft =50+ codinates[prevKey]!['fromLeft']!;
-                              double fromTop = codinates[prevKey]!['fromTop']!;
-                              double toLeft = 50+codinates[nextKey]!['fromLeft']!; // not 'toLeft'
-                              double toTop = codinates[nextKey]!['fromTop']!;
-                              bool curveAxis = false;
-
-                              if(fromTop == toTop && fromLeft < toLeft){
-                                toLeft = toLeft - 50;
-
-                                curveAxis=true;
-                              }
-                              if(fromTop < toTop && fromLeft < toLeft){
-                                toLeft = toLeft - 50;
-                                fromTop = fromTop + 17;
-                                curveAxis=false;
-                              }
-                              if(fromTop > toTop && fromLeft > toLeft){
-                                toTop = toTop + 17;
-
-                                curveAxis=true;
-                              }
-                              if(fromTop > toTop && fromLeft == toLeft){
-                                toTop = toTop + 19;
-
-                                curveAxis=true;
-                              }
-                              print("$fromLeft   $fromTop   $toLeft   $toTop   ${prevKey}   ${entry.value}   ${nextKey}");
                               return CustomPaint(
                                 painter: ArrowPainter(
-                                  from: Offset(fromLeft, fromTop),
-                                  to: Offset(toLeft, toTop),
+                                  from: Offset(toLeft, toTop),
+                                  to: Offset(fromLeft, fromTop),
                                   curvature: 15,
                                   curveAxis: Axis.vertical,
                                   invertCurve: curveAxis,
@@ -3169,14 +3291,14 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
                                     fontWeight: FontWeight.w500,
                                     fontSize: 8,
                                   ),
-                                  arrowColor: arrowColor.withOpacity(0.5),
-                                  glassColor: textBackColor.withOpacity(0.4),
-                                  lineColor: textBackColor.withOpacity(0.7),
+                                  arrowColor: arrowColor.withAlpha((0.5 * 255).toInt()),
+                                  glassColor: textBackColor.withAlpha((0.5 * 255).toInt()),
+                                  lineColor: textBackColor.withAlpha((0.7 * 255).toInt()),
                                 ),
                               );
                             } else {
                               // Debugging
-                              print("Missing coordinates for $prevKey or $nextKey");
+
                               return Container();
                             }
                           }
@@ -3184,7 +3306,9 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
                           positionIng += 1;
                           start = 0;
                         }
+                        if(graph.length - 1 == drawIndex){
 
+                        }
                         return Container();
                       }),
 
@@ -3195,7 +3319,7 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
             );
           }
         }
-
+        return Container();
       },
     );
   }
@@ -3293,7 +3417,6 @@ class ArrowPainter extends CustomPainter {
     // Derivative of quadratic Bézier at t=1 to get tangent vector
     final tangent = (end - control) * 2;
     final angle = atan2(tangent.dy, tangent.dx);
-
     final path = Path()
       ..moveTo(end.dx, end.dy)
       ..lineTo(
@@ -3342,23 +3465,23 @@ class RelationCard extends StatelessWidget {
   final Color textColorType;
   final Color textBackColor;
 
-  const RelationCard({required this.title, required this.textColorType, required this.textBackColor});
+  const RelationCard({required this.title, required this.textColorType, required this.textBackColor, super.key});
 
   @override
   Widget build(BuildContext context) {
+    List<String> spliteTitle = title.split("(S-o)");
     return Container(
         padding: EdgeInsets.all(2),
         width: 50,
         decoration: BoxDecoration(
           color: textBackColor,
-          border: Border.all(color: textColorType.withOpacity(0.3)),
+          border: Border.all(color: textColorType.withAlpha((0.3 * 255).toInt())),
           borderRadius: BorderRadius.circular(4),
           boxShadow: [
             BoxShadow(color: textBackColor, blurRadius: 8, offset: Offset(3, 3)),
           ],
         ),
-        child: Center(child: Text(title, style: TextStyle(fontSize: 5, color: textColorType, fontWeight: FontWeight.bold)))
+        child: Center(child: Text("${spliteTitle[0].trim()}\n${spliteTitle[1].trim()}", style: TextStyle(fontSize: 5, color: textColorType, fontWeight: FontWeight.bold)))
     );
   }
 }
-

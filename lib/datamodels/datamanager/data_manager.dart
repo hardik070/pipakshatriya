@@ -36,8 +36,6 @@ class UserDataManager {
       updateCallback(user); // modify the field(s)
       await user.save(); // persist changes
       _currentUser = user;  // update in-memory copy
-    } else {
-      print('No user found to update');
     }
 
   }

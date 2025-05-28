@@ -3,14 +3,12 @@ import 'package:pipakshatriya/dashboard.dart';
 import'dart:async';
 import 'createaccount.dart';
 import 'package:flutter/services.dart';
-import 'createaccount.dart';
 import 'datamodels/datamanager/data_manager.dart';
-import 'dashboard.dart';
 
 class SplashScreen extends StatefulWidget{
 
   const SplashScreen({super.key});
-
+  @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
 

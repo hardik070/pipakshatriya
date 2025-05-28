@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'helper widgets.dart';
+import 'helper_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
 
@@ -22,34 +22,27 @@ class _ContactScreen extends State<ContactScreen> {
   List<dynamic> filteredCityPeoplesList = [];
   String city = '';
   String person = '';
-  List<List<List<String>>> a = [
-    [[], []] // a[0][0], a[0][1]
-  ];
 
-  // List<List<List<int>>> a =[
-  //   [[5,6,7], [7,3,4], [4,5,6]],
-  //   [[5,6,7], [7,3,4], [4,5,6]],
-  //   [[5,6,7], [7,3,4], [4,5,6]]
-  // ];
   final TextEditingController _citysearchController = TextEditingController();
   final TextEditingController _peoplesearchController = TextEditingController();
   final FocusNode _cityFocusNode = FocusNode();
   final FocusNode _peopleFocusNode = FocusNode();
 
-
+  //for citys list geting
   Future<void> _fatchCitys() async{
-    final DocumentReference EngAddress = FirebaseFirestore.instance.collection('EngAddress').doc('CitysData');
-    final DocumentReference HiAddress = FirebaseFirestore.instance.collection('HiAddress').doc('GaonData');
+    final DocumentReference engAddress = FirebaseFirestore.instance.collection('EngAddress').doc('CitysData');
+    final DocumentReference hiAddress = FirebaseFirestore.instance.collection('HiAddress').doc('GaonData');
 
     if(language){
-      DocumentSnapshot cityDataDoc = await EngAddress.get();
+      DocumentSnapshot cityDataDoc = await engAddress.get();
+
       final Map<String, dynamic> cityData = cityDataDoc.data() as Map<String, dynamic>;
       citysList = cityData.keys.toList();
       setState(() {
         filteredCitysList = citysList;
       });
     }else {
-      DocumentSnapshot cityDataDoc = await HiAddress.get();
+      DocumentSnapshot cityDataDoc = await hiAddress.get();
       final Map<String, dynamic> cityData = cityDataDoc.data() as Map<String, dynamic>;
       citysList = cityData.keys.toList();
       setState(() {
@@ -58,21 +51,22 @@ class _ContactScreen extends State<ContactScreen> {
     }
   }
 
+  //for city peoples list getting
   Future<void> _fatchCitysPeople(String city) async{
 
-    final DocumentReference EngAddress = FirebaseFirestore.instance
+    final DocumentReference engAddress = FirebaseFirestore.instance
         .collection('EngAddress')
         .doc('SaveReadPeople')
         .collection('PeoplesList')
         .doc(city);
-    final DocumentReference HiAddress = FirebaseFirestore.instance
+    final DocumentReference hiAddress = FirebaseFirestore.instance
         .collection('HiAddress')
         .doc('SaveReadPeople')
         .collection('PeoplesList')
         .doc(city);
 
     if(language){
-      DocumentSnapshot cityPeoplesDataDoc = await EngAddress.get();
+      DocumentSnapshot cityPeoplesDataDoc = await engAddress.get();
       final Map<String, dynamic> cityPeoplesData = cityPeoplesDataDoc.data() as Map<String, dynamic>;
       cityPeopleList = cityPeoplesData['peoples'];
       setState(() {
@@ -80,7 +74,7 @@ class _ContactScreen extends State<ContactScreen> {
         cityPeopleIsLoading = false;
       });
     }else {
-      DocumentSnapshot cityPeoplesDataDoc = await HiAddress.get();
+      DocumentSnapshot cityPeoplesDataDoc = await hiAddress.get();
       final Map<String, dynamic> cityPeoplesData = cityPeoplesDataDoc.data() as Map<String, dynamic>;
       cityPeopleList = cityPeoplesData['peoples'];
       setState(() {
@@ -90,13 +84,14 @@ class _ContactScreen extends State<ContactScreen> {
     }
   }
 
+  //for person info geting
   Future<void> _fatchPersonInfo(String city, String person) async{
-    final DocumentReference EngAddress = FirebaseFirestore.instance
+    final DocumentReference engAddress = FirebaseFirestore.instance
         .collection('EngAddress')
         .doc('CitysData')
         .collection(city)
         .doc(person);
-    final DocumentReference HiAddress = FirebaseFirestore.instance
+    final DocumentReference hiAddress = FirebaseFirestore.instance
         .collection('HiAddress')
         .doc('GaonData')
         .collection(city)

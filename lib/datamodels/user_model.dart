@@ -1,5 +1,4 @@
 import 'package:hive/hive.dart';
-import 'relationship.dart';
 import 'login_info.dart';
 import 'contact.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'helper widgets.dart';
+import 'helper_widgets.dart';
 
 class CommunityDiscovery extends StatefulWidget{
   const CommunityDiscovery({super.key});
@@ -11,7 +11,7 @@ class CommunityDiscovery extends StatefulWidget{
 
 class _CommunityDiscoveryState extends State<CommunityDiscovery>{
 
-  List<Map<String, String>> Data = [
+  List<Map<String, String>> data = [
     {
       "Name" : "hardik kumar",
       "Village" : "Daspa"
@@ -50,9 +50,9 @@ class _CommunityDiscoveryState extends State<CommunityDiscovery>{
         ),
       ),
       body: ListView.builder(
-        itemCount: Data.length,
+        itemCount: data.length,
         itemBuilder: (context, index){
-          return PersonTile(Name: Data[index]["Name"]??'', Village: Data[index]["Village"]??'');
+          return PersonTile(name: data[index]["Name"]??'', village: data[index]["Village"]??'');
         },
       ),
     );

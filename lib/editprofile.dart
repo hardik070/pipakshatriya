@@ -14,11 +14,13 @@ import 'datamodels/datamanager/data_manager.dart';
 
 
 class EditProfile extends StatefulWidget {
+  const EditProfile({super.key});
+
   @override
-  _EditProfileState createState() => _EditProfileState();
+  EditProfileState createState() => EditProfileState();
 }
 
-class _EditProfileState extends State<EditProfile> {
+class EditProfileState extends State<EditProfile> {
 
   final List<TextEditingController> _phoneNumbersController = [];
 
@@ -2499,7 +2501,7 @@ class _EditProfileState extends State<EditProfile> {
           "profilePic" : uploadedImageUrl
         });
       }catch (e){
-        print("\n\n\n\Error to store on firestore : $e");
+        print("Error to store on firestore : $e");
       }
       setState(() {
         profilePicUrl = uploadedImageUrl!;
@@ -3104,7 +3106,7 @@ class _EditProfileState extends State<EditProfile> {
                                         ),
                                         child: Center(
                                           child: Text(
-                                            "${indexMapValues.keys.first}",
+                                            indexMapValues.keys.first,
                                             style: TextStyle(
                                                 color: textColorType,
                                                 fontWeight: FontWeight.w500,
@@ -3118,7 +3120,6 @@ class _EditProfileState extends State<EditProfile> {
                                       child: GestureDetector(
                                         onTap: () async{
                                           FocusManager.instance.primaryFocus?.unfocus();
-                                          List<String> a = bhinmal.keys.toList();
                                           await _showItemDialog(context, index, bhinmal.keys.toList(), "City...", "Select city in which your relative live in.");
 
                                           await _showItemDialog(context ,index, bhinmal[relationships[index].values.first]!.keys.toList(), "Person...", "Select your relative.");
@@ -3136,7 +3137,7 @@ class _EditProfileState extends State<EditProfile> {
                                             ),
                                             child: Center(
                                               child: Text(
-                                                "${indexMapValues.values.first}",
+                                                indexMapValues.values.first,
                                                 style: TextStyle(
                                                     color: Colors.white,
                                                     fontWeight: FontWeight.w500,
@@ -3207,8 +3208,9 @@ class _EditProfileState extends State<EditProfile> {
                                     setState(() {
                                       isSaving = true;
                                     });
-                                    await _uploadUserInfoToFirestore();
                                     Navigator.pop(context);
+                                    await _uploadUserInfoToFirestore();
+
                                     setState(() {
                                       isSaving = false;
                                     });
