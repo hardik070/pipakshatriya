@@ -46,7 +46,7 @@ class _profileManageState extends State<profileManage>{
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             Row(
               children: [
 
@@ -54,12 +54,12 @@ class _profileManageState extends State<profileManage>{
                   borderRadius: BorderRadius.circular(18),
                   child: CachedNetworkImage(
                     imageUrl: user.profilePic,
-                    placeholder: (context, url) => CircleAvatar(
+                    placeholder: (context, url) =>const CircleAvatar(
                         radius: 60,
                         //backgroundImage: uploadedImageUrl != null ? FileImage(_profileImage!) : null,
                         child: Icon(Icons.person, size: 30, color: Color(0xFF666AC6))
                     ),
-                    errorWidget: (context, url, error) => CircleAvatar(
+                    errorWidget: (context, url, error) =>const CircleAvatar(
                       radius: 60,
                       //backgroundImage: _profileImage != null ? FileImage(_profileImage!) : null,
                       child: Icon(Icons.person, size: 30, color: Color(0xFF666AC6)),
@@ -69,7 +69,7 @@ class _profileManageState extends State<profileManage>{
                     height: 50,
                   ),
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
@@ -127,6 +127,7 @@ class _profileManageState extends State<profileManage>{
               child: SingleChildScrollView(
                 child: Column(
                   children: [
+                    //about me
                     Container(
                       padding: EdgeInsets.all(15),
                       margin: EdgeInsets.only(top: 10,bottom: 10),
@@ -176,7 +177,7 @@ class _profileManageState extends State<profileManage>{
                         ],
                       ),
                     ),
-
+                    //contact
                     Container(
                       padding: EdgeInsets.all(15),
                       margin: EdgeInsets.only(top: 10,bottom: 10),
@@ -217,7 +218,7 @@ class _profileManageState extends State<profileManage>{
 
                             return Column(
                               children: [
-                                index == 0 ? Container() : Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
+                                index == 0 ? Container() : const Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
                                 profileTile(item.value, "Contact Number", Icons.call),
                               ],
                             );
@@ -227,7 +228,7 @@ class _profileManageState extends State<profileManage>{
                        ],
                       ),
                     ),
-
+                    //relationships
                     Container(
                       padding: EdgeInsets.all(15),
                       margin: EdgeInsets.only(top: 10,bottom: 10),
@@ -269,7 +270,7 @@ class _profileManageState extends State<profileManage>{
                             String relative = item.value.values.first;
                             return Column(
                               children: [
-                                index == 0 ? Container() : Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
+                                index == 0 ? Container() : const Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
                                 profileTile(relative, relationType, Icons.person),
                               ],
                             );
@@ -277,12 +278,56 @@ class _profileManageState extends State<profileManage>{
                         ],
                       ),
                     ),
-
-                    SizedBox(
-                      height: 150,
+                    //help & support
+                    Container(
+                      padding: EdgeInsets.all(15),
+                      margin: EdgeInsets.only(top: 10,bottom: 10),
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFF4A3274),
+                            Color(0xFF4D5CBF),
+                            Color(0xFF5C4D91)],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color(0x57ff3456),
+                            blurRadius: 5,
+                            offset: Offset(0, 2),
+                          )
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            width: double.infinity,
+                            height: 50,
+                            child: Text(
+                              "Help & Support",
+                              style: GoogleFonts.poppins(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 18,
+                                height: 1,
+                              ),
+                            ),
+                          ),
+                          profileTile("hardikkumar2664@gmail.com", "Email", Icons.email_rounded),
+                          Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
+                          profileTile("9727264663", "Whatsapp", Icons.call),
+                          Divider(color: Color(0x4FA6A9E3),thickness: 1, height: 25),
+                          MessageInputWidget()
+                        ],
+                      ),
+                    ),
+                    //logout
+                    Padding(
+                      padding: EdgeInsets.only(top: 50, bottom: 130),
                       child: Row(
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.logout_rounded,
                             size: 35,
                             color: Color(0xFF666AC6),
@@ -292,13 +337,13 @@ class _profileManageState extends State<profileManage>{
                             onTap: () async {
                               await UserDataManager().clearUserData();
                               Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => CreateAccountWidget()
-                                )
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => CreateAccountWidget()
+                                  )
                               );
                             },
-                            child: Text(
+                            child:const Text(
                               "Log out",
                               style: TextStyle(
                                 color: Color(0xFF666AC6),
@@ -310,7 +355,7 @@ class _profileManageState extends State<profileManage>{
 
                         ],
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -320,47 +365,172 @@ class _profileManageState extends State<profileManage>{
       ),
     );
   }
+}
 
-  Widget profileTile(String title, String subtitle, final icon){
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
+Widget profileTile(String title, String subtitle, final icon){
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.start,
+    children: [
+      Container(
+        height: 37,
+        width: 37,
+        decoration: BoxDecoration(
+            color: Color(0xfffffb00),
+            borderRadius: BorderRadius.circular(8)
+        ),
+        child: Icon(
+          icon,
+          color: Color(0xff0a0147),
+          size: 22,
+        ),
+      ),
+      const SizedBox(width: 10),
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title.isNotEmpty ? title.split("(S-o)")[0].trim() : subtitle,
+            style: GoogleFonts.poppins(
+              color: Colors.white,
+              fontWeight: FontWeight.w400,
+              fontSize: 15,
+            ),
+          ),
+          Text(
+            subtitle,
+            style: GoogleFonts.poppins(
+              color: Colors.white60,
+              fontWeight: FontWeight.w400,
+              fontSize: 12,
+            ),
+          ),
+        ],
+      ),
+    ],
+  );
+}
+
+class MessageInputWidget extends StatefulWidget {
+
+  @override
+  _MessageInputWidgetState createState() => _MessageInputWidgetState();
+}
+
+class _MessageInputWidgetState extends State<MessageInputWidget> {
+  TextEditingController? _feedbackController;
+
+  bool isFeedBackFormActive = false;
+
+  bool deletButtonIcon = false;
+
+  void wantsToGiveFeedback(){
+    if (_feedbackController != null) return;
+
+    _feedbackController = TextEditingController();
+
+    setState(() {
+      isFeedBackFormActive = true;
+    });
+  }
+
+
+  void onSubmit(){
+    _feedbackController!.dispose();
+    _feedbackController = null;
+
+    setState(() {
+      isFeedBackFormActive = false;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return isFeedBackFormActive ?
+    Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
           height: 37,
           width: 37,
           decoration: BoxDecoration(
-            color: Color(0xfffffb00),
-            borderRadius: BorderRadius.circular(8)
+              color: Color(0xfffffb00),
+              borderRadius: BorderRadius.circular(8)
           ),
           child: Icon(
-            icon,
+            Icons.feedback_rounded,
             color: Color(0xff0a0147),
             size: 22,
           ),
         ),
-        SizedBox(width: 10),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title.isNotEmpty ? title.split("(S-o)")[0].trim() : subtitle,
-              style: GoogleFonts.poppins(
-                color: Colors.white,
-                fontWeight: FontWeight.w400,
-                fontSize: 15,
+        SizedBox(width: 10,),
+        Expanded(
+          child: TextField(
+            controller: _feedbackController,
+            decoration: InputDecoration(
+              constraints: BoxConstraints(
+                maxWidth: 300, // Maximum width
+                maxHeight: 150, // Maximum height
+              ),
+              hintText: "Give feedback...",
+              hintStyle: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w300,
+                  fontSize: 17),
+              filled: true,
+              fillColor: const Color(0x7F23255D),
+              contentPadding: const EdgeInsets.symmetric(
+                  vertical: 5, horizontal: 20),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25),
+                borderSide: BorderSide.none,
+              ),
+              suffixIcon: IconButton(
+                onPressed: () {
+                  setState(() {
+                    _feedbackController!.clear();
+                  });
+                },
+                icon: Icon(Icons.close_rounded),
+                color: Colors.white54,
               ),
             ),
-            Text(
-              subtitle,
-              style: TextStyle(
-                color: Colors.white60,
-                fontWeight: FontWeight.w400,
-                fontSize: 12,
-              ),
+            onChanged: (value) {
+
+            },
+            keyboardType: TextInputType.multiline,
+            maxLines: null,
+            style: const TextStyle(
+              fontSize: 16,
+              fontFamily: 'Inter',
+              color: Colors.white,
             ),
-          ],
+          ),
+        ),
+        IconButton(
+          icon: const Icon(Icons.send_rounded, size: 35),
+          color: Colors.white,
+          onPressed: () {
+            onSubmit();
+          },
         ),
       ],
+    )
+        :
+    GestureDetector(
+      onTap: () {
+        wantsToGiveFeedback();
+      },
+      child: Row(
+        children: [
+          profileTile("Give Feedback", "Write", Icons.feedback_rounded),
+          Spacer(),
+          Icon(
+            Icons.edit_rounded,
+            color: Colors.white,
+            size: 20,
+          ),
+        ],
+      )
     );
   }
 }

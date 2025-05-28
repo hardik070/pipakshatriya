@@ -102,17 +102,6 @@ class _ContactScreen extends State<ContactScreen> {
         .collection(city)
         .doc(person);
 
-    // if(language){
-    //   DocumentSnapshot PersonInfoDoc = await EngAddress.get();
-    //   final Map<String, dynamic> personInfodata = cityDataDoc.data() as Map<String, dynamic>;
-    //   citysList = cityData.keys.toList();
-    //   setState(() {
-    //     filteredCitysList = citysList;
-    //   });
-    // }else {
-    //
-    // }
-
   }
 
   @override

@@ -16,9 +16,7 @@ class ItemSelectionScreen extends StatefulWidget {
 class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
   String? selectedItem1;
   String? selectedItem2;
-  final TextEditingController _searchController = TextEditingController();
-  //List<String> fltdlist = [];
-  //String searchQuery= '';
+
   bool postition= false;
   Map<String, Map<String, dynamic>> bhinmal = {
     "Mr Ajmal ji (S-o)  Shri Pratapji": {
@@ -2243,6 +2241,7 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
     super.initState();
   }
   void _showItemDialog() async {
+    final TextEditingController _searchController = TextEditingController();
     List<String> fltdlist = bhinmal.keys.toList();
     String searchQuery= '';
     final result = await showDialog<String>(
@@ -2365,6 +2364,7 @@ class _ItemSelectionScreenState extends State<ItemSelectionScreen> {
       }
     }
     _searchController.clear();
+    _searchController.dispose();
   }
 
   List<String> splitAndKeep(String input, List<String> delimiters) {

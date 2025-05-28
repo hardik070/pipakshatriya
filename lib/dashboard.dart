@@ -24,16 +24,19 @@ class _Dashboard extends State<Dashboard> {
   @override
   void initState() {
     super.initState();
-    if(UserDataManager().currentUser!.relationships.isEmpty
-        || UserDataManager().currentUser!.name.isEmpty
-        || UserDataManager().currentUser!.fatherName.isEmpty
-        || UserDataManager().currentUser!.gotra.isEmpty
-        || UserDataManager().currentUser!.actualAddress.isEmpty
-        || UserDataManager().currentUser!.currentAddress.isEmpty
-        || UserDataManager().currentUser!.phoneNumber.isEmpty
-        || UserDataManager().currentUser!.profilePic.isEmpty){
-      _loadProfileFillComponent();
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if(UserDataManager().currentUser!.relationships.isEmpty
+          || UserDataManager().currentUser!.name.isEmpty
+          || UserDataManager().currentUser!.fatherName.isEmpty
+          || UserDataManager().currentUser!.gotra.isEmpty
+          || UserDataManager().currentUser!.actualAddress.isEmpty
+          || UserDataManager().currentUser!.currentAddress.isEmpty
+          || UserDataManager().currentUser!.phoneNumber.isEmpty
+          || UserDataManager().currentUser!.profilePic.isEmpty){
+        _loadProfileFillComponent();
+      }
+    });
+
   }
 
   void _loadProfileFillComponent() async{
@@ -101,10 +104,10 @@ class _Dashboard extends State<Dashboard> {
 
   final List<Widget> _screens = [
 
-    Center(child: ContactScreen()),
-    Center(child: CommunityMessage()),
-    Center(child: ItemSelectionScreen()),
-    Center(child: profileManage()),
+    ContactScreen(),
+    CommunityMessage(),
+    ItemSelectionScreen(),
+    profileManage()
   ];
 
   @override
