@@ -2,7 +2,7 @@ import 'package:hive/hive.dart';
 import 'package:pipakshatriya/datamodels/user_model.dart';
 import 'dart:async';
 
-class UserDataManager {
+class  UserDataManager {
   static final UserDataManager _instance = UserDataManager._internal();
   factory UserDataManager() => _instance;
   UserDataManager._internal();

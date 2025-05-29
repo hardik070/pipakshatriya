@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'helper_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
+import 'show_person_info.dart';
 
 class ContactScreen extends StatefulWidget {
   const ContactScreen({super.key});
@@ -349,7 +350,13 @@ class _ContactScreen extends State<ContactScreen> {
                           return GestureDetector(
                             onTap: ()async{
                               person = filteredCityPeoplesList[index];
-                              _fatchPersonInfo(city, person);
+                              //_fatchPersonInfo(city, person);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ShowPersonInfo(userId: "pipa_kshatriya_darji")
+                                )
+                              );
                             },
                             child: CityTile(city: person1 ,state: person2),
                           );
