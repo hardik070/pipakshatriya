@@ -1,7 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
-class UserProfileScreen extends StatelessWidget {
-  const UserProfileScreen({super.key});
+class ShowPersonInfo extends StatefulWidget{
+  final String userId;
+  const ShowPersonInfo({super.key, required this.userId});
+
+  @override
+  State<ShowPersonInfo> createState() => _ShowPersonInfo();
+}
+class _ShowPersonInfo extends State<ShowPersonInfo> {
+
+  bool isDataLoading = true;
+  Map<String, dynamic>? userInfo;
+
+  @override
+  void initState(){
+    super.initState();
+    _getUserInfo();
+  }
+
+  Future<void> _getUserInfo() async{
+    try{
+      DocumentSnapshot userData = await FirebaseFirestore.instance.collection("users").doc(widget.userId).get();
+      userInfo = userData.data() as Map<String, dynamic>?;
+
+      setState(() {
+        isDataLoading = false;
+      });
+    }catch (e){
+      setState(() {
+        isDataLoading = false;
+      });
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -19,75 +52,88 @@ class UserProfileScreen extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
+      body: isDataLoading ? Center(child: CircularProgressIndicator(),)
+          :
+      SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             // Profile Picture & Send Message
-            Center(
-              child: Column(
-                children: [
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Container(
-                        height: 120,
-                        width: 120,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: const LinearGradient(
-                            colors: [Color(0xfffffb00), Color(0xFF666AC6)],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                        ),
-                      ),
-                      const CircleAvatar(
-                        radius: 55,
-                        backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=4'),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  Container(
-                    width: 160,
-                    height: 45,
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [Color(0xffffc107), Color(0xFF666AC6)],
-                      ),
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: ElevatedButton.icon(
-                      onPressed: () {},
-                      icon: const Icon(Icons.send),
-                      label: const Text('Message'),
-                      style: ElevatedButton.styleFrom(
-                        elevation: 0,
-                        backgroundColor: Colors.transparent,
-                        foregroundColor: Colors.white,
-                        shadowColor: Colors.transparent,
-                      ),
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                Container(
+                  height: 120,
+                  width: 120,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: const LinearGradient(
+                      colors: [Color(0xfffffb00), Color(0xFF666AC6)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
                     ),
                   ),
-                ],
+                ),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(100),
+                  child: CachedNetworkImage(
+                    imageUrl: userInfo?['profilePic'] ?? "",
+                    placeholder: (context, url) =>const CircleAvatar(
+                        radius: 60,
+                        //backgroundImage: uploadedImageUrl != null ? FileImage(_profileImage!) : null,
+                        child: Icon(Icons.person, size: 40, color: Color(0xFF666AC6))
+                    ),
+                    errorWidget: (context, url, error) =>const CircleAvatar(
+                      radius: 60,
+                      //backgroundImage: _profileImage != null ? FileImage(_profileImage!) : null,
+                      child: Icon(Icons.person, size: 40, color: Color(0xFF666AC6)),
+                    ),
+                    fit: BoxFit.cover,
+                    width: 112,
+                    height: 112,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Container(
+              width: 160,
+              height: 45,
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [Color(0xffffc107), Color(0xFF666AC6)],
+                ),
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: ElevatedButton.icon(
+                onPressed: () {},
+                icon: const Icon(Icons.send),
+                label: const Text('Message'),
+                style: ElevatedButton.styleFrom(
+                  elevation: 0,
+                  backgroundColor: Colors.transparent,
+                  foregroundColor: Colors.white,
+                  shadowColor: Colors.transparent,
+                ),
               ),
             ),
             const SizedBox(height: 24),
 
             // Name & Gotra
-            const Text(
-              'Rahul Pipakshatriya',
-              style: TextStyle(
+            Text(
+              userInfo?['name'] ?? "",
+              style:const TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
                 color: Color(0xFF23255D),
               ),
             ),
             const SizedBox(height: 6),
-            const Text(
-              "Gotra: Parmar",
-              style: TextStyle(
+            Text(
+              userInfo?['gotra'] ?? "",
+              style:const TextStyle(
                 fontSize: 16,
                 color: Color(0xFF666AC6),
                 fontWeight: FontWeight.bold,
@@ -96,19 +142,21 @@ class UserProfileScreen extends StatelessWidget {
             const SizedBox(height: 24),
 
             // Personal Info
-            _buildCardSection('Personal Info', const [
-              ProfileField(label: 'Father Name', value: 'Ramesh Pipakshatriya', icon: Icons.person,),
-              ProfileField(label: 'Current City', value: 'Mumbai', icon: Icons.location_city_rounded,),
-              ProfileField(label: 'Actual City', value: 'Jamnagar', icon: Icons.location_history,),
+            _buildCardSection('Personal Info', [
+              ProfileField(label: 'Father Name', value: userInfo?['fatherName'] ?? '', icon: Icons.person,),
+              ProfileField(label: 'Current City', value: userInfo?['currentAddress'] ?? '', icon: Icons.location_city_rounded,),
+              ProfileField(label: 'Actual City', value: userInfo?['actualAddress'] ?? '', icon: Icons.location_history,),
             ]),
 
             const SizedBox(height: 20),
 
             // Contact List
-            _buildCardSection('Contact List', const [
-              ProfileField(label: 'Amit Sharma', value: '+91 9876543210', icon: Icons.call,),
-              ProfileField(label: 'Suresh Mehta', value: '+91 9123456780', icon: Icons.call,),
-              ProfileField(label: 'Pooja Patel', value: '+91 9012345678', icon: Icons.call,),
+
+            _buildCardSection('Contact List', [
+              ...(userInfo?['numbers']??[]).asMap().entries.map((number){
+                print(number);
+                return ProfileField(label: 'No.${number.key+1}', value: number.value, icon: Icons.call,);
+              }).toList(),
             ]),
 
             const SizedBox(height: 20),
@@ -118,7 +166,7 @@ class UserProfileScreen extends StatelessWidget {
               GridView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: 4,
+                itemCount: (userInfo?['relations']).length ?? 0,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   crossAxisSpacing: 8,
@@ -126,6 +174,38 @@ class UserProfileScreen extends StatelessWidget {
                   childAspectRatio: 3 / 2,
                 ),
                 itemBuilder: (context, index) {
+                  final indexMapValues = (userInfo!['relations'])[index];
+                  String name = indexMapValues.values.first;
+                  final onlyName = name.split("(S-o)");
+
+                  Color textColorType = Colors.white;
+                  Color textBackColor = Colors.black;
+
+                  if(indexMapValues.keys.first == "Fufa"){
+                    textColorType = Color(0xFF4CAF50);
+                    textBackColor = Color(0xFFE8F5E9);
+
+                  }else if(indexMapValues.keys.first == "Mama"){
+                    textColorType = Color(0xFF304D6C);
+                    textBackColor = Color(0x34304D6C);
+
+                  }else if(indexMapValues.keys.first == "Chacha"){
+                    textColorType = Color(0xFF2196F3);
+                    textBackColor = Color(0xFFE3F2FD);
+
+                  }else if(indexMapValues.keys.first == "Mosa"){
+                    textColorType = Color(0xFFFF5722);
+                    textBackColor = Color(0xFFFFEBEE);
+                  }else if(indexMapValues.keys.first == "Sasur"){
+                    textColorType = Color(0xFF3955EF);
+                    textBackColor = Color(0x4F6073DC);
+                  }else if(indexMapValues.keys.first == "Sadu"){
+                    textColorType = Color(0xFFFFFFFF);
+                    textBackColor = Color(0xFF507CC1);
+                  }else if(indexMapValues.keys.first == "Sala"){
+                    textColorType = Color(0xFF6A1B9A);
+                    textBackColor = Color(0xFFE1BEE7);
+                  }
 
                   return GestureDetector(
                     onTap: () {
@@ -133,7 +213,7 @@ class UserProfileScreen extends StatelessWidget {
                     },
                     child: Container(
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF9F9F9),
+                        color: textBackColor,
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: const [
                           BoxShadow(color: Colors.black12, blurRadius: 3, offset: Offset(0, 2)),
@@ -151,10 +231,10 @@ class UserProfileScreen extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
-                                Text('Amit Verma', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
-                                Text('Cousin', style: TextStyle(fontSize: 12, color: Colors.black54)),
-                                Text('Delhi', style: TextStyle(fontSize: 11, color: Colors.black45)),
+                              children: [
+                                Text(onlyName[0], style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: textColorType)),
+                                Text(indexMapValues.keys.first, style: TextStyle(fontSize: 12, color: textColorType)),
+                                Text('Delhi', style: TextStyle(fontSize: 11, color: textColorType)),
                               ],
                             ),
                           ),
@@ -249,14 +329,16 @@ class ProfileField extends StatelessWidget {
                     text: '$label: ',
                     style: const TextStyle(
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF474A98),
+                      color: Color(0xBD474A98),
+                      fontSize: 15
                     ),
                   ),
                   TextSpan(
                     text: value,
                     style: const TextStyle(
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black87,
+                      fontWeight: FontWeight.w600,
+                      color:  Color(0xFF474A98),
+                      fontSize: 15
                     ),
                   ),
                 ],

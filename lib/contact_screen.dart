@@ -85,20 +85,6 @@ class _ContactScreen extends State<ContactScreen> {
     }
   }
 
-  //for person info geting
-  Future<void> _fatchPersonInfo(String city, String person) async{
-    final DocumentReference engAddress = FirebaseFirestore.instance
-        .collection('EngAddress')
-        .doc('CitysData')
-        .collection(city)
-        .doc(person);
-    final DocumentReference hiAddress = FirebaseFirestore.instance
-        .collection('HiAddress')
-        .doc('GaonData')
-        .collection(city)
-        .doc(person);
-
-  }
 
   @override
   void initState(){
@@ -354,7 +340,7 @@ class _ContactScreen extends State<ContactScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => UserProfileScreen()
+                                  builder: (context) => ShowPersonInfo(userId: "pipa_kshatriya_darji")
                                 )
                               );
                             },
