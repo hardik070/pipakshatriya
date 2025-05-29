@@ -18,7 +18,7 @@ class Dashboard extends StatefulWidget {
 
 class _Dashboard extends State<Dashboard> {
 
-  int _selectedIndex = 3;
+  int _selectedIndex = 0;
   final TextEditingController _searchController = TextEditingController();
 
   @override

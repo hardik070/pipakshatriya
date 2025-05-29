@@ -1,113 +1,269 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'datamodels/datamanager/data_manager.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ShowPersonInfo extends StatefulWidget{
-  final String userId;
-  @override
-  const ShowPersonInfo({super.key, required this.userId});
+class UserProfileScreen extends StatelessWidget {
+  const UserProfileScreen({super.key});
 
   @override
-  State<ShowPersonInfo> createState() => _ShowPersonInfo();
-}
-
-class _ShowPersonInfo extends State<ShowPersonInfo>{
-  bool isDataLoading = true;
-  Map<String, dynamic>? userInfo;
-
-  @override
-  void initState(){
-    super.initState();
-    _getUserInfo();
-  }
-
-  Future<void> _getUserInfo() async{
-    try{
-      DocumentSnapshot userData = await FirebaseFirestore.instance.collection("users").doc(widget.userId).get();
-      userInfo = userData.data() as Map<String, dynamic>?;
-
-      setState(() {
-        isDataLoading = false;
-      });
-    }catch (e){
-      setState(() {
-        isDataLoading = false;
-      });
-    }
-  }
-  
-  @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFFDFDFD), // Soft white background
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.arrow_back_ios_new_rounded)
+        backgroundColor: Colors.white,
+        elevation: 2,
+        title: const Text(
+          'Profile',
+          style: TextStyle(
+            color: Color(0xFF23255D),
+            fontWeight: FontWeight.bold,
+          ),
         ),
+        centerTitle: true,
       ),
-      body: SafeArea(
-        child: isDataLoading ? Center(child: CircularProgressIndicator(),)
-            :
-        Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+        child: Column(
           children: [
-            Row(
-              children: [
-
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(100),
-                  child: CachedNetworkImage(
-                    imageUrl: userInfo?["profilePic"] ?? '',
-                    placeholder: (context, url) =>const CircleAvatar(
-                        radius: 100,
-                        //backgroundImage: uploadedImageUrl != null ? FileImage(_profileImage!) : null,
-                        child: Icon(Icons.person, size: 30, color: Color(0xFF666AC6))
-                    ),
-                    errorWidget: (context, url, error) =>const CircleAvatar(
-                      radius: 100,
-                      //backgroundImage: _profileImage != null ? FileImage(_profileImage!) : null,
-                      child: Icon(Icons.person, size: 30, color: Color(0xFF666AC6)),
-                    ),
-                    fit: BoxFit.cover,
-                    width: 100,
-                    height: 100,
+            // Profile Picture & Send Message
+            Center(
+              child: Column(
+                children: [
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Container(
+                        height: 120,
+                        width: 120,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: const LinearGradient(
+                            colors: [Color(0xfffffb00), Color(0xFF666AC6)],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                        ),
+                      ),
+                      const CircleAvatar(
+                        radius: 55,
+                        backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=4'),
+                      ),
+                    ],
                   ),
-                ),
-                const SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      //GlobalVariables().name.isNotEmpty ? GlobalVariables().name : 'Name',
-                      userInfo?["name"] ?? '',
-                      style: GoogleFonts.openSans(
-                          color: Color(0xFF666AC6),
-                          fontWeight: FontWeight.w600,
-                          fontSize: 20,
-                          height: 1.3
+                  const SizedBox(height: 12),
+                  Container(
+                    width: 160,
+                    height: 45,
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [Color(0xffffc107), Color(0xFF666AC6)],
+                      ),
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: ElevatedButton.icon(
+                      onPressed: () {},
+                      icon: const Icon(Icons.send),
+                      label: const Text('Message'),
+                      style: ElevatedButton.styleFrom(
+                        elevation: 0,
+                        backgroundColor: Colors.transparent,
+                        foregroundColor: Colors.white,
+                        shadowColor: Colors.transparent,
                       ),
                     ),
-                    Text(
-                      //GlobalVariables().course.isNotEmpty ? GlobalVariables().course : 'Course' ,
-                      userInfo?["fatherName"] ?? '',
-                      style: GoogleFonts.poppins(
-                        color: Color(0xFF666AC6),
-                        fontWeight: FontWeight.w400,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+                  ),
+                ],
+              ),
             ),
+            const SizedBox(height: 24),
+
+            // Name & Gotra
+            const Text(
+              'Rahul Pipakshatriya',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF23255D),
+              ),
+            ),
+            const SizedBox(height: 6),
+            const Text(
+              "Gotra: Parmar",
+              style: TextStyle(
+                fontSize: 16,
+                color: Color(0xFF666AC6),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 24),
+
+            // Personal Info
+            _buildCardSection('Personal Info', const [
+              ProfileField(label: 'Father Name', value: 'Ramesh Pipakshatriya', icon: Icons.person,),
+              ProfileField(label: 'Current City', value: 'Mumbai', icon: Icons.location_city_rounded,),
+              ProfileField(label: 'Actual City', value: 'Jamnagar', icon: Icons.location_history,),
+            ]),
+
+            const SizedBox(height: 20),
+
+            // Contact List
+            _buildCardSection('Contact List', const [
+              ProfileField(label: 'Amit Sharma', value: '+91 9876543210', icon: Icons.call,),
+              ProfileField(label: 'Suresh Mehta', value: '+91 9123456780', icon: Icons.call,),
+              ProfileField(label: 'Pooja Patel', value: '+91 9012345678', icon: Icons.call,),
+            ]),
+
+            const SizedBox(height: 20),
+
+            // Relations Map
+            _buildCardSection('Relations Map', [
+              GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: 4,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 8,
+                  mainAxisSpacing: 8,
+                  childAspectRatio: 3 / 2,
+                ),
+                itemBuilder: (context, index) {
+
+                  return GestureDetector(
+                    onTap: () {
+                      // Navigate to relation details
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF9F9F9),
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: const [
+                          BoxShadow(color: Colors.black12, blurRadius: 3, offset: Offset(0, 2)),
+                        ],
+                      ),
+                      padding: const EdgeInsets.all(8),
+                      child: Row(
+                        children: [
+                          const CircleAvatar(
+                            backgroundImage: NetworkImage('https://firebasestorage.googleapis.com/v0/b/pipa-kshatriya-darji-samaj.appspot.com/o/profilePic%2Fpipa_kshatriya_darji_profilePic?alt=media&token=83ab1401-dc87-4313-86df-946fb677ea3a'),
+                            radius: 24,
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                Text('Amit Verma', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
+                                Text('Cousin', style: TextStyle(fontSize: 12, color: Colors.black54)),
+                                Text('Delhi', style: TextStyle(fontSize: 11, color: Colors.black45)),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ]),
+
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildCardSection(String title, List<Widget> children) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.symmetric(horizontal: 4),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 6,
+            offset: Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 16,
+              color: Color(0xFF666AC6),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 10),
+          ...children,
+        ],
+      ),
+    );
+  }
+}
+class ProfileField extends StatelessWidget {
+  final String label;
+  final String value;
+  final IconData? icon;
+
+  const ProfileField({
+    super.key,
+    required this.label,
+    required this.value,
+    this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF5F6FA),
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.03),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (icon != null)
+            Icon(icon, size: 20, color: const Color(0xFF3D5AFE)),
+          if (icon != null) const SizedBox(width: 10),
+          Expanded(
+            child: RichText(
+              text: TextSpan(
+                style: const TextStyle(fontSize: 14),
+                children: [
+                  TextSpan(
+                    text: '$label: ',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF474A98),
+                    ),
+                  ),
+                  TextSpan(
+                    text: value,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
