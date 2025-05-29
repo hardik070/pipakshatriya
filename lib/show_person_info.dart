@@ -35,6 +35,28 @@ class _ShowPersonInfo extends State<ShowPersonInfo> {
     }
   }
 
+  void _showImageFullScreen() async{
+    await showDialog(
+        context: context,
+        builder: (BuildContext context){
+          return StatefulBuilder(
+              builder: (context, setState){
+                return AlertDialog(
+                  contentPadding: EdgeInsets.zero,
+                  insetPadding: EdgeInsets.symmetric(horizontal: 30),
+                  content: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: CachedNetworkImage(
+                        imageUrl: userInfo!['profilePic'] ?? ''
+                    ),
+                  )
+                );
+              }
+          );
+        }
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -61,41 +83,48 @@ class _ShowPersonInfo extends State<ShowPersonInfo> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             // Profile Picture & Send Message
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                Container(
-                  height: 120,
-                  width: 120,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: const LinearGradient(
-                      colors: [Color(0xfffffb00), Color(0xFF666AC6)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
+            GestureDetector(
+              onTap: () {
+                if(userInfo?['profilePic'] != null){
+                  _showImageFullScreen();
+                }
+              },
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                    height: 120,
+                    width: 120,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: const LinearGradient(
+                        colors: [Color(0xfffffb00), Color(0xFF666AC6)],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
                     ),
                   ),
-                ),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(100),
-                  child: CachedNetworkImage(
-                    imageUrl: userInfo?['profilePic'] ?? "",
-                    placeholder: (context, url) =>const CircleAvatar(
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(100),
+                    child: CachedNetworkImage(
+                      imageUrl: userInfo?['profilePic'] ?? "",
+                      placeholder: (context, url) =>const CircleAvatar(
+                          radius: 60,
+                          //backgroundImage: uploadedImageUrl != null ? FileImage(_profileImage!) : null,
+                          child: Icon(Icons.person, size: 40, color: Color(0xFF666AC6))
+                      ),
+                      errorWidget: (context, url, error) =>const CircleAvatar(
                         radius: 60,
-                        //backgroundImage: uploadedImageUrl != null ? FileImage(_profileImage!) : null,
-                        child: Icon(Icons.person, size: 40, color: Color(0xFF666AC6))
+                        //backgroundImage: _profileImage != null ? FileImage(_profileImage!) : null,
+                        child: Icon(Icons.person, size: 40, color: Color(0xFF666AC6)),
+                      ),
+                      fit: BoxFit.cover,
+                      width: 112,
+                      height: 112,
                     ),
-                    errorWidget: (context, url, error) =>const CircleAvatar(
-                      radius: 60,
-                      //backgroundImage: _profileImage != null ? FileImage(_profileImage!) : null,
-                      child: Icon(Icons.person, size: 40, color: Color(0xFF666AC6)),
-                    ),
-                    fit: BoxFit.cover,
-                    width: 112,
-                    height: 112,
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             const SizedBox(height: 12),
             Container(
@@ -171,7 +200,7 @@ class _ShowPersonInfo extends State<ShowPersonInfo> {
                   crossAxisCount: 2,
                   crossAxisSpacing: 8,
                   mainAxisSpacing: 8,
-                  childAspectRatio: 3 / 2,
+                  childAspectRatio: 3 / 1.8,
                 ),
                 itemBuilder: (context, index) {
                   final indexMapValues = (userInfo!['relations'])[index];
@@ -224,9 +253,9 @@ class _ShowPersonInfo extends State<ShowPersonInfo> {
                         children: [
                           const CircleAvatar(
                             backgroundImage: NetworkImage('https://firebasestorage.googleapis.com/v0/b/pipa-kshatriya-darji-samaj.appspot.com/o/profilePic%2Fpipa_kshatriya_darji_profilePic?alt=media&token=83ab1401-dc87-4313-86df-946fb677ea3a'),
-                            radius: 24,
+                            radius: 20,
                           ),
-                          const SizedBox(width: 10),
+                          const SizedBox(width: 7),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
