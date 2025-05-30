@@ -2609,6 +2609,7 @@ class EditProfileState extends State<EditProfile> {
 
   Future<void> _uploadUserInfoToFirestore() async{
 
+    var user = UserDataManager().currentUser;
     String name = nameController.text.trim();
     String fatherName = fatherNameController.text.trim();
     String gotra = gotraController.text.trim();
@@ -2634,17 +2635,22 @@ class EditProfileState extends State<EditProfile> {
         "lastUpdated" : FieldValue.serverTimestamp()
       }, SetOptions(merge: true),);
 
-      await FirebaseFirestore.instance
-          .collection('address')
-          .doc(city)
-          .set({
-        userid : {
-          "name" : name,
-          "fatherName" : fatherName,
-          "gotra" : gotra,
-          "profilePic" : profilePicUrl
-        }
-      },SetOptions(merge: true));
+      if( (user!.name != name) || (user.fatherName != fatherName) ||
+        (user.profilePic != profilePicUrl) || (user.gotra != gotra)){
+        await FirebaseFirestore.instance
+            .collection('address')
+            .doc(city)
+            .set({
+          userid : {
+            "name" : name,
+            "fatherName" : fatherName,
+            "gotra" : gotra,
+            "profilePic" : profilePicUrl
+          }
+        },SetOptions(merge: true));
+      }else {
+        print("does not to store");
+      }
 
       if(!(citysList.contains(city)) || !(citysList.contains(currentCity))){
         await FirebaseFirestore.instance
