@@ -104,6 +104,7 @@ class ProfileManageState extends State<ProfileManage>{
                             builder: (_) => EditProfile()
                         )
                     );
+                    user = UserDataManager().currentUser;
                     setState(() {});
                   },
                   child: Container(

@@ -4,7 +4,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 
 class ShowPersonInfo extends StatefulWidget{
   final String userId;
-  const ShowPersonInfo({super.key, required this.userId});
+  final String city;
+  const ShowPersonInfo({super.key, required this.userId, required this.city});
 
   @override
   State<ShowPersonInfo> createState() => _ShowPersonInfo();
@@ -22,7 +23,12 @@ class _ShowPersonInfo extends State<ShowPersonInfo> {
 
   Future<void> _getUserInfo() async{
     try{
-      DocumentSnapshot userData = await FirebaseFirestore.instance.collection("users").doc(widget.userId).get();
+      DocumentSnapshot userData = await FirebaseFirestore.instance
+                                  .collection("EngAddress")
+                                  .doc("CitysData")
+                                  .collection(widget.city)
+                                  .doc(widget.userId)
+                                  .get();
       userInfo = userData.data() as Map<String, dynamic>?;
 
       setState(() {
@@ -161,7 +167,7 @@ class _ShowPersonInfo extends State<ShowPersonInfo> {
             ),
             const SizedBox(height: 6),
             Text(
-              userInfo?['gotra'] ?? "",
+              (userInfo?['gotra'] ?? "").trim(),
               style:const TextStyle(
                 fontSize: 16,
                 color: Color(0xFF666AC6),
@@ -195,7 +201,7 @@ class _ShowPersonInfo extends State<ShowPersonInfo> {
               GridView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: (userInfo?['relations']).length ?? 0,
+                itemCount: (userInfo?['relations'] ?? []).length,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   crossAxisSpacing: 8,

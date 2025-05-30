@@ -11,6 +11,7 @@ class ItemSelectionScreen extends StatefulWidget {
 }
 
 class ItemSelectionScreenState extends State<ItemSelectionScreen> {
+  final TextEditingController _searchController = TextEditingController();
   String? selectedItem1;
   String? selectedItem2;
 
@@ -2171,7 +2172,7 @@ class ItemSelectionScreenState extends State<ItemSelectionScreen> {
     super.initState();
   }
   void _showItemDialog() async {
-    final TextEditingController _searchController = TextEditingController();
+
     List<String> fltdlist = bhinmal.keys.toList();
     String searchQuery= '';
     final result = await showDialog<String>(
@@ -2253,7 +2254,6 @@ class ItemSelectionScreenState extends State<ItemSelectionScreen> {
                               style: TextStyle(
                                 color: Color(0xFF23255D),
                                 fontWeight: FontWeight.w500,
-
                               ),
                             ),
                             onTap: () {
@@ -2294,7 +2294,6 @@ class ItemSelectionScreenState extends State<ItemSelectionScreen> {
       }
     }
     _searchController.clear();
-    _searchController.dispose();
   }
 
   List<String> splitAndKeep(String input, List<String> delimiters) {

@@ -340,7 +340,7 @@ class _ContactScreen extends State<ContactScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => ShowPersonInfo(userId: "pipa_kshatriya_darji")
+                                  builder: (context) => ShowPersonInfo(userId: filteredCityPeoplesList[index], city: city)
                                 )
                               );
                             },
