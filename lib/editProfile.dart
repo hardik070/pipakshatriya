@@ -26,7 +26,7 @@ class EditProfileState extends State<EditProfile> {
 
 
   bool isSaving = false;
-  var user ;
+
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController fatherNameController = TextEditingController();
@@ -2360,7 +2360,6 @@ class EditProfileState extends State<EditProfile> {
   @override
   void initState() {
     super.initState();
-    user = UserDataManager().currentUser;
     emailController.text = UserDataManager().currentUser!.email;
     nameController.text = UserDataManager().currentUser!.name;
     fatherNameController.text = UserDataManager().currentUser!.fatherName;
@@ -2368,7 +2367,7 @@ class EditProfileState extends State<EditProfile> {
     cityController.text = UserDataManager().currentUser!.actualAddress;
     currentCityController.text = UserDataManager().currentUser!.currentAddress;
     userId = UserDataManager().currentUser!.userId;
-    profilePicUrl = UserDataManager().currentUser!.profilePic;
+    profilePicUrl = UserDataManager().currentUser?.profilePic ?? '';
     numbers = List.from(UserDataManager().currentUser!.phoneNumber);
     relationships = List.from(UserDataManager().currentUser!.relationships);
     if(numbers.isNotEmpty){
@@ -2515,7 +2514,6 @@ class EditProfileState extends State<EditProfile> {
   }
 
   Future<void> _formValidation(BuildContext context) async{
-
     if(nameController.text.trim().isNotEmpty){
       if(fatherNameController.text.trim().isNotEmpty){
         if(gotraController.text.trim().isNotEmpty){
@@ -2610,7 +2608,7 @@ class EditProfileState extends State<EditProfile> {
   }
 
   Future<void> _uploadUserInfoToFirestore() async{
-    var user = UserDataManager().currentUser;
+
     String name = nameController.text.trim();
     String fatherName = fatherNameController.text.trim();
     String gotra = gotraController.text.trim();
@@ -2620,28 +2618,12 @@ class EditProfileState extends State<EditProfile> {
     List<Map<String, String>> relations = relationships.map((eachRelation) => eachRelation).toList();
     String userid = UserDataManager().currentUser!.userId;
 
-    if(UserDataManager().currentUser!.gotra.isEmpty ){
-      try{
-        await FirebaseFirestore.instance
-            .collection('address')
-            .doc(city)
-            .set({
-          userid: {
-            "name": name,
-            "fatherName": fatherName,
-            "gotra": gotra,
-            "profilePic": profilePicUrl
-          }
-        }, SetOptions(merge: true));
-      }catch(e){
-        print(e);
-      }
-    }
-
     try{
       await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userid).update({
+          .collection('address')
+          .doc(city)
+          .collection("users")
+          .doc(userid).set({
         "name" : name,
         "fatherName" : fatherName,
         "gotra" : gotra,
@@ -2649,25 +2631,49 @@ class EditProfileState extends State<EditProfile> {
         "currentAddress" : currentCity,
         "relations" : relations,
         "numbers" : numbers,
-      });
+        "lastUpdated" : FieldValue.serverTimestamp()
+      }, SetOptions(merge: true),);
+
+      await FirebaseFirestore.instance
+          .collection('address')
+          .doc(city)
+          .set({
+        userid : {
+          "name" : name,
+          "fatherName" : fatherName,
+          "gotra" : gotra,
+          "profilePic" : profilePicUrl
+        }
+      },SetOptions(merge: true));
+
+      if(!(citysList.contains(city)) || !(citysList.contains(currentCity))){
+        await FirebaseFirestore.instance
+            .collection('citysList')
+            .doc("citys")
+            .set({
+          city : true,
+          currentCity : true
+        },SetOptions(merge: true));
+      }
+
     }catch (e){
-      print('');
+      print("Error to store on firestore : $e");
     }
 
     try{
       final user = UserModel(
-        name: name,
-        fatherName: fatherName,
-        email: emailController.text.trim(),
-        gotra: gotra,
-        actualAddress: city,
-        currentAddress: currentCity,
-        phoneNumber: numbers,
-        relationships: relationships,
-        loginInfo: UserDataManager().currentUser!.loginInfo,
-        profilePic: UserDataManager().currentUser!.profilePic,
-        contacts: UserDataManager().currentUser!.contacts,
-        userId: userid,
+          name: name,
+          fatherName: fatherName,
+          email: emailController.text.trim(),
+          gotra: gotra,
+          actualAddress: city,
+          currentAddress: currentCity,
+          phoneNumber: numbers,
+          relationships: relationships,
+          loginInfo: UserDataManager().currentUser!.loginInfo,
+          profilePic: UserDataManager().currentUser!.profilePic,
+          contacts: UserDataManager().currentUser!.contacts,
+          userId: UserDataManager().currentUser!.userId
       );
 
       await UserDataManager().updateUser(user);
@@ -2717,14 +2723,14 @@ class EditProfileState extends State<EditProfile> {
     gotraController.dispose();
     cityController.dispose();
     currentCityController.dispose();
-
+    _searchController.dispose();
     for(var controller in _phoneNumbersController){
       controller.dispose();
     }
     super.dispose();
   }
 
-  Future<bool> _showItemDialog(
+  Future<void> _showItemDialog(
       BuildContext context,
       int indexFromPara,
       List<String> elements,
@@ -2831,7 +2837,7 @@ class EditProfileState extends State<EditProfile> {
     );
 
     _searchController.clear();
-    return true;
+    return ;
   }
 
 
@@ -2916,16 +2922,16 @@ class EditProfileState extends State<EditProfile> {
                 Container(),
                 SizedBox(height: 20,),
                 //Divider(color: Color(0x54002785), thickness: 1, height: 20),
-                textBox("Name", Icons.person_rounded, TextInputType.name, nameController, 20, user.name.isNotEmpty),
+                textBox("Name", Icons.person_rounded, TextInputType.name, nameController, 20),
                 SizedBox(height: 15,),
                 //Divider(color: Color(0x54002785), thickness: 1, height: 20),
-                textBox("E-mail", Icons.email_rounded, TextInputType.emailAddress, emailController, 30, user.email.isNotEmpty),
+                textBox("E-mail", Icons.email_rounded, TextInputType.emailAddress, emailController, 30),
                 SizedBox(height: 15,),
                 //Divider(color: Color(0x54002785), thickness: 1, height: 20),
-                textBox("Father name", Icons.account_circle_rounded, TextInputType.text, fatherNameController, 20, user.fatherName.isNotEmpty),
+                textBox("Father name", Icons.account_circle_rounded, TextInputType.text, fatherNameController, 20),
                 SizedBox(height: 15,),
                 //Divider(color: Color(0x54002785), thickness: 1, height: 20),
-                textBox("Gotra", Icons.temple_hindu_rounded, TextInputType.text, gotraController, 20, user.gotra.isNotEmpty),
+                textBox("Gotra", Icons.temple_hindu_rounded, TextInputType.text, gotraController, 20),
                 fltdListGotra.isNotEmpty ?
                 ConstrainedBox(
                   constraints: BoxConstraints(
@@ -2944,7 +2950,6 @@ class EditProfileState extends State<EditProfile> {
 
                               return GestureDetector(
                                 onTap: () {
-                                  FocusManager.instance.primaryFocus?.unfocus();
                                   gotraController.text = fltdListGotra[index];
                                   setState(() {
                                     fltdListGotra = [];
@@ -2972,7 +2977,7 @@ class EditProfileState extends State<EditProfile> {
                 Container(),
                 SizedBox(height: 15,),
                 //Divider(color: Color(0x54002785), thickness: 1, height: 20),
-                textBox("Address", Icons.location_city_rounded, TextInputType.text, cityController, 20, user.actualAddress.isNotEmpty),
+                textBox("Address", Icons.location_city_rounded, TextInputType.text, cityController, 20),
                 fltdCityList.isNotEmpty ?
                 ConstrainedBox(
                   constraints: BoxConstraints(
@@ -2991,7 +2996,6 @@ class EditProfileState extends State<EditProfile> {
 
                               return GestureDetector(
                                 onTap: () {
-                                  FocusManager.instance.primaryFocus?.unfocus();
                                   cityController.text = fltdCityList[index];
                                   setState(() {
                                     fltdCityList = [];
@@ -3018,7 +3022,7 @@ class EditProfileState extends State<EditProfile> {
                     :
                 Container(),
                 SizedBox(height: 15,),
-                textBox("Current living address", Icons.location_history, TextInputType.text, currentCityController, 20, false),
+                textBox("Current living address", Icons.location_history, TextInputType.text, currentCityController, 20),
                 fltdCurrentCityList.isNotEmpty ?
                 ConstrainedBox(
                   constraints: BoxConstraints(
@@ -3037,7 +3041,6 @@ class EditProfileState extends State<EditProfile> {
 
                               return GestureDetector(
                                 onTap: () {
-                                  FocusManager.instance.primaryFocus?.unfocus();
                                   currentCityController.text = fltdCurrentCityList[index];
                                   setState(() {
                                     fltdCurrentCityList = [];
@@ -3102,23 +3105,16 @@ class EditProfileState extends State<EditProfile> {
                                 children: [
 
                                   Expanded(
-                                    child: textBox("Number${index+1}", Icons.phone, TextInputType.phone, controller, 10,false),
+                                    child: textBox("Number${index+1}", Icons.phone, TextInputType.phone, controller, 10),
                                   ),
 
 
                                   const SizedBox(width: 10),
 
-
                                   /// Delete Button
-                                  SizedBox(
-                                    height: 50,
-                                    width: 40,
-                                    child: GestureDetector(
-                                      onTap: (){
-                                        _deleteOption(index, controller);
-                                      },
-                                      child: Icon(Icons.delete, color: Color(0xFF666AC6),),
-                                    ),
+                                  IconButton(
+                                    icon: const Icon(Icons.close_rounded, color: Colors.black54, size: 30),
+                                    onPressed: () => _deleteOption(index, controller),
                                   ),
                                 ],
                               ),
@@ -3233,7 +3229,7 @@ class EditProfileState extends State<EditProfile> {
                                           setState(() {});
                                         },
                                         child: Container(
-                                          padding: EdgeInsets.symmetric(horizontal: 5),
+                                            padding: EdgeInsets.symmetric(horizontal: 5),
                                             height: 50,
                                             decoration: BoxDecoration(
                                               color: Color(0xA9666AC6),
@@ -3297,14 +3293,13 @@ class EditProfileState extends State<EditProfile> {
       ),
     );
   }
+
+
+
   String citySearchQuery = "";
-  Widget textBox(
-      final String hint,
-      final prefixIcon,
-      final inputType,
-      final TextEditingController controller,
-      int maxLength,
-      final isTypeingEnabled,) {
+
+
+  Widget textBox(String hint, final prefixIcon, final inputType, TextEditingController controller, int maxLength) {
     return TextFormField(
       controller: controller,
       decoration: InputDecoration(
@@ -3330,6 +3325,25 @@ class EditProfileState extends State<EditProfile> {
           borderRadius: BorderRadius.circular(12),
         ),
         prefixIcon: Icon(prefixIcon, color: Color(0xff130097), size: 20),
+        suffixIcon: controller == cityController ||
+            controller == currentCityController ||
+            controller == gotraController ?
+        GestureDetector(onTap: (){
+          setState(() {
+            if(controller == cityController){
+              cityController.clear();
+              fltdCityList = [];
+            }else if(controller == currentCityController){
+              fltdCurrentCityList = [];
+              currentCityController.clear();
+            }else if(controller == gotraController){
+              fltdListGotra = [];
+              gotraController.clear();
+            }
+          });
+        }, child: Icon(Icons.close_rounded, color: Colors.deepPurpleAccent,),)
+            :
+        null,
         filled: true,
         fillColor: const Color(0xFFF1F4F8),
         counterText: '',
@@ -3357,8 +3371,9 @@ class EditProfileState extends State<EditProfile> {
 
       },
       maxLength: maxLength,
-      readOnly: isTypeingEnabled,
+      readOnly: controller == emailController ? true : false,
       keyboardType: inputType,
     );
   }
+
 }
