@@ -49,11 +49,14 @@ class CityTile extends StatelessWidget{
 
 class PersonTile extends StatelessWidget{
   final String name;
-  final String village;
-
+  final String gotra;
+  final String fatherName;
+  final String profilePic;
   const PersonTile({
     required this.name,
-    required this.village,
+    required this.gotra,
+    required this.fatherName,
+    required this.profilePic,
     super.key
   }) ;
 
@@ -111,29 +114,27 @@ class PersonTile extends StatelessWidget{
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
-                height: 45,
-                width: 45,
-                child: Stack(
-                  children: [
-                    Container(
-                      width: 45.0,
-                      height: 45.0,
-                      clipBehavior: Clip.antiAlias,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                      ),
-                      child: CachedNetworkImage(
-                        imageUrl: //data['gender']?? false ?
-                        "https://imgs.search.brave.com/ek_J28ierOL93E0C7btwCHh1V0nZyPAKISxj654meLg/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS1waG90/by9jYXJ0b29uLWdp/cmwtd2l0aC1sb25n/LWhhaXItYm9vdHMt/c3RhbmRpbmctZnJv/bnQtd2hpdGUtYmFj/a2dyb3VuZC1nZW5l/cmF0aXZlLWFpXzkw/MDgzMy0zODA0My5q/cGc_c2VtdD1haXNf/aHlicmlk",
-                          //  :
-                       // "https://imgs.search.brave.com/Zz7rIOCJbxFVbkrRHGPdpNUfsyd6wne8UTisdu-3pV0/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS1waG90/by9jYXJ0b29uLWJv/eS13aXRoLWdyZWVu/LWV5ZXMtYmx1ZS1z/aGlydF8xMDI4ODgy/LTEwNjI2MC5qcGc_/c2VtdD1haXNfaHli/cmlk",
-
-                        placeholder: (context, url) => CircularProgressIndicator(),
-                        errorWidget: (context, url, error) => Icon(Icons.error, color: Colors.red),
-                        fit: BoxFit.cover,
-                      ),
+                height: 50,
+                width: 50,
+                child: Container(
+                  width: 50.0,
+                  height: 50.0,
+                  clipBehavior: Clip.antiAlias,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                  ),
+                  child: CachedNetworkImage(
+                    imageUrl: profilePic,
+                    placeholder: (context, url) => CircleAvatar(
+                      radius: 50,
+                      child: Icon(Icons.person),
                     ),
-                  ],
+                    errorWidget: (context, url, error) => CircleAvatar(
+                      radius: 50,
+                      child: Icon(Icons.error_outline_rounded),
+                    ),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
               // Container(
@@ -158,46 +159,22 @@ class PersonTile extends StatelessWidget{
                   children: [
                     Text(
                       name ,
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 17.0,
+                      style: GoogleFonts.poppins(
+                        fontSize: 18.0,
                         color: Colors.white,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w400,
                         //height: 1,
                       ),
                     ),
                     //message.isNotEmpty ?
-                    Row(
-                      children: [
-                        Text("hello"
-                        //  message.length > 30 ?
-                       //   message.substring(0, 30) + '...' : message, // Display the time appropriately
-                          ,style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.white70,
-                            //   fontWeight: FontWeight.w500
-                          ),
-                        ),
-                        SizedBox(
-                          height: 22,
-                          width: 26,
-                          child: Card(
-                              child: Center(
-                                child: Text(
-                                  //receiverIDs.length.toString(),
-                                  "hello",
-                                  style: TextStyle(
-                                      fontSize: 10,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w500
-                                    //   fontWeight: FontWeight.w500
-                                  ),
-                                ),
-                              )
-                          ),
-                        )
-                      ],
-                    )
+                    Text(
+                      "$fatherName $gotra",
+                      style: GoogleFonts.poppins(
+                          fontSize: 14,
+                          color: Colors.white70,
+                          fontWeight: FontWeight.w400
+                      ),
+                    ),
 
                     // "data['lastSeen']" != null ? Text(
                     //   "Last Online : formattedTime", // Display the time appropriately

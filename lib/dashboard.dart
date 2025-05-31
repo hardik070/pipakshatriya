@@ -24,6 +24,7 @@ class _Dashboard extends State<Dashboard> {
   @override
   void initState() {
     super.initState();
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if(UserDataManager().currentUser!.relationships.isEmpty
           || UserDataManager().currentUser!.name.isEmpty

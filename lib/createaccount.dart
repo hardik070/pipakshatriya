@@ -131,6 +131,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
     String email = emailController.text;
     String password = passwordController.text;
     String name = userNameController.text.trim();
+    name = name[0].toUpperCase()+name.substring(1);
 
     try{
       await _auth.createUserWithEmailAndPassword(

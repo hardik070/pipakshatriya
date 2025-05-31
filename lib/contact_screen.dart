@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pipakshatriya/datamodels/datamanager/data_manager.dart';
 import 'helper_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
@@ -31,65 +32,43 @@ class _ContactScreen extends State<ContactScreen> {
 
   //for citys list geting
   Future<void> _fatchCitys() async{
-    final DocumentReference engAddress = FirebaseFirestore.instance.collection('EngAddress').doc('CitysData');
-    final DocumentReference hiAddress = FirebaseFirestore.instance.collection('HiAddress').doc('GaonData');
+    final DocumentReference citysData = FirebaseFirestore.instance.collection('minUsersData').doc('citysList');
+    DocumentSnapshot cityDataDoc = await citysData.get();
 
-    if(language){
-      DocumentSnapshot cityDataDoc = await engAddress.get();
-
-      final Map<String, dynamic> cityData = cityDataDoc.data() as Map<String, dynamic>;
-      citysList = cityData.keys.toList();
-      setState(() {
-        filteredCitysList = citysList;
-      });
-    }else {
-      DocumentSnapshot cityDataDoc = await hiAddress.get();
-      final Map<String, dynamic> cityData = cityDataDoc.data() as Map<String, dynamic>;
-      citysList = cityData.keys.toList();
-      setState(() {
-        filteredCitysList = citysList;
-      });
-    }
+    final Map<String, dynamic> cityData = cityDataDoc.data() as Map<String, dynamic>;
+    citysList = cityData.keys.toList();
+    setState(() {
+      filteredCitysList = citysList;
+    });
   }
 
   //for city peoples list getting
   Future<void> _fatchCitysPeople(String city) async{
+    filteredCityPeoplesList.clear();
+    final CollectionReference citysPeoples = FirebaseFirestore.instance
+        .collection('minUsersData')
+        .doc('citysList')
+        .collection(city);
+    final QuerySnapshot cityPeoplesDocsData = await citysPeoples.get();
 
-    final DocumentReference engAddress = FirebaseFirestore.instance
-        .collection('EngAddress')
-        .doc('SaveReadPeople')
-        .collection('PeoplesList')
-        .doc(city);
-    final DocumentReference hiAddress = FirebaseFirestore.instance
-        .collection('HiAddress')
-        .doc('SaveReadPeople')
-        .collection('PeoplesList')
-        .doc(city);
+    for(var doc in cityPeoplesDocsData.docs){
+      Map<String, dynamic> peoplesDataList = doc.data() as Map<String, dynamic>;
 
-    if(language){
-      DocumentSnapshot cityPeoplesDataDoc = await engAddress.get();
-      final Map<String, dynamic> cityPeoplesData = cityPeoplesDataDoc.data() as Map<String, dynamic>;
-      cityPeopleList = cityPeoplesData['peoples'];
-      setState(() {
-        filteredCityPeoplesList = cityPeopleList;
-        cityPeopleIsLoading = false;
-      });
-    }else {
-      DocumentSnapshot cityPeoplesDataDoc = await hiAddress.get();
-      final Map<String, dynamic> cityPeoplesData = cityPeoplesDataDoc.data() as Map<String, dynamic>;
-      cityPeopleList = cityPeoplesData['peoples'];
-      setState(() {
-        filteredCityPeoplesList = cityPeopleList;
-        cityPeopleIsLoading = false;
-      });
+      for(var item in peoplesDataList.entries){
+        filteredCityPeoplesList.add(item);
+      }
     }
+
+    setState(() {
+      cityPeopleIsLoading = false;
+    });
   }
 
 
   @override
   void initState(){
-    _fatchCitys();
     super.initState();
+    _fatchCitys();
   }
 
   @override
@@ -323,28 +302,26 @@ class _ContactScreen extends State<ContactScreen> {
                       },
                       child: ListView.builder(
                         itemCount: filteredCityPeoplesList.length,
-                        cacheExtent: 50000,
+                        cacheExtent: 5000,
                         padding: EdgeInsets.symmetric(horizontal: 5, vertical: 13),
                         itemBuilder: (context, index) {
-                          String person1 ='';
-                          String person2='';
-                          String fullName= filteredCityPeoplesList[index];
+                          if(filteredCityPeoplesList[index].key == UserDataManager().currentUser!.userId) return SizedBox.shrink();
+                          final personData= filteredCityPeoplesList[index].value;
+                          final name = personData["name"];
+                          final fatherName = personData["fatherName"];
+                          final gotra = personData["gotra"];
+                          final profilePic = personData["profilePic"];
 
-                          List<String> parts = language ? fullName.split("(S-o)") : fullName.split("(पुत्र)");
-                          person1 = parts[0].trim(); // "Mr Shantilal ji"
-                          person2= parts.length > 1 ? parts[1].trim() : "";
                           return GestureDetector(
                             onTap: ()async{
-                              person = filteredCityPeoplesList[index];
-                              //_fatchPersonInfo(city, person);
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => ShowPersonInfo(userId: filteredCityPeoplesList[index], city: city)
+                                  builder: (context) => ShowPersonInfo(userId: filteredCityPeoplesList[index].key)
                                 )
                               );
                             },
-                            child: CityTile(city: person1 ,state: person2),
+                            child: PersonTile(name: name, gotra: gotra, fatherName: fatherName, profilePic: profilePic),
                           );
                         },
                       ),

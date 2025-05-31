@@ -4,8 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 
 class ShowPersonInfo extends StatefulWidget{
   final String userId;
-  final String city;
-  const ShowPersonInfo({super.key, required this.userId, required this.city});
+  const ShowPersonInfo({super.key, required this.userId});
 
   @override
   State<ShowPersonInfo> createState() => _ShowPersonInfo();
@@ -24,9 +23,7 @@ class _ShowPersonInfo extends State<ShowPersonInfo> {
   Future<void> _getUserInfo() async{
     try{
       DocumentSnapshot userData = await FirebaseFirestore.instance
-                                  .collection("EngAddress")
-                                  .doc("CitysData")
-                                  .collection(widget.city)
+                                  .collection("users")
                                   .doc(widget.userId)
                                   .get();
       userInfo = userData.data() as Map<String, dynamic>?;
@@ -343,7 +340,7 @@ class ProfileField extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: Colors.black.withAlpha((0.03 * 255).toInt()),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),

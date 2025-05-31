@@ -26,6 +26,7 @@ class EditProfileState extends State<EditProfile> {
 
 
   bool isSaving = false;
+  bool isImageUploading = false;
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
@@ -2388,6 +2389,7 @@ class EditProfileState extends State<EditProfile> {
   String? uploadedImageUrl;
   File? _profileImage;
   XFile? pickedFile;
+  File? compresedImage;
 
   // Future<void> pickAndUploadImage() async {
   //   statusId = true;
@@ -2442,24 +2444,22 @@ class EditProfileState extends State<EditProfile> {
   //   }
   //   statusId = false;
   // }
-  Future<void> pickAndUploadImage() async {
-    try {
+  Future<void> _pickImage() async {
+    pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile == null) {
+      return;
+    }
+    setState(() {
+      profilePicUrl = '';
+      _profileImage = File(pickedFile!.path);
+    });
 
-      pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-      if (pickedFile == null) {
-        return;
-      }
-
-      setState(() {
-        _profileImage = File(pickedFile!.path);
-      });
-
+    if (pickedFile != null) {
       final file = File(pickedFile!.path);
       final ext = path.extension(file.path).toLowerCase(); // .jpg or .png
 
       int quality = (ext == '.jpg' || ext == '.jpeg') ? 20 : 70;
 
-      // 2. Compress accordingly
       final dir = await getTemporaryDirectory();
       final targetPath = path.join(dir.path, "compressed.jpg");
 
@@ -2468,15 +2468,19 @@ class EditProfileState extends State<EditProfile> {
         targetPath,
         quality: quality,
       );
+      compresedImage = File(compressedFile!.path);
+    }
+  }
 
+  Future<bool> _uploadImage() async{
 
-      File? compresedImage = File(compressedFile!.path);
-      // Step 2: Create unique file name
+    try{
+      _uploadProgress = 0.0;
       String fileName = basename("${userId}_profilePic");
       Reference storageRef = FirebaseStorage.instance.ref().child('profilePic/$fileName');
 
       // Step 3: Upload image
-      UploadTask uploadTask = storageRef.putFile(compresedImage);
+      UploadTask uploadTask = storageRef.putFile(compresedImage!);
 
       uploadTask.snapshotEvents.listen((TaskSnapshot snapshot) {
         final progress = snapshot.bytesTransferred / snapshot.totalBytes;
@@ -2494,23 +2498,14 @@ class EditProfileState extends State<EditProfile> {
       await UserDataManager().updateUserField((user) {
         user.profilePic = uploadedImageUrl!;
       });
-      try{
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(userId).update({
-          "profilePic" : uploadedImageUrl
-        });
-      }catch (e){
-        print("Error to store on firestore : $e");
-      }
       setState(() {
         profilePicUrl = uploadedImageUrl!;
       });
-
-
-    } catch (e) {
-      print('Error uploading image: $e');
+      return true;
+    }catch(e){
+      print(e);
     }
+    return false;
   }
 
   Future<void> _formValidation(BuildContext context) async{
@@ -2616,15 +2611,25 @@ class EditProfileState extends State<EditProfile> {
     String city = cityController.text.trim();
     String currentCity = currentCityController.text.trim();
     List<String> numbers = _phoneNumbersController.map((
-        eachNumber) => eachNumber.text).toList();
+                           eachNumber) => eachNumber.text).toList();
     List<Map<String, String>> relations = relationships.map((
-        eachRelation) => eachRelation).toList();
+                            eachRelation) => eachRelation).toList();
     String userid = UserDataManager().currentUser!.userId;
     String subDocId = UserDataManager().currentUser!.subDocId;
+    bool isNewImageSet = false;
+    name = name[0].toUpperCase()+name.substring(1);
+    fatherName = fatherName[0].toUpperCase()+fatherName.substring(1);
+    gotra = gotra[0].toUpperCase()+gotra.substring(1);
+    city = city[0].toUpperCase()+city.substring(1);
+    currentCity = currentCity[0].toUpperCase()+currentCity.substring(1);
+    if(pickedFile != null){
+      isNewImageSet = await _uploadImage();
+    }
 
     if(subDocId.isEmpty){
       if ((user!.name != name) || (user.fatherName != fatherName) ||
-          (user.profilePic != profilePicUrl) || (user.gotra != gotra)) {
+          (user.profilePic != profilePicUrl) || (user.gotra != gotra)
+          || isNewImageSet) {
         try {
           await FirebaseFirestore.instance
               .collection('minUsersData')
@@ -2681,7 +2686,8 @@ class EditProfileState extends State<EditProfile> {
       }
     }else {
       if ((user!.name != name) || (user.fatherName != fatherName) ||
-          (user.profilePic != profilePicUrl) || (user.gotra != gotra)) {
+          (user.profilePic != profilePicUrl) || (user.gotra != gotra)
+          || isNewImageSet) {
         try {
           await FirebaseFirestore.instance
               .collection('minUsersData')
@@ -2693,7 +2699,7 @@ class EditProfileState extends State<EditProfile> {
               "name" : name,
               "fatherName" : fatherName,
               "gotra" : gotra,
-              "profilePic" : profilePicUrl
+              "profilePic" : user.profilePic
             },
           }, SetOptions(merge: true));
         } catch (e) {
@@ -2705,7 +2711,7 @@ class EditProfileState extends State<EditProfile> {
     try {
       await FirebaseFirestore.instance
           .collection('users')
-          .doc(userid).set({
+          .doc(userid).update({
         "name": name,
         "fatherName": fatherName,
         "gotra": gotra,
@@ -2714,15 +2720,15 @@ class EditProfileState extends State<EditProfile> {
         "relations": relations,
         "numbers": numbers,
         "lastUpdated": FieldValue.serverTimestamp(),
-        "profilePic": profilePicUrl,
+        "profilePic": user.profilePic,
         "subDocId": subDocId
-      }, SetOptions(merge: true),);
+      });
 
 
       if (!(citysList.contains(city)) || !(citysList.contains(currentCity))) {
         await FirebaseFirestore.instance
-            .collection('citysList')
-            .doc("citys")
+            .collection('minUsersData')
+            .doc("citysList")
             .set({
           city: true,
           currentCity: true
@@ -2944,8 +2950,7 @@ class EditProfileState extends State<EditProfile> {
                 Center(
                     child: GestureDetector(
                       onTap: () async{
-                        profilePicUrl = '';
-                        await pickAndUploadImage();
+                        await _pickImage();
                       },
                       child: SizedBox(
                           height: 300,
@@ -2984,14 +2989,12 @@ class EditProfileState extends State<EditProfile> {
                     )
                 ),
                 SizedBox(height: 15,),
-                pickedFile != null ?
-                LinearProgressIndicator(
+                _uploadProgress != 0 ? LinearProgressIndicator(
                   value: _uploadProgress, // between 0 and 1
                   minHeight: 6,
                   backgroundColor: Color(0xFFB3B5EF),
                   valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF666AC6),),
-                ) :
-                Container(),
+                ) : SizedBox.shrink(),
                 SizedBox(height: 20,),
                 //Divider(color: Color(0x54002785), thickness: 1, height: 20),
                 textBox("Name", Icons.person_rounded, TextInputType.name, nameController, 20, true),
