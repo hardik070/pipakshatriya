@@ -120,7 +120,8 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
               token: data['userId'] ?? '', loginTime: DateTime.now()),
           contacts: [],
           currentAddress: data['currentAddress'] ?? '',
-          userId: data['userId'] ?? ''
+          userId: data['userId'] ?? '',
+          subDocId: data['subDocId'] ?? ''
       );
       await UserDataManager().updateUser(user);
     }
@@ -172,7 +173,8 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
         'name' : name,
         'email' : email,
         'userId' : userId,
-        'createdAt' : FieldValue.serverTimestamp()
+        'createdAt' : FieldValue.serverTimestamp(),
+        'subDocId' : ''
       });
 
      await storeHiveAccountCreation(email, name, userId);
@@ -203,7 +205,8 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
           loginInfo: LoginInfo(token: userId, loginTime: DateTime.now()),
           contacts: [],
           currentAddress: '',
-          userId: userId
+          userId: userId,
+          subDocId: ''
       );
 
       await UserDataManager().updateUser(user);

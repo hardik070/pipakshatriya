@@ -2607,66 +2607,132 @@ class EditProfileState extends State<EditProfile> {
     }
   }
 
-  Future<void> _uploadUserInfoToFirestore() async{
 
+  Future<void> _uploadUserInfoToFirestore() async {
     var user = UserDataManager().currentUser;
     String name = nameController.text.trim();
     String fatherName = fatherNameController.text.trim();
     String gotra = gotraController.text.trim();
     String city = cityController.text.trim();
     String currentCity = currentCityController.text.trim();
-    List<String> numbers = _phoneNumbersController.map((eachNumber) => eachNumber.text).toList();
-    List<Map<String, String>> relations = relationships.map((eachRelation) => eachRelation).toList();
+    List<String> numbers = _phoneNumbersController.map((
+        eachNumber) => eachNumber.text).toList();
+    List<Map<String, String>> relations = relationships.map((
+        eachRelation) => eachRelation).toList();
     String userid = UserDataManager().currentUser!.userId;
+    String subDocId = UserDataManager().currentUser!.subDocId;
 
-    try{
+    if(subDocId.isEmpty){
+      if ((user!.name != name) || (user.fatherName != fatherName) ||
+          (user.profilePic != profilePicUrl) || (user.gotra != gotra)) {
+        try {
+          await FirebaseFirestore.instance
+              .collection('minUsersData')
+              .doc("citysList")
+              .collection(city)
+              .doc("doc1")
+              .set({
+            userid : {
+              "name" : name,
+              "fatherName" : fatherName,
+              "gotra" : gotra,
+              "profilePic" : profilePicUrl
+            },
+          }, SetOptions(merge: true));
+          subDocId = "doc1";
+        } catch (e) {
+
+          try {
+            await FirebaseFirestore.instance
+                .collection('minUsersData')
+                .doc("citysList")
+                .collection(city)
+                .doc("doc2")
+                .set({
+              userid : {
+                "name" : name,
+                "fatherName" : fatherName,
+                "gotra" : gotra,
+                "profilePic" : profilePicUrl
+              },
+            }, SetOptions(merge: true));
+            subDocId = "doc2";
+          } catch (e) {
+            try {
+              await FirebaseFirestore.instance
+                  .collection('minUsersData')
+                  .doc("citysList")
+                  .collection(city)
+                  .doc("doc3")
+                  .set({
+                userid : {
+                  "name" : name,
+                  "fatherName" : fatherName,
+                  "gotra" : gotra,
+                  "profilePic" : profilePicUrl
+                },
+              }, SetOptions(merge: true));
+              subDocId = "doc3";
+            } catch (e) {
+              print(e);
+            }
+          }
+        }
+      }
+    }else {
+      if ((user!.name != name) || (user.fatherName != fatherName) ||
+          (user.profilePic != profilePicUrl) || (user.gotra != gotra)) {
+        try {
+          await FirebaseFirestore.instance
+              .collection('minUsersData')
+              .doc("citysList")
+              .collection(city)
+              .doc(subDocId)
+              .set({
+            userid : {
+              "name" : name,
+              "fatherName" : fatherName,
+              "gotra" : gotra,
+              "profilePic" : profilePicUrl
+            },
+          }, SetOptions(merge: true));
+        } catch (e) {
+          print(e);
+        }
+      }
+    }
+
+    try {
       await FirebaseFirestore.instance
-          .collection('address')
-          .doc(city)
-          .collection("users")
+          .collection('users')
           .doc(userid).set({
-        "name" : name,
-        "fatherName" : fatherName,
-        "gotra" : gotra,
-        "actualAddress" : city,
-        "currentAddress" : currentCity,
-        "relations" : relations,
-        "numbers" : numbers,
-        "lastUpdated" : FieldValue.serverTimestamp()
+        "name": name,
+        "fatherName": fatherName,
+        "gotra": gotra,
+        "actualAddress": city,
+        "currentAddress": currentCity,
+        "relations": relations,
+        "numbers": numbers,
+        "lastUpdated": FieldValue.serverTimestamp(),
+        "profilePic": profilePicUrl,
+        "subDocId": subDocId
       }, SetOptions(merge: true),);
 
-      if( (user!.name != name) || (user.fatherName != fatherName) ||
-        (user.profilePic != profilePicUrl) || (user.gotra != gotra)){
-        await FirebaseFirestore.instance
-            .collection('address')
-            .doc(city)
-            .set({
-          userid : {
-            "name" : name,
-            "fatherName" : fatherName,
-            "gotra" : gotra,
-            "profilePic" : profilePicUrl
-          }
-        },SetOptions(merge: true));
-      }else {
-        print("does not to store");
-      }
 
-      if(!(citysList.contains(city)) || !(citysList.contains(currentCity))){
+      if (!(citysList.contains(city)) || !(citysList.contains(currentCity))) {
         await FirebaseFirestore.instance
             .collection('citysList')
             .doc("citys")
             .set({
-          city : true,
-          currentCity : true
-        },SetOptions(merge: true));
+          city: true,
+          currentCity: true
+        }, SetOptions(merge: true));
       }
-
-    }catch (e){
+    } catch (e) {
       print("Error to store on firestore : $e");
     }
 
-    try{
+    try {
       final user = UserModel(
           name: name,
           fatherName: fatherName,
@@ -2679,14 +2745,14 @@ class EditProfileState extends State<EditProfile> {
           loginInfo: UserDataManager().currentUser!.loginInfo,
           profilePic: UserDataManager().currentUser!.profilePic,
           contacts: UserDataManager().currentUser!.contacts,
-          userId: UserDataManager().currentUser!.userId
+          userId: UserDataManager().currentUser!.userId,
+          subDocId: subDocId
       );
 
       await UserDataManager().updateUser(user);
-    }catch (e){
+    } catch (e) {
       print(e);
     }
-
   }
 
   void createNumberController() {
@@ -2928,16 +2994,16 @@ class EditProfileState extends State<EditProfile> {
                 Container(),
                 SizedBox(height: 20,),
                 //Divider(color: Color(0x54002785), thickness: 1, height: 20),
-                textBox("Name", Icons.person_rounded, TextInputType.name, nameController, 20),
+                textBox("Name", Icons.person_rounded, TextInputType.name, nameController, 20, true),
                 SizedBox(height: 15,),
                 //Divider(color: Color(0x54002785), thickness: 1, height: 20),
-                textBox("E-mail", Icons.email_rounded, TextInputType.emailAddress, emailController, 30),
+                textBox("E-mail", Icons.email_rounded, TextInputType.emailAddress, emailController, 30, false),
                 SizedBox(height: 15,),
                 //Divider(color: Color(0x54002785), thickness: 1, height: 20),
-                textBox("Father name", Icons.account_circle_rounded, TextInputType.text, fatherNameController, 20),
+                textBox("Father name", Icons.account_circle_rounded, TextInputType.text, fatherNameController, 20, true),
                 SizedBox(height: 15,),
                 //Divider(color: Color(0x54002785), thickness: 1, height: 20),
-                textBox("Gotra", Icons.temple_hindu_rounded, TextInputType.text, gotraController, 20),
+                textBox("Gotra", Icons.temple_hindu_rounded, TextInputType.text, gotraController, 20, true),
                 fltdListGotra.isNotEmpty ?
                 ConstrainedBox(
                   constraints: BoxConstraints(
@@ -2983,7 +3049,7 @@ class EditProfileState extends State<EditProfile> {
                 Container(),
                 SizedBox(height: 15,),
                 //Divider(color: Color(0x54002785), thickness: 1, height: 20),
-                textBox("Address", Icons.location_city_rounded, TextInputType.text, cityController, 20),
+                textBox("Address", Icons.location_city_rounded, TextInputType.text, cityController, 20, UserDataManager().currentUser!.actualAddress.isEmpty),
                 fltdCityList.isNotEmpty ?
                 ConstrainedBox(
                   constraints: BoxConstraints(
@@ -3028,7 +3094,7 @@ class EditProfileState extends State<EditProfile> {
                     :
                 Container(),
                 SizedBox(height: 15,),
-                textBox("Current living address", Icons.location_history, TextInputType.text, currentCityController, 20),
+                textBox("Current living address", Icons.location_history, TextInputType.text, currentCityController, 20, true),
                 fltdCurrentCityList.isNotEmpty ?
                 ConstrainedBox(
                   constraints: BoxConstraints(
@@ -3073,6 +3139,7 @@ class EditProfileState extends State<EditProfile> {
                     :
                 Container(),
                 SizedBox(height: 25),
+                //phone number
                 Card(
                     color: Colors.white,
                     child: Padding(
@@ -3111,16 +3178,22 @@ class EditProfileState extends State<EditProfile> {
                                 children: [
 
                                   Expanded(
-                                    child: textBox("Number${index+1}", Icons.phone, TextInputType.phone, controller, 10),
+                                    child: textBox("Number${index+1}", Icons.phone, TextInputType.phone, controller, 10, true),
                                   ),
 
 
                                   const SizedBox(width: 10),
 
                                   /// Delete Button
-                                  IconButton(
-                                    icon: const Icon(Icons.close_rounded, color: Colors.black54, size: 30),
-                                    onPressed: () => _deleteOption(index, controller),
+                                  SizedBox(
+                                    height: 50,
+                                    width: 40,
+                                    child: GestureDetector(
+                                      onTap: (){
+                                        _deleteOption(index, controller);
+                                      },
+                                      child: Icon(Icons.delete, color: Color(0xFF666AC6),),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -3131,6 +3204,7 @@ class EditProfileState extends State<EditProfile> {
                     )
                 ),
                 SizedBox(height: 25),
+                //relations
                 Card(
                     color: Colors.white,
                     child: Padding(
@@ -3305,7 +3379,7 @@ class EditProfileState extends State<EditProfile> {
   String citySearchQuery = "";
 
 
-  Widget textBox(String hint, final prefixIcon, final inputType, TextEditingController controller, int maxLength) {
+  Widget textBox(String hint, final prefixIcon, final inputType, TextEditingController controller, int maxLength, bool isTypingEndabled) {
     return TextFormField(
       controller: controller,
       decoration: InputDecoration(
@@ -3331,7 +3405,7 @@ class EditProfileState extends State<EditProfile> {
           borderRadius: BorderRadius.circular(12),
         ),
         prefixIcon: Icon(prefixIcon, color: Color(0xff130097), size: 20),
-        suffixIcon: controller == cityController ||
+        suffixIcon: isTypingEndabled && (controller == cityController) ||
             controller == currentCityController ||
             controller == gotraController ?
         GestureDetector(onTap: (){
@@ -3377,7 +3451,7 @@ class EditProfileState extends State<EditProfile> {
 
       },
       maxLength: maxLength,
-      readOnly: controller == emailController ? true : false,
+      readOnly: !isTypingEndabled,
       keyboardType: inputType,
     );
   }

@@ -42,6 +42,9 @@ class UserModel extends HiveObject {
   @HiveField(12)
   String userId;
 
+  @HiveField(13)
+  String subDocId;
+
   UserModel({
     required this.name,
     required this.profilePic,
@@ -54,6 +57,7 @@ class UserModel extends HiveObject {
     required this.loginInfo,
     required this.contacts,
     required this.currentAddress,
-    required this.userId
+    required this.userId,
+    required this.subDocId
   });
 }

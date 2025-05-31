@@ -31,13 +31,14 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       contacts: (fields[9] as List).cast<Contact>(),
       currentAddress: fields[10] as String,
       userId: fields[12] as String,
+      subDocId: fields[13] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, UserModel obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(13)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -61,7 +62,9 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       ..writeByte(10)
       ..write(obj.currentAddress)
       ..writeByte(12)
-      ..write(obj.userId);
+      ..write(obj.userId)
+      ..writeByte(13)
+      ..write(obj.subDocId);
   }
 
   @override
