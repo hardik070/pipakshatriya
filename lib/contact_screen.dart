@@ -52,12 +52,10 @@ class _ContactScreen extends State<ContactScreen> {
 
     for(var doc in cityPeoplesDocsData.docs){
       Map<String, dynamic> peoplesDataList = doc.data() as Map<String, dynamic>;
-
-      for(var item in peoplesDataList.entries){
+      for(var item in peoplesDataList.entries) {
         filteredCityPeoplesList.add(item);
       }
     }
-
     setState(() {
       cityPeopleIsLoading = false;
     });
@@ -229,7 +227,7 @@ class _ContactScreen extends State<ContactScreen> {
                   SizedBox(width: 5),
                   GestureDetector(
                       onTap: (){
-                        print(UserDataManager().currentUser!.fachedUsersCache);
+
                       },
                       child: Container(
                           margin: EdgeInsets.only(right: 20, top: 5),

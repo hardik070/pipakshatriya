@@ -24,6 +24,25 @@ class _ShowPersonInfo extends State<ShowPersonInfo> {
   }
 
   Future<void> _getUserInfo() async{
+    List<String> fachedUsersKeys = UserDataManager().currentUser!.fachedUsersKeys!;
+    final fachedUsersCache = UserDataManager().currentUser!.fachedUsersCache!;
+    if(fachedUsersKeys.contains(widget.userId)){
+      int index = fachedUsersKeys.indexOf(widget.userId);
+      setState(() {
+        userInfo = {
+          "name" : fachedUsersCache[index].name,
+          "fatherName" : fachedUsersCache[index].fatherName,
+          "gotra" : fachedUsersCache[index].gotra,
+          "currentAddress" : fachedUsersCache[index].currentAddress,
+          "actualAddress" : fachedUsersCache[index].actualAddress,
+          "numbers" : fachedUsersCache[index].phoneNumber,
+          "relations" : fachedUsersCache[index].relationships,
+          "profilePic" : fachedUsersCache[index].profilePic,
+        };
+        isDataLoading = false;
+      });
+      return ;
+    }
     try{
       DocumentSnapshot userData = await FirebaseFirestore.instance
                                   .collection("users")
@@ -53,6 +72,7 @@ class _ShowPersonInfo extends State<ShowPersonInfo> {
               email: userInfo?['email'] ?? '',
               subDocId: userInfo?['subDocId'] ?? ''
           ));
+          user.fachedUsersKeys!.add(userInfo?['userId'] ?? '');
         });
       }catch(e){
         print("error was an issue \n $e");
@@ -190,7 +210,6 @@ class _ShowPersonInfo extends State<ShowPersonInfo> {
 
             _buildCardSection('Contact List', [
               ...(userInfo?['numbers']??[]).asMap().entries.map((number){
-                print(number);
                 return ProfileField(label: 'No.${number.key+1}', value: number.value, icon: Icons.call,);
               }).toList(),
             ]),
