@@ -1,6 +1,4 @@
 import 'package:hive/hive.dart';
-import 'login_info.dart';
-import 'contact.dart';
 
 part 'user_model.g.dart';
 
@@ -31,18 +29,12 @@ class UserModel extends HiveObject {
   List<Map<String, String>> relationships;
 
   @HiveField(8)
-  LoginInfo loginInfo;
-
-  @HiveField(9)
-  List<Contact> contacts;
-
-  @HiveField(10)
   String currentAddress;
 
-  @HiveField(12)
+  @HiveField(9)
   String userId;
 
-  @HiveField(13)
+  @HiveField(10)
   String subDocId;
 
   UserModel({
@@ -54,8 +46,6 @@ class UserModel extends HiveObject {
     required this.gotra,
     required this.actualAddress,
     required this.relationships,
-    required this.loginInfo,
-    required this.contacts,
     required this.currentAddress,
     required this.userId,
     required this.subDocId

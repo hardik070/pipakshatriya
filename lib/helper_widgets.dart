@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'show_person_info.dart';
 class CityTile extends StatelessWidget{
   final String city;
   final String state;
@@ -64,116 +65,126 @@ class PersonTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 7),
-      padding: const EdgeInsets.all(2),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Color(0xE2FFFFFF), Color(0xFFFFFFFF)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(50),
-        border: Border.all(color: Colors.white24),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 20,
-            offset: const Offset(0, 10),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ShowPersonInfo(userId: userId)
           )
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          GestureDetector(
-            onTap: () => showImageFullScreen(context, profilePic),
-            child: Container(
-              height: 60,
-              width: 60,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: Colors.white, width: 3),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black26,
-                    blurRadius: 6,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: ClipOval(
-                child: CachedNetworkImage(
-                  imageUrl: profilePic,
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) =>
-                  const CircleAvatar(child: Icon(Icons.person)),
-                  errorWidget: (context, url, error) =>
-                  const CircleAvatar(child: Icon(Icons.error)),
-                ),
-              ),
-            ),
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 7),
+        padding: const EdgeInsets.all(2),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xE2FFFFFF), Color(0xFFFFFFFF)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
-          const SizedBox(width: 10), // space for image overlap
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  name,
-                  style: GoogleFonts.poppins(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF23255D),
-                  ),
-                ),
-
-                Text(
-                  '$fatherName • $gotra',
-                  style: GoogleFonts.poppins(
-                    fontSize: 14,
-                    color: Color(0xFF23255D),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              // add message tap here
-            },
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [
-                    Color(0xFF666AC6), // soft purple-blue
-                    Color(0xFF23255D), // deep navy
+          borderRadius: BorderRadius.circular(50),
+          border: Border.all(color: Colors.white24),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 20,
+              offset: const Offset(0, 10),
+            )
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            GestureDetector(
+              onTap: () => showImageFullScreen(context, profilePic),
+              child: Container(
+                height: 60,
+                width: 60,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.white, width: 3),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 6,
+                      offset: const Offset(0, 4),
+                    ),
                   ],
                 ),
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black26,
-                    blurRadius: 6,
-                    offset: const Offset(0, 3),
+                child: ClipOval(
+                  child: CachedNetworkImage(
+                    imageUrl: profilePic,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) =>
+                    const CircleAvatar(child: Icon(Icons.person)),
+                    errorWidget: (context, url, error) =>
+                    const CircleAvatar(child: Icon(Icons.error)),
                   ),
-                ],
-              ),
-              child: const Text(
-                "Message",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14,
-                  letterSpacing: 1.1,
                 ),
               ),
             ),
-          ),
-        ],
+            const SizedBox(width: 10), // space for image overlap
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name,
+                    style: GoogleFonts.poppins(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF23255D),
+                    ),
+                  ),
+
+                  Text(
+                    '$fatherName • $gotra',
+                    style: GoogleFonts.poppins(
+                      fontSize: 14,
+                      color: Color(0xFF23255D),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                // add message tap here
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [
+                      Color(0xFF666AC6), // soft purple-blue
+                      Color(0xFF23255D), // deep navy
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 6,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: const Text(
+                  "Message",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                    letterSpacing: 1.1,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

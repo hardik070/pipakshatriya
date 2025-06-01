@@ -2748,9 +2748,7 @@ class EditProfileState extends State<EditProfile> {
           currentAddress: currentCity,
           phoneNumber: numbers,
           relationships: relationships,
-          loginInfo: UserDataManager().currentUser!.loginInfo,
           profilePic: UserDataManager().currentUser!.profilePic,
-          contacts: UserDataManager().currentUser!.contacts,
           userId: UserDataManager().currentUser!.userId,
           subDocId: subDocId
       );

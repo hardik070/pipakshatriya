@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'datamodels/contact.dart';
-import 'datamodels/login_info.dart';
-import 'datamodels/relationship.dart';
 import 'datamodels/user_model.dart';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -15,9 +12,6 @@ void main() async{
   await Hive.initFlutter();
 
   Hive.registerAdapter(UserModelAdapter());
-  Hive.registerAdapter(RelationshipAdapter());
-  Hive.registerAdapter(LoginInfoAdapter());
-  Hive.registerAdapter(ContactAdapter());
 
   await UserDataManager().init(); // 🔥 load user once
   runApp(const Pipa());

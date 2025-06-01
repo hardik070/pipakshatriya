@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'profilescreen.dart';
 import 'communitydiscover.dart';
 
+
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
 
@@ -17,7 +18,6 @@ class Dashboard extends StatefulWidget {
 }
 
 class _Dashboard extends State<Dashboard> {
-
   int _selectedIndex = 0;
   final TextEditingController _searchController = TextEditingController();
 

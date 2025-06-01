@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'dashboard.dart';
 import 'datamodels/user_model.dart';
 import 'datamodels/datamanager/data_manager.dart';
-import 'datamodels/login_info.dart';
+
 
 
 
@@ -116,9 +116,6 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
           relationships: List<Map<String, String>>.from(
             (data['relations'] ?? []).map((e) => Map<String, String>.from(e)),
           ),
-          loginInfo: LoginInfo(
-              token: data['userId'] ?? '', loginTime: DateTime.now()),
-          contacts: [],
           currentAddress: data['currentAddress'] ?? '',
           userId: data['userId'] ?? '',
           subDocId: data['subDocId'] ?? ''
@@ -203,8 +200,6 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
           gotra: '',
           actualAddress: '',
           relationships: [],
-          loginInfo: LoginInfo(token: userId, loginTime: DateTime.now()),
-          contacts: [],
           currentAddress: '',
           userId: userId,
           subDocId: ''

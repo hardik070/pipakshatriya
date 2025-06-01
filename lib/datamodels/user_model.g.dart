@@ -27,18 +27,16 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       relationships: (fields[7] as List)
           .map((dynamic e) => (e as Map).cast<String, String>())
           .toList(),
-      loginInfo: fields[8] as LoginInfo,
-      contacts: (fields[9] as List).cast<Contact>(),
-      currentAddress: fields[10] as String,
-      userId: fields[12] as String,
-      subDocId: fields[13] as String,
+      currentAddress: fields[8] as String,
+      userId: fields[9] as String,
+      subDocId: fields[10] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, UserModel obj) {
     writer
-      ..writeByte(13)
+      ..writeByte(11)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -56,14 +54,10 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       ..writeByte(7)
       ..write(obj.relationships)
       ..writeByte(8)
-      ..write(obj.loginInfo)
-      ..writeByte(9)
-      ..write(obj.contacts)
-      ..writeByte(10)
       ..write(obj.currentAddress)
-      ..writeByte(12)
+      ..writeByte(9)
       ..write(obj.userId)
-      ..writeByte(13)
+      ..writeByte(10)
       ..write(obj.subDocId);
   }
 
