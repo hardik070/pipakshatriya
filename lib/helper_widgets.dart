@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 class CityTile extends StatelessWidget{
   final String city;
   final String state;
@@ -47,160 +46,139 @@ class CityTile extends StatelessWidget{
   }
 }
 
-class PersonTile extends StatelessWidget{
+class PersonTile extends StatelessWidget {
   final String name;
   final String gotra;
   final String fatherName;
   final String profilePic;
+  final String userId;
+
   const PersonTile({
     required this.name,
     required this.gotra,
     required this.fatherName,
     required this.profilePic,
-    super.key
-  }) ;
+    required this.userId,
+    super.key,
+  });
 
   @override
-  Widget build(BuildContext context){
-    return GestureDetector(
-      // onTap: () async{
-      //   if (GlobalVariables().name.isNotEmpty) {
-      //     Navigator.push(
-      //       context,
-      //       MaterialPageRoute(
-      //         builder: (context) => MessageWidget(
-      //           receiverId: data['userid'],
-      //           receiverName: data['name'],
-      //           newMessage: message,
-      //         ),
-      //       ),
-      //     );
-      //   } else {
-      //     Navigator.push(
-      //       context,
-      //       MaterialPageRoute(builder: (context) => EditProfile()),
-      //     );
-      //     ScaffoldMessenger.of(context).showSnackBar(
-      //       const SnackBar(
-      //         content: Text('First complete your profile!'),
-      //         backgroundColor: Colors.redAccent,
-      //         duration: Duration(milliseconds: 1000),
-      //       ),
-      //     );
-      //   }
-      // },
-      child: Padding(
-        padding: EdgeInsets.only(top: 8, left: 7, right: 7, bottom: 2),
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [Color(0xFF4A3274), Color(0xFF5C4D91)],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
-            borderRadius: BorderRadius.circular(15),
-            boxShadow: [
-              BoxShadow(
-                color: Color(0x57ff3456),
-                blurRadius: 5,
-                offset: Offset(0, 2),
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 7),
+      padding: const EdgeInsets.all(2),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Color(0xE2FFFFFF), Color(0xFFFFFFFF)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(50),
+        border: Border.all(color: Colors.white24),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 20,
+            offset: const Offset(0, 10),
+          )
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          GestureDetector(
+            onTap: () => showImageFullScreen(context, profilePic),
+            child: Container(
+              height: 60,
+              width: 60,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.white, width: 3),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 6,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
               ),
-            ],
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: 50,
-                width: 50,
-                child: Container(
-                  width: 50.0,
-                  height: 50.0,
-                  clipBehavior: Clip.antiAlias,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                  ),
-                  child: CachedNetworkImage(
-                    imageUrl: profilePic,
-                    placeholder: (context, url) => CircleAvatar(
-                      radius: 50,
-                      child: Icon(Icons.person),
-                    ),
-                    errorWidget: (context, url, error) => CircleAvatar(
-                      radius: 50,
-                      child: Icon(Icons.error_outline_rounded),
-                    ),
-                    fit: BoxFit.cover,
-                  ),
+              child: ClipOval(
+                child: CachedNetworkImage(
+                  imageUrl: profilePic,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) =>
+                  const CircleAvatar(child: Icon(Icons.person)),
+                  errorWidget: (context, url, error) =>
+                  const CircleAvatar(child: Icon(Icons.error)),
                 ),
               ),
-              // Container(
-              //   width: 45.0,
-              //   height: 45.0,
-              //   clipBehavior: Clip.antiAlias,
-              //   decoration: BoxDecoration(
-              //     shape: BoxShape.circle,
-              //   ),
-              //   child: CachedNetworkImage(
-              //     imageUrl: 'https://images.unsplash.com/photo-1569222646742-ed39b7cbb072', // Use the imageUrl parameter
-              //     placeholder: (context, url) => CircularProgressIndicator(),
-              //     errorWidget: (context, url, error) => Icon(Icons.error, color: Colors.red),
-              //     fit: BoxFit.cover,
-              //   ),
-              // ),
-              SizedBox(width: 7),
-              Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      name ,
-                      style: GoogleFonts.poppins(
-                        fontSize: 18.0,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w400,
-                        //height: 1,
-                      ),
-                    ),
-                    //message.isNotEmpty ?
-                    Text(
-                      "$fatherName $gotra",
-                      style: GoogleFonts.poppins(
-                          fontSize: 14,
-                          color: Colors.white70,
-                          fontWeight: FontWeight.w400
-                      ),
-                    ),
+            ),
+          ),
+          const SizedBox(width: 10), // space for image overlap
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  name,
+                  style: GoogleFonts.poppins(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF23255D),
+                  ),
+                ),
 
-                    // "data['lastSeen']" != null ? Text(
-                    //   "Last Online : formattedTime", // Display the time appropriately
-                    //   style: TextStyle(
-                    //     fontSize: 12,
-                    //     color: Colors.white70,
-                    //     //  fontWeight: FontWeight.w500
-                    //   ),
-                    // ) : Text(
-                    //   data['course'], // Display the time appropriately
-                    //   style: TextStyle(
-                    //     fontSize: 12,
-                    //     color: Colors.white70,
-                    //     //  fontWeight: FontWeight.w500
-                    //   ),
-                    // ),
+                Text(
+                  '$fatherName • $gotra',
+                  style: GoogleFonts.poppins(
+                    fontSize: 14,
+                    color: Color(0xFF23255D),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              // add message tap here
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [
+                    Color(0xFF666AC6), // soft purple-blue
+                    Color(0xFF23255D), // deep navy
                   ],
                 ),
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 6,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
               ),
-            ],
+              child: const Text(
+                "Message",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14,
+                  letterSpacing: 1.1,
+                ),
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
 }
+
 
 class FloatButton extends StatefulWidget {
   //final VoidCallback onRefresh; // Add callback parameter
@@ -2064,6 +2042,29 @@ class _BuildPollState extends State<BuildPoll>{
   }
 }
 
+
+//full screen image
+void showImageFullScreen(BuildContext context, String imageUrl) async{
+  await showDialog(
+      context: context,
+      builder: (BuildContext context){
+        return StatefulBuilder(
+            builder: (context, setState){
+              return AlertDialog(
+                  contentPadding: EdgeInsets.zero,
+                  insetPadding: EdgeInsets.symmetric(horizontal: 30),
+                  content: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: CachedNetworkImage(
+                        imageUrl: imageUrl
+                    ),
+                  )
+              );
+            }
+        );
+      }
+  );
+}
 // class PersonMsgTile extends StatefulWidget{
 //   PersonMsgTile({super.key});
 //   @override

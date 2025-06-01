@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'helper_widgets.dart';
 
 class ShowPersonInfo extends StatefulWidget{
   final String userId;
@@ -38,28 +39,6 @@ class _ShowPersonInfo extends State<ShowPersonInfo> {
     }
   }
 
-  void _showImageFullScreen() async{
-    await showDialog(
-        context: context,
-        builder: (BuildContext context){
-          return StatefulBuilder(
-              builder: (context, setState){
-                return AlertDialog(
-                  contentPadding: EdgeInsets.zero,
-                  insetPadding: EdgeInsets.symmetric(horizontal: 30),
-                  content: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: CachedNetworkImage(
-                        imageUrl: userInfo!['profilePic'] ?? ''
-                    ),
-                  )
-                );
-              }
-          );
-        }
-    );
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +68,7 @@ class _ShowPersonInfo extends State<ShowPersonInfo> {
             GestureDetector(
               onTap: () {
                 if(userInfo?['profilePic'] != null){
-                  _showImageFullScreen();
+                  showImageFullScreen(context, userInfo?['profilePic'] ?? "");
                 }
               },
               child: Stack(
@@ -265,8 +244,8 @@ class _ShowPersonInfo extends State<ShowPersonInfo> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(onlyName[0], style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: textColorType)),
-                                Text(indexMapValues.keys.first, style: TextStyle(fontSize: 12, color: textColorType)),
-                                Text('Delhi', style: TextStyle(fontSize: 11, color: textColorType)),
+                                Text("${indexMapValues.keys.first} Delhi", style: TextStyle(fontSize: 12, color: textColorType)),
+                                //Text('Delhi', style: TextStyle(fontSize: 11, color: textColorType)),
                               ],
                             ),
                           ),

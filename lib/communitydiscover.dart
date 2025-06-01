@@ -52,7 +52,11 @@ class _CommunityDiscoveryState extends State<CommunityDiscovery>{
       body: ListView.builder(
         itemCount: data.length,
         itemBuilder: (context, index){
-          return PersonTile(name: data[index]["Name"]??'', gotra: data[index]["Village"]??'', fatherName: "hello", profilePic: "ll",);
+          return PersonTile(
+            name: data[index]["Name"]??'',
+            gotra: data[index]["Village"]??'',
+            fatherName: "hello", profilePic: "ll",
+            userId: data[index]["userId"]??'',);
         },
       ),
     );

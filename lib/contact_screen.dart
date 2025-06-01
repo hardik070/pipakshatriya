@@ -3,7 +3,6 @@ import 'package:pipakshatriya/datamodels/datamanager/data_manager.dart';
 import 'helper_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
-import 'show_person_info.dart';
 
 class ContactScreen extends StatefulWidget {
   const ContactScreen({super.key});
@@ -311,18 +310,9 @@ class _ContactScreen extends State<ContactScreen> {
                           final fatherName = personData["fatherName"];
                           final gotra = personData["gotra"];
                           final profilePic = personData["profilePic"];
+                          final userId = filteredCityPeoplesList[index].key;
 
-                          return GestureDetector(
-                            onTap: ()async{
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ShowPersonInfo(userId: filteredCityPeoplesList[index].key)
-                                )
-                              );
-                            },
-                            child: PersonTile(name: name, gotra: gotra, fatherName: fatherName, profilePic: profilePic),
-                          );
+                          return PersonTile(name: name, gotra: gotra, fatherName: fatherName, profilePic: profilePic, userId: userId,);
                         },
                       ),
                     ),
