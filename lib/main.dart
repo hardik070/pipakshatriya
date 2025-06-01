@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'datamodels/user_model.dart';
+import "datamodels/fached_users_cache.dart";
 
 import 'package:firebase_core/firebase_core.dart';
 import 'splashscreen.dart';
@@ -12,6 +13,7 @@ void main() async{
   await Hive.initFlutter();
 
   Hive.registerAdapter(UserModelAdapter());
+  Hive.registerAdapter(FachedUsersCacheAdapter());
 
   await UserDataManager().init(); // 🔥 load user once
   runApp(const Pipa());

@@ -229,7 +229,7 @@ class _ContactScreen extends State<ContactScreen> {
                   SizedBox(width: 5),
                   GestureDetector(
                       onTap: (){
-
+                        print(UserDataManager().currentUser!.fachedUsersCache);
                       },
                       child: Container(
                           margin: EdgeInsets.only(right: 20, top: 5),

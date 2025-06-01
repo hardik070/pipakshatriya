@@ -1,10 +1,9 @@
 import 'package:hive/hive.dart';
-import 'package:pipakshatriya/datamodels/fached_users_cache.dart';
 
-part 'user_model.g.dart';
+part 'fached_users_cache.g.dart';
 
-@HiveType(typeId: 0)
-class UserModel extends HiveObject {
+@HiveType(typeId : 1)
+class FachedUsersCache extends HiveObject{
   @HiveField(0)
   String name;
 
@@ -38,13 +37,7 @@ class UserModel extends HiveObject {
   @HiveField(10)
   String subDocId;
 
-  @HiveField(11)
-  List<FachedUsersCache>? fachedUsersCache;
-
-  @HiveField(12)
-  List<String>? fachedUsersKeys;
-
-  UserModel({
+  FachedUsersCache({
     required this.name,
     required this.profilePic,
     required this.fatherName,

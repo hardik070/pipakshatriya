@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:pipakshatriya/datamodels/fached_users_cache.dart';
 import 'helper_widgets.dart';
+import 'datamodels/datamanager/data_manager.dart';
 
 class ShowPersonInfo extends StatefulWidget{
   final String userId;
@@ -32,6 +34,29 @@ class _ShowPersonInfo extends State<ShowPersonInfo> {
       setState(() {
         isDataLoading = false;
       });
+
+      try{
+        await UserDataManager().updateUserField((user) {
+          user.fachedUsersCache ??=[];
+          user.fachedUsersKeys ??=[];
+
+          user.fachedUsersCache!.add(FachedUsersCache(
+              name: userInfo?['name'] ?? "",
+              profilePic: userInfo?['profilePic'] ?? "",
+              fatherName: userInfo?['fatherName'] ?? '',
+              gotra: userInfo?['gotra'] ?? "",
+              currentAddress: userInfo?['currentAddress'] ?? '',
+              actualAddress: userInfo?['actualAddress'] ?? '',
+              phoneNumber: List<String>.from(userInfo?['numbers']??[]),
+              relationships: List<Map<String, String>>.from((userInfo!['relations'] ?? []).map((e) => Map<String, String>.from(e))),
+              userId: userInfo?['userId'] ?? '',
+              email: userInfo?['email'] ?? '',
+              subDocId: userInfo?['subDocId'] ?? ''
+          ));
+        });
+      }catch(e){
+        print("error was an issue \n $e");
+      }
     }catch (e){
       setState(() {
         isDataLoading = false;
@@ -143,7 +168,7 @@ class _ShowPersonInfo extends State<ShowPersonInfo> {
             ),
             const SizedBox(height: 6),
             Text(
-              (userInfo?['gotra'] ?? "").trim(),
+              userInfo?['gotra'] ?? "",
               style:const TextStyle(
                 fontSize: 16,
                 color: Color(0xFF666AC6),

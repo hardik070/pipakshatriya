@@ -37,6 +37,5 @@ class  UserDataManager {
       await user.save(); // persist changes
       _currentUser = user;  // update in-memory copy
     }
-
   }
 }
