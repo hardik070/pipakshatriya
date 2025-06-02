@@ -19,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen>{
     super.initState();
 
     Timer(Duration(milliseconds: 500), (){
-      if((UserDataManager().currentUser?.userId ?? '').isNotEmpty){
+      if(UserDataManager().currentUser != null && UserDataManager().currentUser!.userId.isNotEmpty){
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (_) => Dashboard())
         );

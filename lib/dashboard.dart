@@ -21,12 +21,9 @@ class _Dashboard extends State<Dashboard> {
   int _selectedIndex = 0;
   final TextEditingController _searchController = TextEditingController();
 
-  List<String> fachedUsersKeys = [];
-
   @override
   void initState() {
     super.initState();
-    fachedUsersKeys = UserDataManager().currentUser!.fachedUsersKeys!;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if(UserDataManager().currentUser!.relationships.isEmpty
           || UserDataManager().currentUser!.name.isEmpty
