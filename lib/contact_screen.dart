@@ -43,6 +43,20 @@ class _ContactScreen extends State<ContactScreen> {
 
   //for city peoples list getting
   Future<void> _fatchCitysPeople(String city) async{
+
+    if(UserDataManager().currentUser!.minUsersDataCache != null){
+      List<dynamic> allCitysData = UserDataManager().currentUser!.minUsersDataCache!;
+      for(Map<String, dynamic> cityData in allCitysData){
+        if(cityData.containsKey(city)){
+          setState(() {
+            filteredCityPeoplesList = cityData[city];
+            cityPeopleIsLoading = false;
+          });
+          return;
+        }
+      }
+    }
+
     filteredCityPeoplesList.clear();
     final CollectionReference citysPeoples = FirebaseFirestore.instance
         .collection('minUsersData')
@@ -59,6 +73,19 @@ class _ContactScreen extends State<ContactScreen> {
     setState(() {
       cityPeopleIsLoading = false;
     });
+
+    try{
+      if(UserDataManager().currentUser!.minUsersDataCache == null){
+        UserDataManager().currentUser!.minUsersDataCache = [];
+      }
+      print("List data before adding \n $filteredCityPeoplesList");
+      UserDataManager().updateUserField((user){
+        user.minUsersDataCache!.add({city : List.from(filteredCityPeoplesList)});
+      });
+      print("Success added data");
+    }catch(e){
+      print("error adding data  \n$e");
+    }
   }
 
 
@@ -227,7 +254,10 @@ class _ContactScreen extends State<ContactScreen> {
                   SizedBox(width: 5),
                   GestureDetector(
                       onTap: (){
-
+                        UserDataManager().currentUser!.minUsersDataCache!.clear();
+                      },
+                      onDoubleTap: () {
+                        print(UserDataManager().currentUser!.minUsersDataCache!);
                       },
                       child: Container(
                           margin: EdgeInsets.only(right: 20, top: 5),

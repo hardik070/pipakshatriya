@@ -44,6 +44,9 @@ class UserModel extends HiveObject {
   @HiveField(12)
   List<String>? fachedUsersKeys;
 
+  @HiveField(13)
+  List<Map<String, dynamic>>? minUsersDataCache;
+
   UserModel({
     required this.name,
     required this.profilePic,
