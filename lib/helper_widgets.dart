@@ -155,7 +155,7 @@ class PersonTile extends StatelessWidget {
                 // add message tap here
               },
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
                     colors: [
@@ -163,7 +163,7 @@ class PersonTile extends StatelessWidget {
                       Color(0xFF23255D), // deep navy
                     ],
                   ),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black26,
@@ -178,7 +178,7 @@ class PersonTile extends StatelessWidget {
                     color: Colors.white,
                     fontWeight: FontWeight.w600,
                     fontSize: 14,
-                    letterSpacing: 1.1,
+                    letterSpacing: 0.5,
                   ),
                 ),
               ),

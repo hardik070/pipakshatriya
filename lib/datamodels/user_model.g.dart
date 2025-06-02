@@ -32,16 +32,13 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       subDocId: fields[10] as String,
     )
       ..fachedUsersCache = (fields[11] as List?)?.cast<FachedUsersCache>()
-      ..fachedUsersKeys = (fields[12] as List?)?.cast<String>()
-      ..minUsersDataCache = (fields[13] as List?)
-          ?.map((dynamic e) => (e as Map).cast<String, dynamic>())
-          ?.toList();
+      ..fachedUsersKeys = (fields[12] as List?)?.cast<String>();
   }
 
   @override
   void write(BinaryWriter writer, UserModel obj) {
     writer
-      ..writeByte(14)
+      ..writeByte(13)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -67,9 +64,7 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       ..writeByte(11)
       ..write(obj.fachedUsersCache)
       ..writeByte(12)
-      ..write(obj.fachedUsersKeys)
-      ..writeByte(13)
-      ..write(obj.minUsersDataCache);
+      ..write(obj.fachedUsersKeys);
   }
 
   @override

@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
 
 class ContactScreen extends StatefulWidget {
+
   const ContactScreen({super.key});
 
   @override
@@ -41,50 +42,59 @@ class _ContactScreen extends State<ContactScreen> {
     });
   }
 
-  //for city peoples list getting
-  Future<void> _fatchCitysPeople(String city) async{
+  Map<String, Map<String, Map<String, String>>> cityPeopleData = {}; // "city" -> userId -> data
 
-    if(UserDataManager().currentUser!.minUsersDataCache != null){
-      List<dynamic> allCitysData = UserDataManager().currentUser!.minUsersDataCache!;
-      for(Map<String, dynamic> cityData in allCitysData){
-        if(cityData.containsKey(city)){
-          setState(() {
-            filteredCityPeoplesList = cityData[city];
-            cityPeopleIsLoading = false;
-          });
-          return;
+  Future<void> fetchCityPeople(String cityName) async {
+    Map<String, Map<String, String>> cityPeoples = {};
+
+    if (cityPeopleData.containsKey(cityName)) {
+      try{
+        setState(() {
+          cityPeoples = cityPeopleData[cityName] ?? {};
+          filteredCityPeoplesList = cityPeoples.entries.toList();
+          cityPeopleIsLoading = false;
+        });
+        return;
+      }catch(e){
+        print("error was with \n \n $e");
+      }
+    }
+    try {
+      final collection = FirebaseFirestore.instance
+          .collection('minUsersData')
+          .doc('citysList')
+          .collection(cityName);
+
+
+      final snapshot = await collection.get();
+
+      final Map<String, Map<String, String>> usersMap = {};
+
+      for (final doc in snapshot.docs) {
+        final data = doc.data();
+
+        final Map<String, Object?> map = Map<String, Object?>.from(data);
+
+        for (final entry in map.entries) {
+          final String userId = entry.key;
+          final Map<String, Object?> userDataRaw = Map<String, Object?>.from(entry.value as Map);
+          final Map<String, String> userData = userDataRaw.map(
+                (k, v) => MapEntry(k, v.toString()),
+          );
+
+          usersMap[userId] = userData;
         }
       }
-    }
 
-    filteredCityPeoplesList.clear();
-    final CollectionReference citysPeoples = FirebaseFirestore.instance
-        .collection('minUsersData')
-        .doc('citysList')
-        .collection(city);
-    final QuerySnapshot cityPeoplesDocsData = await citysPeoples.get();
+        cityPeopleData[cityName] = usersMap;
+        cityPeoples = usersMap;
 
-    for(var doc in cityPeoplesDocsData.docs){
-      Map<String, dynamic> peoplesDataList = doc.data() as Map<String, dynamic>;
-      for(var item in peoplesDataList.entries) {
-        filteredCityPeoplesList.add(item);
-      }
-    }
-    setState(() {
-      cityPeopleIsLoading = false;
-    });
-
-    try{
-      if(UserDataManager().currentUser!.minUsersDataCache == null){
-        UserDataManager().currentUser!.minUsersDataCache = [];
-      }
-      print("List data before adding \n $filteredCityPeoplesList");
-      UserDataManager().updateUserField((user){
-        user.minUsersDataCache!.add({city : List.from(filteredCityPeoplesList)});
-      });
-      print("Success added data");
-    }catch(e){
-      print("error adding data  \n$e");
+        setState(() {
+          cityPeopleIsLoading = false;
+          filteredCityPeoplesList = cityPeoples.entries.toList();
+        });
+    } catch (e) {
+      print("Error fetching city people: $e");
     }
   }
 
@@ -254,10 +264,7 @@ class _ContactScreen extends State<ContactScreen> {
                   SizedBox(width: 5),
                   GestureDetector(
                       onTap: (){
-                        UserDataManager().currentUser!.minUsersDataCache!.clear();
-                      },
-                      onDoubleTap: () {
-                        print(UserDataManager().currentUser!.minUsersDataCache!);
+                        print(cityPeopleData[city]!.entries.toList());
                       },
                       child: Container(
                           margin: EdgeInsets.only(right: 20, top: 5),
@@ -309,7 +316,9 @@ class _ContactScreen extends State<ContactScreen> {
                                 cityPeopleIsLoading = true;
                                 lastCity = filteredCitysList[index];
                                 city = filteredCitysList[index];
-                                _fatchCitysPeople(filteredCitysList[index]);
+                                filteredCityPeoplesList.clear();
+                                await fetchCityPeople(filteredCitysList[index]);
+                                //await _fatchCitysPeople(filteredCitysList[index]);
                               }
                             }
 
@@ -332,6 +341,7 @@ class _ContactScreen extends State<ContactScreen> {
                         cacheExtent: 5000,
                         padding: EdgeInsets.symmetric(horizontal: 5, vertical: 13),
                         itemBuilder: (context, index) {
+
                           if(filteredCityPeoplesList[index].key == UserDataManager().currentUser!.userId) return SizedBox.shrink();
                           final personData= filteredCityPeoplesList[index].value;
                           final name = personData["name"];
